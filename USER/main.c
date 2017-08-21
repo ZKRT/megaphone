@@ -4,6 +4,8 @@
 #include "adc.h"
 #include "uart.h"
 #include "can.h"
+#include "light.h"
+#include "key.h"
 /*
 头文件中
 can.h包含了zkrt.h
@@ -17,8 +19,8 @@ void bsp_init(void)
 	RCC_Configuration();
 	SysTick_Init();
 	LED_Init();
-//	ADC1_Init();
-//	USART1_Config();
+	ADC1_Init();
+	USART1_Config();
 	CAN_Mode_Init(CAN_Mode_Normal);
 //	KEY_Init();
 }
@@ -31,28 +33,31 @@ int main()
 	
 	while (1)
 	{		
+		zkrt_decode();
+//		KEY_Rock();
+		
 		if (_10ms_count - TimingDelay >= 10)								//10ms一个时间片
 		{
 			_10ms_count = TimingDelay;
-//			ADC_StartOfConversion(ADC1);											//每10ms一次，读取板载电压
-//			
-//			if ((_10ms_flag%10) == 0)													//每100ms一次，整合电压、检测电压、发送心跳
-//			{				
-//				if (MAVLINK_TX_INIT_VAL - TimingDelay > 2000)		//初始化的2S内不执行检查，以后每次读取到后都检查
-//				{
-//					bat_read();
-//					if (stand_count - TimingDelay > 500)
-//					{
-//						bat_check();
-//					}
-//				}
-//			}
+			ADC_StartOfConversion(ADC1);											//每10ms一次，读取板载电压
+			
+			if ((_10ms_flag%10) == 0)													//每100ms一次，整合电压、检测电压、发送心跳
+			{				
+				if (MAVLINK_TX_INIT_VAL - TimingDelay > 2000)		//初始化的2S内不执行检查，以后每次读取到后都检查
+				{
+					bat_read();
+					if (stand_count - TimingDelay > 500)
+					{
+						bat_check();
+					}
+				}
+			}
 			
 			if ((_10ms_flag%100) == 0)												//每1000ms一次，发送一次心跳
 			{
 				if (MAVLINK_TX_INIT_VAL - TimingDelay > 3000)		//初始化的3S内不执行发送心跳，以后每次都发送心跳
 				{
-//					status_light[6] = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_7);
+					status_light[6] = GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_7);
 					status_light[7]++;
 					if (status_light[7] == 0XFF)
 					{
@@ -66,12 +71,15 @@ int main()
 		
 		if (led_rx_count - TimingDelay > 50)
 		{
-			GPIO_SetBits(GPIOA, GPIO_Pin_7);
+			GPIO_SetBits(GPIOB, GPIO_Pin_7);
 		}
 		
 		if (led_tx_count - TimingDelay > 50)
 		{
-			GPIO_SetBits(GPIOA, GPIO_Pin_6);
+			GPIO_SetBits(GPIOB, GPIO_Pin_6);
 		}
 	}
 }
+
+
+

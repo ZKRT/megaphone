@@ -81,7 +81,7 @@ void CEC_CAN_IRQHandler(void)
 		}
 	}
 	
-	GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+	GPIO_ResetBits(GPIOB, GPIO_Pin_7);
 	led_rx_count = TimingDelay;
 }
 
@@ -139,7 +139,7 @@ uint8_t Can_Send_Msg(uint8_t* msg,uint8_t len)
 		return 1;
   }
 	
-	GPIO_ResetBits(GPIOA, GPIO_Pin_6);
+	GPIO_ResetBits(GPIOB, GPIO_Pin_6);
 	led_tx_count = TimingDelay;
 	
 	return 0;		//³É¹¦·µ»Ø

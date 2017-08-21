@@ -16,11 +16,11 @@ void zkrt_decode(void)
 			stand_count = TimingDelay;
 			if (zkrt_packet_buffer.data[0] == 1)
 			{
-//				GPIO_SetBits(GPIOA, GPIO_Pin_7);
+				GPIO_SetBits(GPIOA, GPIO_Pin_7);
 			}
 			else
 			{
-//				GPIO_ResetBits(GPIOA, GPIO_Pin_7);
+				GPIO_ResetBits(GPIOA, GPIO_Pin_7);
 			}
 		}
 	}

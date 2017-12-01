@@ -1,11 +1,10 @@
 /**
   ******************************************************************************
-  * @file    appcan.h 
+  * @file    appfiles.h 
   * @author  ZKRT
-  * @version V1.0
-  * @date    9-May-2017
-  * @brief   
-	*					 + (1) init
+  * @version V0.0.1
+  * @date    23-December-2016
+  * @brief   Header for appfiles.c module
   ******************************************************************************
   * @attention
   *
@@ -15,28 +14,28 @@
   */
   
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __APPCAN_H
-#define __APPCAN_H 
+#ifndef __APPFILES_H
+#define __APPFILES_H
+
 /* Includes ------------------------------------------------------------------*/
 #include "sys.h"
-#include "zkrt.h"
+#include "ff.h"
+
 /* Exported macro ------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
+/** @defgroup something
+  * @{
+  */ 
+  
+/**
+  * @}
+  */ 
 /* Exported constants --------------------------------------------------------*/
-
-//message protocol handle flag and buffer struct
-typedef struct
-{
-	zkrt_packet_t recvpacket;
-	zkrt_packet_t sendpacket;
-	u8 data[ZK_MAX_LEN];
-	u8 datalen;
-}msg_handle_st;
-
 /* Exported functions ------------------------------------------------------- */
-void appcan_init(void);
-void appcan_prcs(void);
-#endif /* __APPCAN_H */
+
+
+#endif /* __APPAUDIO_H */
+
 /**
   * @}
   */ 
@@ -44,6 +43,5 @@ void appcan_prcs(void);
 /**
   * @}
   */
-	
-/************************ (C) COPYRIGHT ZKRT *****END OF FILE****/
 
+/************************ (C) COPYRIGHT ZKRT *****END OF FILE****/

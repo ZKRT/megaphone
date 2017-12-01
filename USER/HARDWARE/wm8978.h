@@ -2,6 +2,8 @@
 #define __WM8978_H
 #include "sys.h"    									
 
+//#define USE_TMIIC  //zkrt_todo: this driver can not work now.
+
 //如果AD0脚(4脚)接地,IIC地址为0X4A(不包含最低位).
 //如果接V3.3,则IIC地址为0X4B(不包含最低位).
 #define WM8978_ADDR				0X1A	//WM8978的器件地址,固定为0X1A 

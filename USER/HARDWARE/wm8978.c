@@ -1,17 +1,9 @@
 #include "wm8978.h"
+#ifdef USE_TMIIC
+#include "tm_stm32f4_i2c.h"
+#else
 #include "myiic.h"
-//////////////////////////////////////////////////////////////////////////////////	 
-//本程序只供学习使用，未经作者许可，不得用于其它任何用途
-//ALIENTEK STM32F407开发板
-//WM8978 驱动代码	   
-//正点原子@ALIENTEK
-//技术论坛:www.openedv.com
-//创建日期:2014/5/24
-//版本：V1.0
-//版权所有，盗版必究。
-//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
-//All rights reserved									  
-////////////////////////////////////////////////////////////////////////////////// 	
+#endif
 
 //WM8978寄存器值缓存区(总共58个寄存器,0~57),占用116字节内存
 //因为WM8978的IIC操作不支持读操作,所以在本地保存所有寄存器值
@@ -60,9 +52,17 @@ u8 WM8978_Init(void)
 	GPIO_PinAFConfig(GPIOC,GPIO_PinSource3,GPIO_AF_SPI2);	//PC3 ,AF5  I2S_DACDATA 
 	GPIO_PinAFConfig(GPIOC,GPIO_PinSource6,GPIO_AF_SPI2);	//PC6 ,AF5  I2S_MCK
 	GPIO_PinAFConfig(GPIOC,GPIO_PinSource2,GPIO_AF6_SPI2);	//PC2 ,AF6  I2S_ADCDATA  I2S2ext_SD是AF6!!!
- 
-	
+
+#ifdef USE_TMIIC
+	/* Initialize I2C, SCL: PB9 and SDA: PB8 with 100kHt serial clock */
+	TM_I2C_Init(I2C1, TM_I2C_PinsPack_2, 100000);
+	Delay(1000);
+	if(TM_I2C_IsDeviceConnected(I2C1, WM8978_ADDR))
+		printf("iic connected\n");
+#else
 	IIC_Init();//初始化IIC接口
+#endif
+
 	res=WM8978_Write_Reg(0,0);	//软复位WM8978
 	if(res)return 1;			//发送指令失败,WM8978异常
 	//以下为通用设置
@@ -85,6 +85,17 @@ u8 WM8978_Init(void)
 //    其他,错误代码
 u8 WM8978_Write_Reg(u8 reg,u16 val)
 { 
+#ifdef USE_TMIIC
+	u8 iicdata[2];
+	iicdata[1] = (u8)(val)&0xff;
+	iicdata[0] = (u8)(val>>8)&0x01;
+	/**
+	 * Write multi bytes to slave with address ADDRESS
+	 * Write to registers starting from WM8978_ADDR, get data in variable "data" and write 2 bytes
+	 */
+	TM_I2C_WriteMulti(I2C1, WM8978_ADDR, reg, iicdata, 2);
+	WM8978_REGVAL_TBL[reg]=val;	//保存寄存器值到本地
+#else
 	IIC_Start(); 
 	IIC_Send_Byte((WM8978_ADDR<<1)|0);//发送器件地址+写命令	 
 	if(IIC_Wait_Ack())return 1;	//等待应答(成功?/失败?) 
@@ -93,7 +104,9 @@ u8 WM8978_Write_Reg(u8 reg,u16 val)
 	IIC_Send_Byte(val&0XFF);	//发送数据
 	if(IIC_Wait_Ack())return 3;	//等待应答(成功?/失败?) 
     IIC_Stop();
-	WM8978_REGVAL_TBL[reg]=val;	//保存寄存器值到本地
+	WM8978_REGVAL_TBL[reg]=val;	//保存寄存器值到本地	
+#endif	
+
 	return 0;	
 }  
 //WM8978读寄存器
@@ -307,15 +320,3 @@ void WM8978_EQ5_Set(u8 cfreq,u8 gain)
 	regval|=gain;		//设置增益	
  	WM8978_Write_Reg(22,regval);//R22,EQ5设置 	
 }
-
-
-
-
-
-
-
-
-
-
-
-

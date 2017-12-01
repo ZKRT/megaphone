@@ -164,8 +164,23 @@ u8 mf_scan_files(u8 * path)
 #else							   
         	fn = fileinfo.fname;
 #endif	                                              /* It is a file. */
-			printf("%s/", path);//打印路径	
-			printf("%s\r\n",  fn);//打印文件名	  
+			
+			printf("dir.id:%d\r\n",dir.id);
+			printf("dir.index:%d\r\n",dir.index);
+			printf("dir.sclust:%d\r\n",dir.sclust);
+			printf("dir.clust:%d\r\n",dir.clust);
+			printf("dir.sect:%d\r\n",dir.sect);	  
+
+			printf("\r\n");
+			printf("File Name is:%s\r\n",fn);
+			printf("File Size is:%d\r\n",fileinfo.fsize);
+			printf("File data is:%d\r\n",fileinfo.fdate);
+			printf("File time is:%d\r\n",fileinfo.ftime);
+			printf("File Attr is:%d\r\n",fileinfo.fattrib);
+			printf("\r\n");			
+//			
+//			printf("%s/", path);//打印路径	
+//			printf("%s\r\n",  fn);//打印文件名	  
 		} 
     }	  
     return res;	  

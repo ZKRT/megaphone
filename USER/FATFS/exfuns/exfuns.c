@@ -151,32 +151,71 @@ u8 exf_getfree(u8 *drv,u32 *total,u32 *free)
   * @param  None
   * @retval None
   */
+#pragma pack(1)
+typedef struct
+{
+	u8 id;
+	char name[10];
+}testsf;
+#pragma pack() 
 void appfatfs_test(void)
 { 
+//////test 1: read and write	
+//	FIL fsrc, fdst;      
+//	BYTE buffer[4096];   
+//	FRESULT res;         
+//	UINT br, bw;         
+
+//	res = f_open(&fsrc, "0:/TEST/read.txt", FA_OPEN_EXISTING | FA_READ);
+//	if(res==FR_OK)
+//	{
+//		res = f_read(&fsrc, buffer, sizeof(buffer), &br);
+//		if(res==FR_OK)
+//		{
+//			printf("read.txt:%s\n",buffer);
+//		}	
+//	}
+//	else
+//	{
+//		printf("can not open file 0:/TEST/read.txt\n");
+//	}
+
+//	
+//	res = f_open(&fdst, "0:/TEST/write.txt", FA_CREATE_ALWAYS | FA_WRITE);
+//  if (res==FR_OK)
+//	{
+//		res = f_write (&fdst, "ÈðÌ©", sizeof("ÈðÌ©"), &bw);	/* Write data to a file */
+//		if(res==FR_OK)
+//		{
+//			printf("wirte ok\n");
+//		}
+//	}
+//	else
+//	{
+//		printf("can not open file 0:/TEST/write.txt\n");
+//	}	
+//	f_close(&fsrc);
+//	f_close(&fdst);
+
+//////test2: scan dir and read dir 
+//  mf_scan_files("0:/RECORDER");
+
+//////test3: write struct data to file and read struct data in file
+	testsf sdata[10];
+	testsf rdata[20];
+	int i;
 	FIL fsrc, fdst;      
-	BYTE buffer[4096];   
 	FRESULT res;         
-	UINT br, bw;         
-
-	res = f_open(&fsrc, "0:/TEST/read.txt", FA_OPEN_EXISTING | FA_READ);
-	if(res==FR_OK)
+	UINT br, bw;       	
+	for(i=0; i<10; i++)
 	{
-		res = f_read(&fsrc, buffer, sizeof(buffer), &br);
-		if(res==FR_OK)
-		{
-			printf("read.txt:%s\n",buffer);
-		}	
+		sdata[i].id = i+1;
+		sprintf(sdata[i].name, "%dhello\n", i+1);
 	}
-	else
-	{
-		printf("can not open file 0:/TEST/read.txt\n");
-	}
-
-	
-	res = f_open(&fdst, "0:/TEST/write.txt", FA_CREATE_ALWAYS | FA_WRITE);
+	res = f_open(&fdst, "0:/TEST/hello", FA_CREATE_ALWAYS | FA_WRITE);
   if (res==FR_OK)
 	{
-		res = f_write (&fdst, "ÈðÌ©", sizeof("ÈðÌ©"), &bw);	/* Write data to a file */
+		res = f_write (&fdst, (void*)&sdata, sizeof(sdata), &bw);	/* Write data to a file */
 		if(res==FR_OK)
 		{
 			printf("wirte ok\n");
@@ -184,10 +223,29 @@ void appfatfs_test(void)
 	}
 	else
 	{
-		printf("can not open file 0:/TEST/write.txt\n");
+		printf("can not open file 0:/TEST/hello\n");
 	}	
-	f_close(&fsrc);
-	f_close(&fdst);
+  f_sync(&fdst);
+	res = f_open(&fsrc, "0:/TEST/hello", FA_OPEN_EXISTING | FA_READ);
+	if(res==FR_OK)
+	{
+		res = f_read(&fsrc, (void*)&rdata, sizeof(rdata), &br);
+		if(res==FR_OK)
+		{
+			printf("read info is=======\n");
+			for(i=0; i<10; i++)
+			{
+				printf("id:%d,name:%s\n", rdata[i].id, rdata[i].name);
+			}
+		}	
+	}
+	else
+	{
+		printf("can not open file 0:/TEST/hello\n");
+	}	
+	f_close(&fsrc);	
+		f_close(&fdst); 
+	while(1);
 }	
 
 

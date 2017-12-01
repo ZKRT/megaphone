@@ -63,7 +63,7 @@ const u16 i2splaybuf[2]={0X0000,0X0000};//2¸ö16Î»Êý¾Ý,ÓÃÓÚÂ¼ÒôÊ±I2S Master·¢ËÍ.Ñ
 void recoder_enter_rec_mode(void)
 {
 	WM8978_ADDA_Cfg(0,1);		//¿ªÆôADC
-	WM8978_Input_Cfg(0,1,0);	//¿ªÆôÊäÈëÍ¨µÀ(MIC&LINE IN)
+	WM8978_Input_Cfg(1,1,0);	//¿ªÆôÊäÈëÍ¨µÀ(MIC&LINE IN)
 	WM8978_Output_Cfg(0,1);		//¿ªÆôBYPASSÊä³ö 
 	WM8978_MIC_Gain(46);		//MICÔöÒæÉèÖÃ 
 	
@@ -74,7 +74,7 @@ void recoder_enter_rec_mode(void)
  	I2S2_TX_DMA_Init((u8*)&i2splaybuf[0],(u8*)&i2splaybuf[1],1); 		//ÅäÖÃTX DMA 
 	DMA1_Stream4->CR&=~(1<<4);	//¹Ø±Õ´«ÊäÍê³ÉÖÐ¶Ï(ÕâÀï²»ÓÃÖÐ¶ÏËÍÊý¾Ý) 
 	I2S2ext_RX_DMA_Init(i2srecbuf1,i2srecbuf2,I2S_RX_DMA_BUF_SIZE/2); 	//ÅäÖÃRX DMA
-  	i2s_rx_callback=rec_i2s_dma_rx_callback;//»Øµ÷º¯ÊýÖ¸wav_i2s_dma_callback
+  i2s_rx_callback=rec_i2s_dma_rx_callback;//»Øµ÷º¯ÊýÖ¸wav_i2s_dma_callback
  	I2S_Play_Start();	//¿ªÊ¼I2SÊý¾Ý·¢ËÍ(Ö÷»ú)
 	I2S_Rec_Start(); 	//¿ªÊ¼I2SÊý¾Ý½ÓÊÕ(´Ó»ú)
 	recoder_remindmsg_show(0);

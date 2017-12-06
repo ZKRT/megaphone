@@ -22,6 +22,7 @@
 #include "wm8978.h"
 #include "recorder.h"
 #include "myiic.h"
+#include "appfiles.h"
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -58,12 +59,14 @@ int main(void)
 		printf("sd Free Size:     %d MB\n", _free>>10); 	    
 	} 
 	appfatfs_test();
+	appfile_init();
   while(1)
   {
 		/* product code start, the proposed process should not be delayed*/
 		appled_prcs();                                       //LEDÁ÷³Ì
 		appcan_prcs();
 		appkey_prcs();   
+
 //		wav_recorder();
 //		ostmr_wait(5);
 //		printf("key %d, %d, %d, %d\n", all_key[KEY1_NUM].jitter_val, all_key[KEY2_NUM].jitter_val, all_key[KEY3_NUM].jitter_val, all_key[KEY4_NUM].jitter_val);

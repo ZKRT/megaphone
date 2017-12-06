@@ -4,6 +4,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 /*
 
@@ -158,8 +159,8 @@ typedef enum
 #define  BITSET     true
 #define  BITCLEAR   !(BITSET) 
 
-#define false 			FALSE
-#define true        TRUE
+//#define false 			FALSE
+//#define true        TRUE
 #define equal			  0				/* for strcmp() and memcmp() */
 
 #ifndef NULL
@@ -200,6 +201,7 @@ typedef enum
 /* Accept bit index such as 0, 1, 2, etc */
 #define setBit(x,b)         (x) |=  (1U<<(b))
 #define clearBit(x,b)		    (x) &= ~(1U<<(b))
+#define getBit(x, y)        (x &= (1 << y))
 #define flipBit(x,b)		    (x) ^=  (1U<<(b))
 #define testBit(x,b)		    ((x) &  (1U<<(b)))
 #define bitIsCleared(a,b)   (((a) & (1U << (b))) == 0)

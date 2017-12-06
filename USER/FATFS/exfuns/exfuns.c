@@ -159,7 +159,7 @@ typedef struct
 }testsf;
 #pragma pack() 
 void appfatfs_test(void)
-{ 
+{
 //////test 1: read and write	
 //	FIL fsrc, fdst;      
 //	BYTE buffer[4096];   
@@ -201,51 +201,55 @@ void appfatfs_test(void)
 //  mf_scan_files("0:/RECORDER");
 
 //////test3: write struct data to file and read struct data in file
-	testsf sdata[10];
-	testsf rdata[20];
-	int i;
-	FIL fsrc, fdst;      
-	FRESULT res;         
-	UINT br, bw;       	
-	for(i=0; i<10; i++)
-	{
-		sdata[i].id = i+1;
-		sprintf(sdata[i].name, "%dhello\n", i+1);
-	}
-	res = f_open(&fdst, "0:/TEST/hello", FA_CREATE_ALWAYS | FA_WRITE);
-  if (res==FR_OK)
-	{
-		res = f_write (&fdst, (void*)&sdata, sizeof(sdata), &bw);	/* Write data to a file */
-		if(res==FR_OK)
-		{
-			printf("wirte ok\n");
-		}
-	}
-	else
-	{
-		printf("can not open file 0:/TEST/hello\n");
-	}	
-  f_sync(&fdst);
-	res = f_open(&fsrc, "0:/TEST/hello", FA_OPEN_EXISTING | FA_READ);
-	if(res==FR_OK)
-	{
-		res = f_read(&fsrc, (void*)&rdata, sizeof(rdata), &br);
-		if(res==FR_OK)
-		{
-			printf("read info is=======\n");
-			for(i=0; i<10; i++)
-			{
-				printf("id:%d,name:%s\n", rdata[i].id, rdata[i].name);
-			}
-		}	
-	}
-	else
-	{
-		printf("can not open file 0:/TEST/hello\n");
-	}	
-	f_close(&fsrc);	
-		f_close(&fdst); 
-	while(1);
+//	testsf sdata[10];
+//	testsf rdata[20];
+//	int i;
+//	FIL fsrc, fdst;      
+//	FRESULT res;         
+//	UINT br, bw;       	
+//	for(i=0; i<10; i++)
+//	{
+//		sdata[i].id = i+1;
+//		sprintf(sdata[i].name, "%dhello\n", i+1);
+//	}
+//	res = f_open(&fdst, "0:/TEST/hello", FA_CREATE_ALWAYS | FA_WRITE);
+//  if (res==FR_OK)
+//	{
+//		res = f_write (&fdst, (void*)&sdata, sizeof(sdata), &bw);	/* Write data to a file */
+//		if(res==FR_OK)
+//		{
+//			printf("wirte ok\n");
+//		}
+//	}
+//	else
+//	{
+//		printf("can not open file 0:/TEST/hello\n");
+//	}	
+//  f_sync(&fdst);
+//	res = f_open(&fsrc, "0:/TEST/hello", FA_OPEN_EXISTING | FA_READ);
+//	if(res==FR_OK)
+//	{
+//		res = f_read(&fsrc, (void*)&rdata, sizeof(rdata), &br);
+//		if(res==FR_OK)
+//		{
+//			printf("read info is=======\n");
+//			for(i=0; i<10; i++)
+//			{
+//				printf("id:%d,name:%s\n", rdata[i].id, rdata[i].name);
+//			}
+//		}	
+//	}
+//	else
+//	{
+//		printf("can not open file 0:/TEST/hello\n");
+//	}	
+//	f_close(&fsrc);	
+//		f_close(&fdst); 
+//	while(1);
+	
+	//////test4: 不能打开文件夹后再打开文件，只能以绝地路径打开文件，已测试。code略
+	
+
 }	
 
 

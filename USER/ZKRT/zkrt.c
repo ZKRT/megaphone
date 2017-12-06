@@ -81,10 +81,9 @@ uint16_t crc_calculate(const uint8_t* pBuffer, uint16_t length)
 }
 /**
  * @brief zkrt_final_encode
- *
- * @param  
- * @param  
- * @return 
+ * @param   待发送的缓冲区
+ * @param   待转换的结构体
+ * @return  待发送的数据长度
  **/
 uint8_t zkrt_final_encode(uint8_t *dstdata, zkrt_packet_t *packet)
 {
@@ -108,18 +107,17 @@ uint8_t zkrt_final_encode(uint8_t *dstdata, zkrt_packet_t *packet)
  * @param  
  * @return 
  **/
-void zkrt_init_packet(zkrt_packet_t *packet)
-{
+void zkrt_init_packet(zkrt_packet_t *packet){
 	uint8_t i;
 	packet->start_code = _START_CODE;                            
 	packet->ver = _VERSION;                                      
 	packet->session_ack = ZK_SESSION_ACK_DISABLE;                                 
 	packet->padding_enc = ZK_ENCRYPT_DS;    
   packet->end_code = _END_CODE;		
-	packet->length = 0;                                   
+//	packet->length = 0;                                   
 	packet->seq = 0;  
-	packet->cmd = 0;
-	packet->command = 0;
+//	packet->cmd = 0;
+//	packet->command = 0;
 	for(i=0;i<3;i++)
 		packet->APPID[i]= 0x00;        
 	for(i=0;i<6;i++)
@@ -128,6 +126,7 @@ void zkrt_init_packet(zkrt_packet_t *packet)
 		packet->data[i]= 0x00;	
 	packet->crc = 0XFFFF;
 }
+
 /*对单个字节的crc更新校验*/
 void zkrt_update_checksum(zkrt_packet_t* packet, uint8_t ch)
 {

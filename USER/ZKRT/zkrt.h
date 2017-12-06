@@ -78,6 +78,8 @@
 #define ZKRT_INDEX_DATA             17
 #define ZKRT_INDEX_CRC(datalen)	    (ZK_HEADER_LEN+datalen-1)
 #define ZKRT_INDEX_END(datalen)     (ZK_HEADER_LEN+datalen+1)
+//data index
+#define ZK_DINDEX_DEVTYPE           3
 
 
 //编号定义，用于UAVID[2：1]和UAVID[5：4]  

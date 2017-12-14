@@ -114,7 +114,9 @@ typedef enum
 	S_FailIdInvalid,
   S_FailNoPlaySong,
 	S_FailVolumeExceed,
-	S_FailParamInvalid
+	S_FailParamInvalid,
+	S_FailSDFlash,
+	S_FailRecNameRepeat
 }ResStatusEnum;
 /**
   * @}
@@ -130,6 +132,7 @@ typedef struct
 }send_plst;
 
 //////respond
+#define RES_HEADER_LEN  2  //equal to control num+status
 typedef struct
 {
 	u8 control_num;

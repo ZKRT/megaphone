@@ -21,7 +21,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
-const char SD_DIR_NAME[MAX_DIR][12] = 
+const char SD_DIR_NAME[MAX_DIR][DIR_NAME_MAXLEN] = 
 {
 	"0:/MUSIC",
 	"0:/RECORDER",
@@ -181,6 +181,7 @@ bool audio_item_exist(u8 id)
 }
 /**
   * @brief  audio_item_add
+just for record audio
   * @param  
   * @note   
   * @retval 
@@ -195,6 +196,15 @@ bool audio_item_add(const u8* name, u8 *newid)
 			infolist_pst[i].id = i;
 			*newid = i;
 			strcpy((char*)infolist_pst[i].name, (char*)name);
+			infolist_pst[i].attr = ATTR_RECORD;
+			infolist_pst[i].format = FORMAT_WAV;
+			infolist_pst[i].bitrate = 16000*4*8;
+			infolist_pst[i].bps = 16;
+			infolist_pst[i].samplerate = 16000;
+			infolist_pst[i].time =0;
+			infolist_pst[i].size =0;
+		  _audioinfolist_st.rec_num++; //add record num
+			setBit(_audioinfolist_st.id_mask, i); //remap list mapping
 			return true;
 		}
 	}
@@ -230,7 +240,9 @@ bool audio_item_del(u8 id)
 	{
 		if(arr == ATTR_RECORD)
 		{
-			*id_v = AUDIOID_NONE;
+			_audioinfolist_st.rec_num--; //minus record num
+			clearBit(_audioinfolist_st.id_mask, id); //remap list mapping
+			*id_v = AUDIOID_NONE; //id reset to none
 			return true;
 		}
 	}	
@@ -248,6 +260,43 @@ audioinfo_st* audio_item_get(u8 id)
 	if(audio_item_exist(id))
 		return &infolist_pst[id];
 	return NULL;
+}
+/**
+  * @brief  audio_item_nextid_loop 
+根据给定ID值，获取下一个有效ID值
+  * @param  
+  * @note   
+  * @retval
+  */
+u8 audio_item_nextid_loop(u8 id)
+{
+  u8 newid = id+1;
+	newid = newid>=ID_LIST_MAX? 0:newid;
+	while(infolist_pst[newid].id == AUDIOID_NONE)
+	{
+		newid++;
+		newid = newid>=ID_LIST_MAX? 0:newid;
+	}
+	return newid;
+}
+/**
+  * @brief  audio_item_check_name_repeat
+  * @param  
+  * @note   
+  * @retval 
+  */
+bool audio_item_check_name_repeat(const u8* name)
+{
+	int i;
+	for(i=0; i<ID_LIST_MAX; i++)
+	{
+		if(infolist_pst[i].id != AUDIOID_NONE)
+		{
+			if(strcmp((char*)name, (char*)infolist_pst[i].name)==0)
+				return true;
+		}
+	}
+	return false;
 }
 ///////////////////////////////////////////////////////////////////////////////file funciton
 
@@ -279,7 +328,24 @@ static void printf_audio_list_info(void)
 	}
 	printf("-----------------------audio list info end-------------------\n");
 }
-
+/**
+  * @brief  printf_audio_list_info
+  * @param  
+  * @note   
+  * @retval
+  */
+void printf_audio_item(const audioinfo_st *item)
+{
+	printf("[id]:%d\n", item->id);
+	printf("[name]:%s\n", item->name);
+	printf("[attr]:%d\n", item->attr);
+	printf("[bitrate]:%d\n", item->bitrate);
+	printf("[bps]:%d\n", item->bps);
+	printf("[format]:%d\n", item->format);
+	printf("[samplerate]:%d\n", item->samplerate);
+	printf("[size]:%d\n", item->size);
+	printf("[time]:%d\n", item->time);
+}
 /**
   * @}
   */ 

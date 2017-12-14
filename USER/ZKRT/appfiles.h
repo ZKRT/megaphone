@@ -39,6 +39,7 @@
 #define CONFIG_DIR                         2
 #define LOG_DIR                            3
 #define MAX_DIR                            LOG_DIR+1
+#define DIR_NAME_MAXLEN                    12
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -80,9 +81,24 @@ typedef struct
 /* Exported functions ------------------------------------------------------- */
 void appfile_init(void);
 void appfile_prcs(void);
+bool audio_item_exist(u8 id);
+bool audio_item_add(const u8* name, u8 *newid);
+bool audio_item_mofiy(u8 id, const u8* name);
+bool audio_item_del(u8 id);
+bool audio_item_check_name_repeat(const u8* name);
+void printf_audio_item(const audioinfo_st *item);
+
+u8 audio_item_nextid_loop(u8 id);
+audioinfo_st* audio_item_get(u8 id);
 
 
 extern const char SD_DIR_NAME[][12];
+extern appfile_st _appfiles_handlest;
+extern appfile_st *appfiles;
+extern appfile_st *appfiles_hdle_pst;
+extern audioinfolist_st _audioinfolist_st;
+extern audioinfolist_st *audiolist_pst;
+extern audioinfo_st *infolist_pst;
 #endif /* __APPAUDIO_H */
 
 /**

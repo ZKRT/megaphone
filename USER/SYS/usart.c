@@ -78,10 +78,12 @@ void _sys_exit(int x)
 }
 int fputc(int ch, FILE *f)
 {
+#ifdef PRINTF_OPEN	
 	while (USART_GetFlagStatus(USART_TEST_NUM, USART_FLAG_TC) == RESET)
 		;
 	USART_SendData(USART_TEST_NUM, (unsigned char) ch);
 //	t_osscomm_sendMessage((unsigned char*) &ch, 1, USART_TEST_NUM);
+#endif	
   return (ch);
 }
 #endif

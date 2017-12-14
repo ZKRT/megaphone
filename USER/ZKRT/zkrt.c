@@ -92,11 +92,15 @@ uint8_t zkrt_final_encode(uint8_t *dstdata, zkrt_packet_t *packet)
 	zkrt_tx_seq[packet->UAVID[3]]++;
 	zkrt_tx_seq[packet->UAVID[3]]%=255;
 //calculate crc	
+#if ZK_CRC_ENABLE
 	packet->crc = crc_calculate(((const uint8_t*)(packet)), ZK_HEADER_LEN+packet->length);    
+#else
+	packet->crc = 0xffff;
+#endif
 //copy packet to senddata
   memcpy(dstdata, packet, ZK_HEADER_LEN);
-	memcpy(dstdata+ZK_HEADER_LEN, packet+ZK_HEADER_LEN, packet->length);
-	memcpy(dstdata+ZK_HEADER_LEN+packet->length, packet+ZK_HEADER_LEN+ZK_DATA_MAX_LEN, ZK_FIXED_LEN-ZK_HEADER_LEN);
+	memcpy(dstdata+ZK_HEADER_LEN, packet->data, packet->length);
+	memcpy(dstdata+ZK_HEADER_LEN+packet->length, packet->data+ZK_DATA_MAX_LEN, ZK_FIXED_LEN-ZK_HEADER_LEN);
 //return total length	
 	return (ZK_FIXED_LEN+packet->length);
 }
@@ -130,11 +134,13 @@ void zkrt_init_packet(zkrt_packet_t *packet){
 /*对单个字节的crc更新校验*/
 void zkrt_update_checksum(zkrt_packet_t* packet, uint8_t ch)
 {
+#if ZK_CRC_ENABLE	
 	uint16_t crc = packet->crc;
 	
 	crc_accumulate(ch,&(crc));//如果直接传参crc_accumulate(ch,&(packet->crc));不可以，因为结构体成员的地址不能直接传参，这会导致hardfault错误
 	
 	packet->crc = crc;
+#endif
 }
 /**
  * @brief zkrt_decode_char
@@ -232,13 +238,25 @@ uint8_t zkrt_decode_char(zkrt_packet_t *packet, uint8_t ch)
 			zkrt_curser_state = 11;
 		}
 	}
-	else if ((zkrt_curser_state == 11)&&(ch == (uint8_t)((packet->crc)&0xff)))	//字节47，CRC1
+	else if (zkrt_curser_state == 11)	//字节47，CRC1
 	{
-		zkrt_curser_state = 12;
+#if ZK_CRC_ENABLE		
+		if(ch == (uint8_t)((packet->crc)&0xff))
+			zkrt_curser_state = 12;
+#else
+		  packet->crc = ch&0xff;
+			zkrt_curser_state = 12;		
+#endif		
 	}
-	else if ((zkrt_curser_state == 12)&&(ch == (uint8_t)((packet->crc)>>8)))		//字节48，CRC2
+	else if (zkrt_curser_state == 12)		//字节48，CRC2
 	{
-		zkrt_curser_state = 13;
+#if ZK_CRC_ENABLE				
+		if(ch == (uint8_t)((packet->crc)>>8))
+			zkrt_curser_state = 13;
+#else
+		  packet->crc = (packet->crc)|(ch<<8);
+			zkrt_curser_state = 13;
+#endif		
 	}
 	else if ((zkrt_curser_state == 13)&&(ch == _END_CODE))											//字节49，结尾
 	{

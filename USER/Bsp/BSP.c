@@ -203,7 +203,7 @@ static void NVIC_Configuration(void)
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
   
-//  /* CAN IRQ Channel configuration */  //zkrt_todo
+//  /* CAN IRQ Channel configuration */ 
 //  NVIC_InitStructure.NVIC_IRQChannel = CAN1_RX0_IRQn;
 //  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = CAN_PreemptionPriority;
 //	NVIC_InitStructure.NVIC_IRQChannelSubPriority = CAN_SubPriority;

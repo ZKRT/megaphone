@@ -21,12 +21,12 @@
 #include "stm32f4xx.h"
 
 /* Exported macro ------------------------------------------------------------*/
-
 //whether printf data 
-#define DisplayData  0  //zkrt_debug
+#define PRINTF_OPEN          //zkrt_debug
+//#define USE_TMIIC  //zkrt_todo: this driver can not work now.
 
 //unit test debug
-//#define CanSend2SubModule_TEST   //zkrt_debug
+#define UART_TEST_PROTOCOL   //zkrt_debug
 
 
 /* Exported types ------------------------------------------------------------*/

@@ -186,10 +186,10 @@ void TIM7_IRQHandler(void)
   * @param  None
   * @retval None
   */
-//void USART1_IRQHandler(void)  //ZKRT_TODO
-//{
-//	_USARTX_IRQHandler(USART1);
-//}
+void USART1_IRQHandler(void) 
+{
+	_USARTX_IRQHandler(USART1);
+}
 
 /**
   * @brief  This function handles USARTy global interrupt request.

@@ -20,7 +20,9 @@
 #include "can.h"
 #include "appcan.h"
 #include "appprotocol.h"
-
+#ifdef UART_TEST_PROTOCOL
+#include "osusart.h"
+#endif
 /* Private macro -------------------------------------------------------------*/
 #define UPLOAD_TIMEOUT		 			    10 //10ms
 #define UPLOAD_TIMEOUT_CNT		 			100 //
@@ -66,8 +68,7 @@ void appcan_prcs(void)
 	{
 		upload_timecnt = UPLOAD_TIMEOUT_CNT;
 		//执行定时上传
-		appcan_hbpacket_send();
-//		printf("upload test\n");
+//		appcan_hbpacket_send(); //zkrt_debug
 	}
 }
 ///**
@@ -106,7 +107,12 @@ static uint8_t appcan_hbpacket_send(void)
 	packet2->data[4] = (u8)(TNHB_FLAG>>24&0xff);
 	packet2->length = HB_LENGTH;
 	msg_handlest.datalen = zkrt_final_encode(data, packet2);
+#ifdef UART_TEST_PROTOCOL
+	t_osscomm_sendMessage(data, msg_handlest.datalen, USART_TEST_NUM);
+#else
 	CAN1_send_message_fun(data, msg_handlest.datalen);
+#endif	
+	
 	return 0;
 }
 /**
@@ -154,6 +160,7 @@ static void app_can_recv_handle(void)
 			break;
 		
 		case ZK_COMMAND_SPECIFIED:
+//			printf("ptcol_fun\n");
 			ret = ptcol_fun[packet->data[CTRLNUM_INDEX]](packet->data, packet2->data, packet->length, &packet2->length);
 			break;
 		
@@ -168,7 +175,11 @@ static void app_can_recv_handle(void)
 		packet2->cmd = packet->cmd+1;
 		packet2->command = packet->command;
 		msg_handlest.datalen = zkrt_final_encode(msg_handlest.data, packet2);
-		ret = CAN1_send_message_fun(msg_handlest.data, msg_handlest.datalen); 
+#ifdef UART_TEST_PROTOCOL
+		t_osscomm_sendMessage(msg_handlest.data, msg_handlest.datalen, USART_TEST_NUM);
+#else
+		ret = CAN1_send_message_fun(msg_handlest.data, msg_handlest.datalen);
+#endif
 	}
 //clear recv packet
   memset(packet, 0, sizeof(zkrt_packet_t));
@@ -180,6 +191,17 @@ static void app_can_recv_handle(void)
   */
 static u8 zkrt_decode(zkrt_packet_t *packet)
 {
+#ifdef UART_TEST_PROTOCOL
+	uint8_t testbuf[100]="HELLO";
+  uint16_t testbuf_len;
+	if(t_osscomm_ReceiveMessage(testbuf, &testbuf_len, USART_TEST_NUM)==SCOMM_RET_OK)
+	{
+		testbuf_len = testbuf_len>sizeof(zkrt_packet_t)?sizeof(zkrt_packet_t):testbuf_len;
+		memcpy((void*)packet, testbuf, testbuf_len);
+		return 1;
+	}
+#else
+	
 	uint8_t can_value;
 	while(CAN1_rx_check() == 1)
 	{
@@ -189,5 +211,6 @@ static u8 zkrt_decode(zkrt_packet_t *packet)
 			return 1;
 		}
 	}
+#endif
 	return 0;
 }

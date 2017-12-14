@@ -72,6 +72,9 @@ typedef __packed struct
 	u32 datastart;				//数据帧开始的位置(在文件里面的偏移)
 }__wavctrl; 
 
+
+
+
 u8 wav_decode_init(u8* fname,__wavctrl* wavx);
 //u32 wav_buffill(u8 *buf,u16 size,u8 bits);
 u32 wav_buffill(void *fil, u8 *buf, u8 *tbuf, u16 size, u8 bits);

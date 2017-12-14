@@ -116,7 +116,10 @@ typedef enum
 	S_FailVolumeExceed,
 	S_FailParamInvalid,
 	S_FailSDFlash,
-	S_FailRecNameRepeat
+	S_FailRecNameRepeat,
+	S_FailInvalidAudioFiles,
+//	S_FailPlayAsRecording,
+//	S_FailRecordAsPlaying
 }ResStatusEnum;
 /**
   * @}
@@ -158,11 +161,11 @@ typedef struct
 	u8 flag;
 }stopRec_plst;
 //paly song
-//typedef struct
-//{
-//	u8 id;
-//}playSong_plst;
-typedef id_plst playSong_plst;
+typedef struct
+{
+	u8 id;
+	u8 flag;
+}playSong_plst;
 //play control
 typedef struct
 {

@@ -270,6 +270,7 @@ audioinfo_st* audio_item_get(u8 id)
   */
 u8 audio_item_nextid_loop(u8 id)
 {
+	//zkrt_todo:判断list无item的时候，防止死循环
   u8 newid = id+1;
 	newid = newid>=ID_LIST_MAX? 0:newid;
 	while(infolist_pst[newid].id == AUDIOID_NONE)
@@ -299,8 +300,20 @@ bool audio_item_check_name_repeat(const u8* name)
 	return false;
 }
 ///////////////////////////////////////////////////////////////////////////////file funciton
-
-
+///**
+//  * @brief  creat_recorder_path_name
+//创建"0:RECORDER/xxx.wav"的文件
+//  * @param  
+//  * @note   
+//  * @retval
+//  */
+//void creat_recorder_path_name(char *pname)
+//{	 
+//	char objname[strlen((pname)+sizeof("0:RECORDER/")+1];
+//	sprintf((char*)objname,"0:RECORDER/%s", pname);
+//	res=f_open(ftemp,(const TCHAR*)pname,FA_READ);//尝试打开这个文件
+//	if(res==FR_NO_FILE)break;		//该文件名不存在=正是我们需要的.
+//}
 
 ///////////////////////////////////////////////////////////////////////////////other funciton
 /**

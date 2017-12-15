@@ -80,7 +80,7 @@ void appled_prcs(void)
 		_can_led_flag = 0;
 		GPIO_WriteBit(CAN_LED_PORT, CAN_LED_PIN, LED_DARK);
 	}
-//	if(_run_led_flag)
+//	if(_run_led_flag)  //zkrt_debug
 //	{
 //		_run_led_flag = 0;
 //		GPIO_WriteBit(RUN_LED_PORT, RUN_LED_PIN, LED_DARK);

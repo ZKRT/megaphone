@@ -14,6 +14,8 @@ void recode_start_handle(void);
 void recoding_handle(void);
 void recode_stop_handle(void);
 void recode_over_handle(void);
+void recode_pause_handle(void);
+void recode_continue_handle(void);
 
 void audio_enter_rec_mode(void);
 void audio_enter_play_mode(void);

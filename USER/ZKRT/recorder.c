@@ -160,7 +160,8 @@ void recoding_handle(void)
 void recode_stop_handle(void)
 {
 	_audiorec.rec_state = OVER_S_REC;	
-}/**
+}
+/**
   * @brief  recode_over
   * @param  
   * @note   
@@ -169,5 +170,25 @@ void recode_stop_handle(void)
 void recode_over_handle(void)
 {
 	_audiorec.rec_state = IDLE_S_REC;	
+}
+/**
+  * @brief  recode_pause_handle
+  * @param  
+  * @note   
+  * @retval
+  */
+void recode_pause_handle(void)
+{
+}
+/**
+  * @brief  recode_continue_handle
+  * @param  
+  * @note   
+  * @retval
+  */
+void recode_continue_handle(void)
+{
+	audio_enter_rec_mode();
+	_audiorec.rec_state = RECORDING_S_REC;	
 }
 

@@ -46,9 +46,6 @@ int main(void)
 	appcan_init();
 	appled_init();
 	appkey_init();
-	WM8978_Init();				//初始化WM8978
-	WM8978_HPvol_Set(60,60);	//耳机音量设置
-	WM8978_SPKvol_Set(60);		//喇叭音量设置	
 //	ostmr_wait(50);  //wait 5 senconds for sensor for ready
   /* Infinite Loop */
 	RCC_GetClocksFreq(&RCC_Clocks);
@@ -69,14 +66,12 @@ int main(void)
 		appcan_prcs();
 		appkey_prcs();
 		appaudio_prcs();		
-//		wav_recorder();
 //		ostmr_wait(5);
 //		printf("key %d, %d, %d, %d\n", all_key[KEY1_NUM].jitter_val, all_key[KEY2_NUM].jitter_val, all_key[KEY3_NUM].jitter_val, all_key[KEY4_NUM].jitter_val);
 //		appuart_test_prcs();
-
 		/* product code end*/
 //		/* test code start*/
-		appfatfs_test();
+//		appfatfs_test();
 //		if(t_osscomm_ReceiveMessage(testbuf, &testbuf_len, USART_TEST_NUM)==SCOMM_RET_OK)
 //		{
 //			t_osscomm_sendMessage(testbuf, testbuf_len, USART_TEST_NUM);

@@ -28,6 +28,7 @@
 
 //volume value mapping
 #define VOLUME_MAP(V)                (u8)(0.63*(V))   //zkrt_notice: 0.63 by wm8978 value limit           
+#define VOLUME_INIT_VALUE            100
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -38,6 +39,7 @@ typedef enum
 	START_S_REC,            //开始录音
 	RECORDING_S_REC,        //录音中
 	PAUSE_S_REC,            //暂停录音中
+	CONTINUE_S_REC,         //继续录音
 	STOP_S_REC,             //停止录音
 	FAIL_S_REC,             //录音失败，录音过程中出现错误
 	OVER_S_REC              //录音结束

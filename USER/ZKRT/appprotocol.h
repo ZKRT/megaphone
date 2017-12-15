@@ -59,6 +59,12 @@
 //volume control param
 #define IS_VOLUME(VOL)                (((VOL) >= 0) && ((VOL) <= 100))
 
+//record control param
+#define REC_CTRL_PAUSE               1               
+#define REC_CTRL_CONTINUE            2
+#define IS_RECOPTION(OPTION)         (((OPTION) == REC_CTRL_PAUSE)    || \
+                                       ((OPTION) == REC_CTRL_CONTINUE))
+
 //audio name length
 #define AUDIO_NAME_LEN                20
 
@@ -101,6 +107,8 @@ typedef enum
   CN_GetFileInfo,
   CN_DelRecFile,
   CN_ModifyFilePram,
+	CN_RecCtrl,
+	CN_GetAudioStae,
 	CN_MAX
 }ControlNumEnum;
 
@@ -118,6 +126,7 @@ typedef enum
 	S_FailSDFlash,
 	S_FailRecNameRepeat,
 	S_FailInvalidAudioFiles,
+	S_FailRecCtrlAsNoRec
 //	S_FailPlayAsRecording,
 //	S_FailRecordAsPlaying
 }ResStatusEnum;
@@ -194,7 +203,11 @@ typedef struct
 	u8 id;
 	u8 name[AUDIO_NAME_LEN];
 }modifyAudio_plst;
-
+//rec control
+typedef struct
+{
+	u8 option;
+}recCtrl_plst;
 //////respond
 //get list
 typedef struct
@@ -232,6 +245,13 @@ typedef struct
 	u32 bitrate;
 	u16 bps;
 }rgetAudioInfo_plst;
+typedef struct
+{
+	char play_state;
+	u8 play_id;
+	char rec_state;
+	u8 rec_id;
+}rgetAudioState_plst;
 //del record audio -none
 //modify audio -none
 

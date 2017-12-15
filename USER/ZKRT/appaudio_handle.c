@@ -78,7 +78,7 @@ char enter_startrec_handle(const unsigned char *name, u8 flag, u8 *rid)
 	if(!IS_REC_FLAG(flag))
 		res = S_FailParamInvalid;
 	
-	if((*state != RECORDING_S_REC)&&(*state != START_S_REC))  //ÅĞ¶ÏÂ¼ÒôÎÄ¼şÊÇ·ñÖØÃû£¬²»ÔÊĞí¸²¸ÇÖ®Ç°µÄÂ¼ÒôÎÄ¼ş£¬ÔÊĞí¸²¸Çµ±Ç°µÄÂ¼ÒôÎÄ¼ş
+	if((*state != RECORDING_S_REC)&&(*state != START_S_REC)&&(*state != PAUSE_S_REC)&&(*state != CONTINUE_S_REC))  //ÅĞ¶ÏÂ¼ÒôÎÄ¼şÊÇ·ñÖØÃû£¬²»ÔÊĞí¸²¸ÇÖ®Ç°µÄÂ¼ÒôÎÄ¼ş£¬ÔÊĞí¸²¸Çµ±Ç°µÄÂ¼ÒôÎÄ¼ş
 	{
 		if(audio_item_check_name_repeat((u8*)name)==true)
 			res = S_FailRecNameRepeat;
@@ -86,7 +86,7 @@ char enter_startrec_handle(const unsigned char *name, u8 flag, u8 *rid)
 	
 	if(res ==S_Success)
 	{
-		I2S_Rec_Stop(); 			//Í£Ö¹Â¼Òô //zkrt_debug
+		I2S_Rec_Stop(); 			//Í£Ö¹Â¼Òô //zkrt_notice
 		appaudio_record_clear_notsave(); //clear record state
 		ret = audio_item_add(name, &id);
 		if(ret==false)
@@ -143,10 +143,10 @@ char enter_stoprec_handle(u8 flag, rstopRec_plst *rother)
 	
 	if(res ==S_Success)
 	{
-		if((*state ==RECORDING_S_REC)||(*state ==START_S_REC))
+		if((*state ==RECORDING_S_REC)||(*state ==START_S_REC)||(*state ==PAUSE_S_REC))
 		{
 			printf("stoprec_ptf,flag:%d\n", flag);
-			I2S_Rec_Stop(); 			//Í£Ö¹Â¼Òô //zkrt_debug
+			I2S_Rec_Stop(); 			//Í£Ö¹Â¼Òô //zkrt_notice
 			
 			if(flag == REC_STOP_NOSAVE)
 			{
@@ -389,6 +389,57 @@ char enter_modifyaudio_handle(const modifyAudio_plst *sother)
 		strcpy((char*)item->name, (char*)sother->name);
 		printf("modifyaudio_ptf, oldname:%s, newname:%s\n", nameold, namenew);
 	}
+
+	return res;
+}
+/**
+  * @brief  enter_recctrl_handle ÔİÍ£/¼ÌĞø
+  * @param  
+  * @note   
+  * @retval
+  */
+char enter_recctrl_handle(const recCtrl_plst *sother)
+{
+	u8 res=S_Success;
+
+	//ÅĞ¶Á²ÎÊıÊÇ·ñÕıÈ·£¬½âÎösother£¬·â×°rother
+	if(!IS_RECOPTION(sother->option))
+		res = S_FailParamInvalid;
+	
+	if(res ==S_Success)
+	{
+		if(audio_hdle_pst->rec_id == AUDIOID_NONE)
+		{
+			res = S_FailRecCtrlAsNoRec;
+		}
+    else
+    {
+			if(sother->option ==REC_CTRL_PAUSE)
+			{
+				_audio_handlest.audiorec->rec_state = PAUSE_S_REC;
+				I2S_Rec_Stop(); 
+			}
+			if(sother->option ==REC_CTRL_CONTINUE)
+			{
+				_audio_handlest.audiorec->rec_state = CONTINUE_S_REC;
+				I2S_Rec_Start(); 		
+			}
+      printf("recctrl_ptf, option:%d, state:%d\n", sother->option, _audio_handlest.audiorec->rec_state);
+		}
+	}
+	
+	return res;
+}
+char enter_getaudiostate_handle(rgetAudioState_plst *rother)
+{
+	u8 res=S_Success;
+	
+	rother->play_id = audio_hdle_pst->play_id;
+	rother->rec_id = audio_hdle_pst->rec_id;
+	rother->play_state = audio_hdle_pst->audioplay->play_state;
+	rother->rec_state = audio_hdle_pst->audiorec->rec_state;
+
+	printf("getaudiostate_ptf, playstate:%d, playid:%d, recstate:%d, recid:%d\n", rother->play_state, rother->play_id, rother->rec_state, rother->rec_id);
 
 	return res;
 }

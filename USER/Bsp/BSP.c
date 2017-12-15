@@ -9,6 +9,7 @@
 #include "exfuns.h"
 #include "ff.h"
 #include "diskio.h"
+#include "wm8978.h"
 
 static void RCC_Configuration(void);
 static void GPIO_Configuration(void);
@@ -50,6 +51,7 @@ void BSP_Init(void)
 	CAN_Mode_Init();
 	exfuns_init();				                  //为fatfs相关变量申请内存  
   f_mount(fs[SD_CARD],"0:", 1); 		//挂载SD卡  	
+	WM8978_Init();				//初始化WM8978
 }
 /**
   * @brief  Configures the different system clocks.

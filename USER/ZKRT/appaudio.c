@@ -47,7 +47,7 @@ void appaudio_init(void)
 	_audio_handlest.audioplay = &_audioplay;
 
   //音频参数	
-  _audio_handlest.volume = VOLUME_MAP(100);
+  _audio_handlest.volume = VOLUME_MAP(VOLUME_INIT_VALUE);
 
 	//录音参数
 	_audio_handlest.rec_enable = true;
@@ -64,6 +64,8 @@ void appaudio_init(void)
 	_audio_handlest.audioplay->play_mode = NORMAL_MAPY;
 	_audio_handlest.audioplay->out_flag = REC_FLAG_OUTDISE;
 	
+	//set vol
+	enter_volctrl_handle(VOLUME_INIT_VALUE);
 	//进入speaker模式
 	audio_enter_speak_mode();
 }
@@ -100,6 +102,13 @@ static void apprecord_handle(void)
 		
 		case RECORDING_S_REC:
 			recoding_handle();
+			break;
+		
+		case PAUSE_S_REC:
+			recode_pause_handle();
+			break;
+		case CONTINUE_S_REC:
+			recode_continue_handle();
 			break;
 		
 		case STOP_S_REC:
@@ -175,6 +184,8 @@ static char volctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
 static char getaudioinfo_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
 static char delrecaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
 static char modifyaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
+static char recctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
+static char getaudiostate_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
 
 const PTCOL_FUN ptcol_fun[] = {
 	none_ptf,
@@ -186,7 +197,9 @@ const PTCOL_FUN ptcol_fun[] = {
 	volctrl_ptf,
 	getaudioinfo_ptf,
 	delrecaudio_ptf,
-	modifyaudio_ptf
+	modifyaudio_ptf,
+	recctrl_ptf,
+	getaudiostate_ptf
 }; 
 /**
   * @brief  none_ptf
@@ -397,7 +410,50 @@ static char modifyaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen)
 	
 	return NEED_RETRUN;
 }
-
+/**
+  * @brief  recctrl_ptf 暂停/继续录音
+  * @param  
+  * @note   
+  * @retval
+  */
+static char recctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen)
+{
+	u8 res=S_Success;
+	send_plst *s = (send_plst*)sdata;
+	respond_plst *r = (respond_plst*)rdata;
+	recCtrl_plst *sother = (recCtrl_plst*)(s->other_data);
+	
+	res = enter_recctrl_handle(sother);
+	
+	//respond header
+	r->control_num = s->control_num;
+	r->status = res;
+	*rlen = RES_HEADER_LEN;
+	
+	return NEED_RETRUN;
+}
+/**
+  * @brief  getaudiostate_ptf
+  * @param  
+  * @note   
+  * @retval
+  */
+static char getaudiostate_ptf(void *sdata, void *rdata, u8 slen, u8* rlen)
+{
+	u8 res=S_Success;
+	send_plst *s = (send_plst*)sdata;
+	respond_plst *r = (respond_plst*)rdata;
+	rgetAudioState_plst *rother = (rgetAudioState_plst*)r->other_data;
+	
+	res = enter_getaudiostate_handle(rother);
+	
+	//respond header
+	r->control_num = s->control_num;
+	r->status = res;
+	*rlen = sizeof(rgetAudioState_plst) + RES_HEADER_LEN;
+	
+	return NEED_RETRUN;
+}
 /**
   * @}
   */ 

@@ -4,7 +4,7 @@
 #include "sys.h"
 
 ////////////////////////////////////////////////////////////macro switch
-#define ZK_CRC_ENABLE               0     //CRC校验开关
+#define ZK_CRC_ENABLE               1     //CRC校验开关 //zkrt_debug
 
 //start code
 #define _START_CODE                 0XEB

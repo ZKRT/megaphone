@@ -68,7 +68,7 @@ void appcan_prcs(void)
 	{
 		upload_timecnt = UPLOAD_TIMEOUT_CNT;
 		//执行定时上传
-//		appcan_hbpacket_send(); //zkrt_debug
+		appcan_hbpacket_send(); //zkrt_debug
 	}
 }
 ///**
@@ -88,29 +88,21 @@ void appcan_prcs(void)
 static uint8_t appcan_hbpacket_send(void)
 {
 	zkrt_packet_t *packet2 = &msg_handlest.sendpacket;
-	uint8_t *data = msg_handlest.data;
-#if 0 //this is old handle	
-	uint8_t *data = (uint8_t*)&can_hb_cmd;
-	uint8_t ret;
-	appcan_hb_pack();
-	ret = CAN1_send_message_fun(data, sizeof(can_hb_cmd));
-	return ret;
-#endif
+	uint8_t *sdata = msg_handlest.data;
+	common_data_plst* cd = (common_data_plst*)packet2->data;
+	common_hbd_plst* chbd = (common_hbd_plst*)cd->type_data;
   //pack heartbeat
 	packet2->cmd = SUBDEV_TO_UAV;
 	packet2->command = ZK_COMMAND_COMMON;
-//	packet2->UAVID[ZK_DINDEX_DEVTYPE] = DEVICE_TYPE_SELF;
-	packet2->data[0] = TN_HEARTBEAT;
-	packet2->data[1] = (u8)(TNHB_FLAG&0xff);
-	packet2->data[2] = (u8)(TNHB_FLAG>>8&0xff);
-	packet2->data[3] = (u8)(TNHB_FLAG>>16&0xff);
-	packet2->data[4] = (u8)(TNHB_FLAG>>24&0xff);
-	packet2->length = HB_LENGTH;
-	msg_handlest.datalen = zkrt_final_encode(data, packet2);
+	packet2->UAVID[ZK_DINDEX_DEVTYPE] = DEVICE_TYPE_SELF;
+	packet2->length = THHB_FIXED_LEN;
+	cd->type_num = TN_HEARTBEAT;
+	chbd->hb_flag = TNHB_FLAG;
+	msg_handlest.datalen = zkrt_final_encode(sdata, packet2);
 #ifdef UART_TEST_PROTOCOL
-	t_osscomm_sendMessage(data, msg_handlest.datalen, USART_TEST_NUM);
+	t_osscomm_sendMessage(sdata, msg_handlest.datalen, USART_TEST_NUM);
 #else
-	CAN1_send_message_fun(data, msg_handlest.datalen);
+	CAN1_send_message_fun(sdata, msg_handlest.datalen);
 #endif	
 	
 	return 0;

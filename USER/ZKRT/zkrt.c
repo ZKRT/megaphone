@@ -243,6 +243,8 @@ uint8_t zkrt_decode_char(zkrt_packet_t *packet, uint8_t ch)
 #if ZK_CRC_ENABLE		
 		if(ch == (uint8_t)((packet->crc)&0xff))
 			zkrt_curser_state = 12;
+		else
+			goto recv_failed;
 #else
 		  packet->crc = ch&0xff;
 			zkrt_curser_state = 12;		
@@ -253,6 +255,8 @@ uint8_t zkrt_decode_char(zkrt_packet_t *packet, uint8_t ch)
 #if ZK_CRC_ENABLE				
 		if(ch == (uint8_t)((packet->crc)>>8))
 			zkrt_curser_state = 13;
+		else
+			goto recv_failed;
 #else
 		  packet->crc = (packet->crc)|(ch<<8);
 			zkrt_curser_state = 13;
@@ -266,11 +270,15 @@ uint8_t zkrt_decode_char(zkrt_packet_t *packet, uint8_t ch)
 	}
 	else
 	{
+		goto recv_failed;
+	}
+	
+	return zkrt_recv_success;
+	
+recv_failed:
 		zkrt_curser_state = 0;
 		zkrt_app_index = 0;
 		zkrt_uav_index = 0;
 		zkrt_dat_index = 0;
-	}
-	
-	return zkrt_recv_success;
+		return 	zkrt_recv_success;
 }

@@ -80,24 +80,24 @@ void appled_prcs(void)
 		_can_led_flag = 0;
 		GPIO_WriteBit(CAN_LED_PORT, CAN_LED_PIN, LED_DARK);
 	}
+	if(_run_led_flag)  
+	{
+		_run_led_flag = 0;
+		GPIO_WriteBit(RUN_LED_PORT, RUN_LED_PIN, LED_DARK);
+	}
 //	if(_run_led_flag)  //zkrt_debug
 //	{
 //		_run_led_flag = 0;
-//		GPIO_WriteBit(RUN_LED_PORT, RUN_LED_PIN, LED_DARK);
-//	}
-	if(_run_led_flag)  //zkrt_debug
-	{
-		_run_led_flag = 0;
-		_run_led_cnt = RUN_LED_INTERVAL;
-		if(GPIO_ReadInputDataBit(RUN_LED_PORT, RUN_LED_PIN))
-		{
-			GPIO_WriteBit(RUN_LED_PORT, RUN_LED_PIN, LED_LIGHT);
-		}
-		else
-		{
-			GPIO_WriteBit(RUN_LED_PORT, RUN_LED_PIN, LED_DARK);
-		}
-	}	
+//		_run_led_cnt = RUN_LED_INTERVAL;
+//		if(GPIO_ReadInputDataBit(RUN_LED_PORT, RUN_LED_PIN))
+//		{
+//			GPIO_WriteBit(RUN_LED_PORT, RUN_LED_PIN, LED_LIGHT);
+//		}
+//		else
+//		{
+//			GPIO_WriteBit(RUN_LED_PORT, RUN_LED_PIN, LED_DARK);
+//		}
+//	}	
 }	
 /**
   * @}

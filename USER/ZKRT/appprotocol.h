@@ -84,7 +84,7 @@
 #define TN_HEARTBEAT                  1
 //hb flag
 #define TNHB_FLAG                     0xaabbccdd
-#define HB_LENGTH                     5
+#define THHB_FIXED_LEN                5
 
 //respond flag
 #define NEED_RETRUN                   1
@@ -133,10 +133,26 @@ typedef enum
 /**
   * @}
   */ 
-///////////////////////////////send and respond struct
-
-//////send
+//////////////////////////////////////////////////////////////////////////protocol start
 #pragma pack(1)
+///////////////////////////////command=common, heartbeat data
+//////common command
+typedef struct
+{
+	u8 type_num;
+	u8 type_data[ZK_DATA_MAX_LEN-1];
+}common_data_plst;
+//heartbeat data
+typedef struct
+{
+	u32 hb_flag;
+	u8 hb_data[ZK_DATA_MAX_LEN-THHB_FIXED_LEN];
+}common_hbd_plst;
+//megaphone heartbeat is null
+
+///////////////////////////////command=specify, send and respond struct
+//////send
+
 typedef struct
 {
 	u8 control_num;
@@ -254,9 +270,8 @@ typedef struct
 }rgetAudioState_plst;
 //del record audio -none
 //modify audio -none
-
+///////////////////////////////////////////////////////////////////////////////////////protocol end
 #pragma pack() 
-
 
 /**
 *   @brief  protocl handle funciton

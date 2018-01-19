@@ -290,13 +290,15 @@ static char playsong_ptf(void *sdata, void *rdata, u8 slen, u8* rlen)
 	send_plst *s = (send_plst*)sdata;
 	respond_plst *r = (respond_plst*)rdata;
 	playSong_plst *sother = (playSong_plst*)(s->other_data);
+	rplaySong_plst *rother = (rplaySong_plst*)r->other_data;
 	
 	res = enter_playsong_handle(sother);
 	
+	rother->id = sother->id;
 	//respond header
 	r->control_num = s->control_num;
 	r->status = res;
-	*rlen = RES_HEADER_LEN;
+	*rlen = sizeof(rplaySong_plst)+RES_HEADER_LEN;
 	return NEED_RETRUN;
 }
 /**
@@ -378,13 +380,15 @@ static char delrecaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen)
 	send_plst *s = (send_plst*)sdata;
 	respond_plst *r = (respond_plst*)rdata;
 	delAudio_plst *sother = (delAudio_plst*)(s->other_data);
+	rdelAudio_plst *rother = (rdelAudio_plst*)r->other_data;
 	
 	res = enter_delrecaudio_handle(sother->id);
 	
+	rother->id = sother->id;
 	//respond header
 	r->control_num = s->control_num;
 	r->status = res;
-	*rlen = RES_HEADER_LEN;
+	*rlen = sizeof(rdelAudio_plst)+RES_HEADER_LEN;
 	
 	return NEED_RETRUN;
 }
@@ -400,13 +404,15 @@ static char modifyaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen)
 	send_plst *s = (send_plst*)sdata;
 	respond_plst *r = (respond_plst*)rdata;
 	modifyAudio_plst *sother = (modifyAudio_plst*)(s->other_data);
+	rmodifyAudio_plst *rother = (rmodifyAudio_plst*)r->other_data;
 	
 	res = enter_modifyaudio_handle(sother);
 	
+	rother->id = sother->id;
 	//respond header
 	r->control_num = s->control_num;
 	r->status = res;
-	*rlen = RES_HEADER_LEN;
+	*rlen = sizeof(rmodifyAudio_plst)+RES_HEADER_LEN;
 	
 	return NEED_RETRUN;
 }

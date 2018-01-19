@@ -159,7 +159,7 @@ typedef struct
 	u8 other_data[ZK_DATA_MAX_LEN-1];
 }send_plst;
 
-//////respond
+//////
 #define RES_HEADER_LEN  2  //equal to control num+status
 typedef struct
 {
@@ -245,7 +245,7 @@ typedef struct
 	u32 time;
 	u32 size;
 }rstopRec_plst;
-//paly song -none
+typedef id_plst rplaySong_plst;
 //play control -none
 //volume control -none
 //check audio info
@@ -268,8 +268,8 @@ typedef struct
 	char rec_state;
 	u8 rec_id;
 }rgetAudioState_plst;
-//del record audio -none
-//modify audio -none
+typedef id_plst rdelAudio_plst;
+typedef id_plst rmodifyAudio_plst;
 ///////////////////////////////////////////////////////////////////////////////////////protocol end
 #pragma pack() 
 

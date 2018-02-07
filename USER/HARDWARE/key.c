@@ -17,13 +17,15 @@
 /* Includes ------------------------------------------------------------------*/
 #include "key.h"
 #include "led.h"
-
+#include "appaudio.h"
+#include "appaudio_handle.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/ 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 Key_st all_key[KEY_NUM];
 
+extern appaudio_st _audio_handlest;
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 static void key_msTask(void);
@@ -130,9 +132,40 @@ static void key_handle(void)
   */
 static void user_key_handle(void)
 {
-//	if(key_pressed(0, 0) == KEY_PRESED)
-//	{
-//	}
+	u8 vol;
+	u8 option;
+	if(key_pressed(KEY_VOL_PLUS, 0) == KEY_PRESED)
+	{
+		vol = _audio_handlest.volume;
+		vol+=10;
+		if(IS_VOLUME((int)vol))
+			enter_volctrl_handle(vol);
+	}
+	if(key_pressed(KEY_VOL_MINUS, 0) == KEY_PRESED)
+	{
+		vol = _audio_handlest.volume;
+		vol=vol -10;
+		if(IS_VOLUME((int)vol))
+			enter_volctrl_handle(vol);
+	}
+	if(key_pressed(KEY_PLAY_NEXT, 0) == KEY_PRESED)
+	{
+		enter_play_next_song();
+	}
+	if(key_pressed(KEY_PALY_PAUSE, 0) == KEY_PRESED)
+	{
+		vol = _audio_handlest.audioplay->play_state;
+		if(vol ==PLAYING_S_APY)
+		{
+			option = PLAY_CTRL_PAUSE;
+			enter_playctrl_handle(option);
+		}
+		else if(vol ==PAUSE_S_APY)
+		{
+			option = PLAY_CTRL_CONTINUE;
+			enter_playctrl_handle(option);
+		}
+	}
 }
 /**
 * @brief  key_pressed: 

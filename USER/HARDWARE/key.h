@@ -8,10 +8,14 @@
 /* Exported constants --------------------------------------------------------*/
 
 //key value read in gpio regester //zkrt_notice
-#define KEY1_V 		                         GPIO_ReadInputDataBit(KEY1_PORT,GPIO_Pin_0) 
-#define KEY2_V 		                         GPIO_ReadInputDataBit(KEY2_PORT,GPIO_Pin_1)	
-#define KEY3_V 		                         GPIO_ReadInputDataBit(KEY3_PORT,GPIO_Pin_2) 
-#define KEY4_V	                           GPIO_ReadInputDataBit(KEY4_PORT,GPIO_Pin_3)
+//#define KEY1_V 		                         GPIO_ReadInputDataBit(KEY1_PORT,GPIO_Pin_0) 
+//#define KEY2_V 		                         GPIO_ReadInputDataBit(KEY2_PORT,GPIO_Pin_1)	
+//#define KEY3_V 		                         GPIO_ReadInputDataBit(KEY3_PORT,GPIO_Pin_2) 
+//#define KEY4_V	                           GPIO_ReadInputDataBit(KEY4_PORT,GPIO_Pin_3)
+#define KEY1_V 		                         GPIO_ReadInputDataBit(KEY1_PORT,GPIO_Pin_2) 
+#define KEY2_V 		                         GPIO_ReadInputDataBit(KEY2_PORT,GPIO_Pin_3)	
+#define KEY3_V 		                         GPIO_ReadInputDataBit(KEY3_PORT,GPIO_Pin_0) 
+#define KEY4_V	                           GPIO_ReadInputDataBit(KEY4_PORT,GPIO_Pin_1)
 
 //key presed or realese value, this define relevant the gpio resgister  //zkrt_notice
 #define KEY_PRESED                         0  
@@ -24,15 +28,10 @@
 #define KEY4_NUM                           3
 #define KEY_NUM                            4
 
-#define KEY_STOP_SAVE                      KEY3_NUM
-#define KEY_PLAY                           KEY2_NUM
-#define KEY_REC_PAUSE                      KEY1_NUM
-#define KEY_WKUP                           KEY4_NUM
-
-#define KEY0_PRES 	                       1
-#define KEY1_PRES	                         2
-#define KEY2_PRES	3
-#define WKUP_PRES   4  //ZKRT_TODO
+#define KEY_PLAY_NEXT                      KEY1_NUM
+#define KEY_PALY_PAUSE                     KEY2_NUM
+#define KEY_VOL_PLUS                       KEY3_NUM
+#define KEY_VOL_MINUS                      KEY4_NUM
 
 //jitter timerout
 #define JITTER_CNT                         2  //200ms

@@ -218,7 +218,7 @@ char enter_playsong_handle(const playSong_plst *sother)
 		res = wav_decode_init((u8*)objname, &audio_hdle_pst->audioplay->wavctrl); //判断文件格式是否有效
 		if(!res)
 		{
-			printf("playsong_ptf, file:%s\n", objname);
+			printf("playsong_ptf, out_flag=%d, file:%s\n", sother->flag, objname);
 			appaudio_play_clear(); //clear last play song
 			_audio_handlest.play_id = sother->id;
 		  _audio_handlest.play_item = item;
@@ -430,6 +430,12 @@ char enter_recctrl_handle(const recCtrl_plst *sother)
 	
 	return res;
 }
+/**
+  * @brief  
+  * @param  
+  * @note   
+  * @retval
+  */
 char enter_getaudiostate_handle(rgetAudioState_plst *rother)
 {
 	u8 res=S_Success;
@@ -441,6 +447,25 @@ char enter_getaudiostate_handle(rgetAudioState_plst *rother)
 
 	printf("getaudiostate_ptf, playstate:%d, playid:%d, recstate:%d, recid:%d\n", rother->play_state, rother->play_id, rother->rec_state, rother->rec_id);
 
+	return res;
+}
+/**
+  * @brief  
+  * @param  
+  * @note   
+  * @retval
+  */
+char enter_play_next_song(void)
+{
+	u8 res=S_Success;
+	playSong_plst next_item={0, REC_FLAG_OUTEN};
+	next_item.id = audio_item_nextid_loop(_audio_handlest.play_id);
+	if(next_item.id !=AUDIOID_NONE)
+	{
+		enter_playsong_handle(&next_item);
+		return res;
+	}
+	res = S_Fail;
 	return res;
 }
 /////////////////////////////////////////////////////////////////////////////// record and play state clear

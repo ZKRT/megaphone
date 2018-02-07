@@ -44,11 +44,20 @@ void rec_i2s_dma_rx_callback(void)
 	}
 }  
 /////////////////////////////////////////////////////////////////////////////////////////wm8978 handle and iis configure function
+void wm8978_input_ctrl(u8 onoff_flag)
+{
+#ifdef USE_PRODUCT_AUDIO_OUPUT
+	WM8978_Input_Cfg(0, onoff_flag, 0);
+#else
+	//调试用
+	WM8978_Input_Cfg(onoff_flag, onoff_flag, 0);	//开启输入通道(MIC&LINE IN)
+#endif	
+}
 //进入PCM 录音模式 		  
 void audio_enter_rec_mode(void)
 {
 	WM8978_ADDA_Cfg(0,1);		//开启ADC
-	WM8978_Input_Cfg(1,1,0);	//开启输入通道(MIC&LINE IN)
+	wm8978_input_ctrl(1);
 	if(_audiorec.rec_out_flag == REC_FLAG_OUTEN)
 		WM8978_Output_Cfg(0, 1);		//开启BYPASS输出 
 	else
@@ -72,13 +81,13 @@ void audio_enter_play_mode(void)
 	WM8978_ADDA_Cfg(1,0);		//开启DAC 
   if(_audioplay.out_flag ==REC_FLAG_OUTEN)
 	{
-		WM8978_Input_Cfg(1,1,0);	//关闭输入通道(MIC&LINE IN)
+		wm8978_input_ctrl(1);
 		WM8978_Output_Cfg(1,1);		//开启DAC输出
 		WM8978_MIC_Gain(46);			//MIC增益设置为0 				
 	}
 	else
 	{
-		WM8978_Input_Cfg(0,0,0);	//关闭输入通道(MIC&LINE IN)
+		wm8978_input_ctrl(0);
 		WM8978_Output_Cfg(1,0);		//开启DAC输出
 		WM8978_MIC_Gain(0);			//MIC增益设置为0 		
 	}
@@ -89,7 +98,7 @@ void audio_enter_play_mode(void)
 void audio_enter_speak_mode(void)
 {
 	WM8978_ADDA_Cfg(0, 0);		 //close adc and dac 
-	WM8978_Input_Cfg(1,1,0);	 //(MIC&LINE IN)
+	wm8978_input_ctrl(1);
 	WM8978_Output_Cfg(0,1);		 //bypass
 	WM8978_MIC_Gain(46);			   //MIC增益设置为0 
 	I2S_Play_Stop();			     //停止时钟发送

@@ -35,6 +35,7 @@ char enter_delrecaudio_handle(u8 id);
 char enter_modifyaudio_handle(const modifyAudio_plst *sother);
 char enter_recctrl_handle(const recCtrl_plst *sother);
 char enter_getaudiostate_handle(rgetAudioState_plst *rother);
+char enter_play_next_song(void);
 
 #endif /* __APPAUDIO_HANDLE_H */
 

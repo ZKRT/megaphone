@@ -27,7 +27,7 @@
 /* Exported constants --------------------------------------------------------*/
 
 //volume value mapping
-#define VOLUME_MAP(V)                (u8)(0.63*(V))   //zkrt_notice: 0.63 by wm8978 value limit           
+#define VOLUME_MAP(V)                (u8)(0.57*(V))   //zkrt_notice: 0.57 by wm8978 value limit  //0.57 is max 0db gain, reg value is 0b111001,see wm8978 doc          
 #define VOLUME_INIT_VALUE            100
 
 /* Exported types ------------------------------------------------------------*/

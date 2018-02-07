@@ -270,9 +270,14 @@ audioinfo_st* audio_item_get(u8 id)
   */
 u8 audio_item_nextid_loop(u8 id)
 {
-	//zkrt_todo:判断list无item的时候，防止死循环
+	
   u8 newid = id+1;
 	newid = newid>=ID_LIST_MAX? 0:newid;
+	
+	if(audiolist_pst->id_mask ==0) //zkrt_notice:判断list无item的时候，防止死循环
+	{
+		return AUDIOID_NONE;
+	}
 	while(infolist_pst[newid].id == AUDIOID_NONE)
 	{
 		newid++;

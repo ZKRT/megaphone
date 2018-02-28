@@ -4,7 +4,10 @@
 #include "stm32f0xx.h"
 #include <stdio.h>
 #include <string.h>
-
+#include <stdbool.h>
+typedef uint32_t  u32;
+typedef uint16_t u16;
+typedef uint8_t  u8;
 #define MAVLINK_TX_INIT_VAL 0XFFFFFFFF
 
 extern volatile uint32_t TimingDelay;				//设置为全局变量，不断的做减法

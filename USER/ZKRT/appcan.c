@@ -68,7 +68,7 @@ void appcan_prcs(void)
 	{
 		upload_timecnt = UPLOAD_TIMEOUT_CNT;
 		//执行定时上传
-		appcan_hbpacket_send(); //zkrt_debug
+		appcan_hbpacket_send();
 	}
 }
 ///**

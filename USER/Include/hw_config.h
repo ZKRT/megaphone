@@ -22,8 +22,8 @@
 
 /* Exported macro ------------------------------------------------------------*/
 //whether printf data 
-#define PRINTF_OPEN          //zkrt_debug
-//#define USE_PRODUCT_AUDIO_OUPUT //zkrt_debug
+//#define PRINTF_OPEN          //zkrt_debug
+#define USE_PRODUCT_AUDIO_OUPUT //zkrt_debug
 //#define USE_TMIIC  //zkrt_todo: this driver can not work now.
 
 //unit test debug

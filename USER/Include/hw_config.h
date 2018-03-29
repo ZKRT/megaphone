@@ -27,7 +27,7 @@
 //#define USE_TMIIC  //zkrt_todo: this driver can not work now.
 
 //unit test debug
-//#define UART_TEST_PROTOCOL   //zkrt_debug
+//#define UART_TEST_PROTOCOL  
 
 
 /* Exported types ------------------------------------------------------------*/

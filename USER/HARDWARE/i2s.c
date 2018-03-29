@@ -26,7 +26,6 @@ void I2S2_Init(u16 I2S_Standard,u16 I2S_Mode,u16 I2S_Clock_Polarity,u16 I2S_Data
 	I2S_InitStructure.I2S_CPOL=I2S_Clock_Polarity;//空闲状态时钟电平
 	I2S_Init(SPI2,&I2S_InitStructure);//初始化IIS
 
- 
 	SPI_I2S_DMACmd(SPI2,SPI_I2S_DMAReq_Tx,ENABLE);//SPI2 TX DMA请求使能.
   I2S_Cmd(SPI2,ENABLE);//SPI2 I2S EN使能.	
 } 
@@ -75,6 +74,7 @@ const u16 I2S_PSC_TBL[][5]=
 {
 	{800 ,256,5,12,1},		//8Khz采样率
 	{1102,429,4,19,0},		//11.025Khz采样率 
+	{1200,256,4,10,1},		//12Khz采样率  //add by yanly
 	{1600,213,2,13,0},		//16Khz采样率
 	{2205,429,4, 9,1},		//22.05Khz采样率
 	{3200,213,2, 6,1},		//32Khz采样率

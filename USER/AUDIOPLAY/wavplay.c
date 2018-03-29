@@ -1,13 +1,12 @@
 #include "wavplay.h" 
 #include "audioplay.h"
 #include "usart.h" 
-#include "ff.h"
 #include "i2s.h"
 #include "wm8978.h"
 #include "appfiles.h"
 #include "appaudio.h"
  
- audioplay_st _audioplay;
+extern audioplay_st _audioplay;
  
 //WAV解析初始化
 //fname:文件路径+文件名
@@ -270,33 +269,7 @@ u8 wav_playing(void)
   */
 void wav_play_over_check_mode(appaudio_st* audio)
 {
-	switch(_audioplay.play_mode)	//判断当前播放模式，做不同的操作
-	{
-		case NORMAL_MAPY:
-			//close playing
-		  _audioplay.play_state = IDLE_S_APY;
-		  audio->play_id = AUDIOID_NONE;
-		  audio->play_item = NULL;
-			break;
-
-		case SINGLELOOP_MAPY:
-			_audioplay.play_state = START_S_APY;
-			break;
-
-
-		case LISTLOOP_MAPY:
-			_audioplay.play_state = START_S_APY;
-		  audio->play_id = audio_item_nextid_loop(audio->play_id);
-		  audio->play_item = audio_item_get(audio->play_id);
-			break;	
-
-    default:
-			//close playing
-		  _audioplay.play_state = IDLE_S_APY;
-		  audio->play_id = AUDIOID_NONE;
-		  audio->play_item = NULL;
-			break;
-	}	
+	audiocommon_play_over_check_mode(audio);
 }
 
 /**
@@ -307,12 +280,7 @@ void wav_play_over_check_mode(appaudio_st* audio)
   */
 void wav_play_over(void)
 {
-	FIL *file = &_audioplay.play_fil;
-	//关闭播放
-	I2S_Play_Stop();
-	f_close(file);
-	_audioplay.wavtransferend = 0;
-	_audioplay.play_state = IDLE_S_APY;
+	audiocommon_play_over();
 }
 /**
   * @brief  wav_play_stop
@@ -322,7 +290,7 @@ void wav_play_over(void)
   */
 void wav_play_stop(void)
 {
-	wav_play_over();
+	audiocommon_play_stop();
 }
 /**
   * @brief  wav_play_pause
@@ -332,8 +300,7 @@ void wav_play_stop(void)
   */
 void wav_play_pause(void)
 {
-	//zkrt_todo://尝试关闭IIS输出中断，中断里判断状态填充无效发送数据，关闭WM8978 DAC, 关闭WM8978 IIS 输出
-	//zkrt_test:暂时测试通过。此处不加任何代码，暂停处理在中断里判断状态填充无效发送数据
+	audiocommon_play_pause();
 }
 /**
   * @brief  wav_play_continue
@@ -343,9 +310,5 @@ void wav_play_pause(void)
   */
 void wav_play_continue(void)
 {
-	//zkrt_todo:
-	//具体操作与wav_play_pause相对应
-	//zkrt_test:暂时测试通过。此处不加任何代码。
-	_audioplay.play_state = PLAYING_S_APY;
+	audiocommon_play_continue();
 }
-

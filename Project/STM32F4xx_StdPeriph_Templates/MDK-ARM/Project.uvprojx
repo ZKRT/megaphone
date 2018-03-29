@@ -333,9 +333,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls>--C99</MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx,USE_STM324xG_EVAL</Define>
+              <Define>USE_STDPERIPH_DRIVER,STM32F40_41xxx,USE_STM324xG_EVAL,ARM_MATH_CM4,__CC_ARM,__FPU_PRESENT=1</Define>
               <Undefine></Undefine>
-              <IncludePath>../;../../../Libraries/CMSIS/Device/ST/STM32F4xx/Include;../../../Libraries/STM32F4xx_StdPeriph_Driver/inc;..\..\..\USER;..\..\..\USER\Bsp;..\..\..\USER\HARDWARE;..\..\..\USER\Hwos;..\..\..\USER\Include;..\..\..\USER\SYS;..\..\..\USER\ZKRT;..\..\..\USER;..\..\..\USER\FATFS\exfuns;..\..\..\USER\FATFS\src;..\..\..\USER\WAV;..\..\..\USER\COMMON</IncludePath>
+              <IncludePath>../;../../../Libraries/CMSIS/Device/ST/STM32F4xx/Include;../../../Libraries/STM32F4xx_StdPeriph_Driver/inc;..\..\..\USER;..\..\..\USER\Bsp;..\..\..\USER\HARDWARE;..\..\..\USER\Hwos;..\..\..\USER\Include;..\..\..\USER\SYS;..\..\..\USER\ZKRT;..\..\..\USER;..\..\..\USER\FATFS\exfuns;..\..\..\USER\FATFS\src;..\..\..\USER\AUDIOPLAY;..\..\..\USER\COMMON;..\..\..\USER\Helix\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -1153,61 +1153,6 @@
               </FileOption>
             </File>
             <File>
-              <FileName>light.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\USER\ZKRT\light.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
               <FileName>zkrt.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\USER\ZKRT\zkrt.c</FilePath>
@@ -1219,61 +1164,6 @@
                   <RVCTOtherData>0</RVCTOtherData>
                   <ModuleSelection>0</ModuleSelection>
                   <IncludeInBuild>1</IncludeInBuild>
-                  <AlwaysBuild>2</AlwaysBuild>
-                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
-                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
-                  <PublicsOnly>2</PublicsOnly>
-                  <StopOnExitCode>11</StopOnExitCode>
-                  <CustomArgument></CustomArgument>
-                  <IncludeLibraryModules></IncludeLibraryModules>
-                  <ComprImg>1</ComprImg>
-                </CommonProperty>
-                <FileArmAds>
-                  <Cads>
-                    <interw>2</interw>
-                    <Optim>0</Optim>
-                    <oTime>2</oTime>
-                    <SplitLS>2</SplitLS>
-                    <OneElfS>2</OneElfS>
-                    <Strict>2</Strict>
-                    <EnumInt>2</EnumInt>
-                    <PlainCh>2</PlainCh>
-                    <Ropi>2</Ropi>
-                    <Rwpi>2</Rwpi>
-                    <wLevel>0</wLevel>
-                    <uThumb>2</uThumb>
-                    <uSurpInc>2</uSurpInc>
-                    <uC99>2</uC99>
-                    <useXO>2</useXO>
-                    <v6Lang>0</v6Lang>
-                    <v6LangP>0</v6LangP>
-                    <vShortEn>2</vShortEn>
-                    <vShortWch>2</vShortWch>
-                    <v6Lto>2</v6Lto>
-                    <v6WtE>2</v6WtE>
-                    <v6Rtti>2</v6Rtti>
-                    <VariousControls>
-                      <MiscControls></MiscControls>
-                      <Define></Define>
-                      <Undefine></Undefine>
-                      <IncludePath></IncludePath>
-                    </VariousControls>
-                  </Cads>
-                </FileArmAds>
-              </FileOption>
-            </File>
-            <File>
-              <FileName>appupload.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\..\USER\ZKRT\appupload.c</FilePath>
-              <FileOption>
-                <CommonProperty>
-                  <UseCPPCompiler>2</UseCPPCompiler>
-                  <RVCTCodeConst>0</RVCTCodeConst>
-                  <RVCTZI>0</RVCTZI>
-                  <RVCTOtherData>0</RVCTOtherData>
-                  <ModuleSelection>0</ModuleSelection>
-                  <IncludeInBuild>0</IncludeInBuild>
                   <AlwaysBuild>2</AlwaysBuild>
                   <GenerateAssemblyFile>2</GenerateAssemblyFile>
                   <AssembleAssemblyFile>2</AssembleAssemblyFile>
@@ -1381,6 +1271,11 @@
               <FileName>appaudio_handle.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\USER\ZKRT\appaudio_handle.c</FilePath>
+            </File>
+            <File>
+              <FileName>appmp3play.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\ZKRT\appmp3play.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1505,12 +1400,22 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>WAV</GroupName>
+          <GroupName>AUDIOPLAY</GroupName>
           <Files>
+            <File>
+              <FileName>mp3play.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\AUDIOPLAY\mp3play.c</FilePath>
+            </File>
+            <File>
+              <FileName>playcommon.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\AUDIOPLAY\playcommon.c</FilePath>
+            </File>
             <File>
               <FileName>wavplay.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\..\..\USER\WAV\wavplay.c</FilePath>
+              <FilePath>..\..\..\USER\AUDIOPLAY\wavplay.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1521,6 +1426,214 @@
               <FileName>malloc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\..\USER\COMMON\malloc.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>2</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>0</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <v6Lang>0</v6Lang>
+                    <v6LangP>0</v6LangP>
+                    <vShortEn>2</vShortEn>
+                    <vShortWch>2</vShortWch>
+                    <v6Lto>2</v6Lto>
+                    <v6WtE>2</v6WtE>
+                    <v6Rtti>2</v6Rtti>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>HELIX</GroupName>
+          <GroupOption>
+            <CommonProperty>
+              <UseCPPCompiler>0</UseCPPCompiler>
+              <RVCTCodeConst>0</RVCTCodeConst>
+              <RVCTZI>0</RVCTZI>
+              <RVCTOtherData>0</RVCTOtherData>
+              <ModuleSelection>0</ModuleSelection>
+              <IncludeInBuild>2</IncludeInBuild>
+              <AlwaysBuild>2</AlwaysBuild>
+              <GenerateAssemblyFile>2</GenerateAssemblyFile>
+              <AssembleAssemblyFile>2</AssembleAssemblyFile>
+              <PublicsOnly>2</PublicsOnly>
+              <StopOnExitCode>11</StopOnExitCode>
+              <CustomArgument></CustomArgument>
+              <IncludeLibraryModules></IncludeLibraryModules>
+              <ComprImg>1</ComprImg>
+            </CommonProperty>
+            <GroupArmAds>
+              <Cads>
+                <interw>2</interw>
+                <Optim>1</Optim>
+                <oTime>0</oTime>
+                <SplitLS>0</SplitLS>
+                <OneElfS>2</OneElfS>
+                <Strict>0</Strict>
+                <EnumInt>0</EnumInt>
+                <PlainCh>0</PlainCh>
+                <Ropi>0</Ropi>
+                <Rwpi>0</Rwpi>
+                <wLevel>0</wLevel>
+                <uThumb>0</uThumb>
+                <uSurpInc>0</uSurpInc>
+                <uC99>2</uC99>
+                <useXO>0</useXO>
+                <v6Lang>0</v6Lang>
+                <v6LangP>0</v6LangP>
+                <vShortEn>2</vShortEn>
+                <vShortWch>2</vShortWch>
+                <v6Lto>2</v6Lto>
+                <v6WtE>2</v6WtE>
+                <v6Rtti>2</v6Rtti>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Cads>
+              <Aads>
+                <interw>2</interw>
+                <Ropi>2</Ropi>
+                <Rwpi>2</Rwpi>
+                <thumb>2</thumb>
+                <SplitLS>2</SplitLS>
+                <SwStkChk>2</SwStkChk>
+                <NoWarn>2</NoWarn>
+                <uSurpInc>2</uSurpInc>
+                <useXO>2</useXO>
+                <uClangAs>2</uClangAs>
+                <VariousControls>
+                  <MiscControls></MiscControls>
+                  <Define></Define>
+                  <Undefine></Undefine>
+                  <IncludePath></IncludePath>
+                </VariousControls>
+              </Aads>
+            </GroupArmAds>
+          </GroupOption>
+          <Files>
+            <File>
+              <FileName>bitstream.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\bitstream.c</FilePath>
+            </File>
+            <File>
+              <FileName>buffers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\buffers.c</FilePath>
+            </File>
+            <File>
+              <FileName>dct32.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\dct32.c</FilePath>
+            </File>
+            <File>
+              <FileName>dequant.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\dequant.c</FilePath>
+            </File>
+            <File>
+              <FileName>dqchan.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\dqchan.c</FilePath>
+            </File>
+            <File>
+              <FileName>huffman.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\huffman.c</FilePath>
+            </File>
+            <File>
+              <FileName>hufftabs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\hufftabs.c</FilePath>
+            </File>
+            <File>
+              <FileName>imdct.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\imdct.c</FilePath>
+            </File>
+            <File>
+              <FileName>mp3_play.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\mp3_play.c</FilePath>
+            </File>
+            <File>
+              <FileName>mp3dec.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\mp3dec.c</FilePath>
+            </File>
+            <File>
+              <FileName>mp3tabs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\mp3tabs.c</FilePath>
+            </File>
+            <File>
+              <FileName>scalfact.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\scalfact.c</FilePath>
+            </File>
+            <File>
+              <FileName>stproc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\stproc.c</FilePath>
+            </File>
+            <File>
+              <FileName>subband.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\subband.c</FilePath>
+            </File>
+            <File>
+              <FileName>trigtabs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\trigtabs.c</FilePath>
+            </File>
+            <File>
+              <FileName>asmmisc.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\arm\asmmisc.S</FilePath>
+            </File>
+            <File>
+              <FileName>asmpoly_thumb2.S</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\..\..\USER\Helix\scr\arm\asmpoly_thumb2.S</FilePath>
             </File>
           </Files>
         </Group>

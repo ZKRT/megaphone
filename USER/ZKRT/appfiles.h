@@ -31,7 +31,8 @@
 //#define CONFIG_DIR                         "0:/CONFIG"
 //#define LOG_DIR                            "0:/LOG"
 
-#define README_STRING                      "audio name length must be less than 20!"
+#define README_STRING                      "Audio name length must be less than 40!\n"
+#define README_STRING2                      "The number of music and record files must be less than 32!\n"
 
 //dir name arry index by SD_DIR_NAME
 #define MUSIC_DIR                          0
@@ -87,7 +88,7 @@ bool audio_item_mofiy(u8 id, const u8* name);
 bool audio_item_del(u8 id);
 bool audio_item_check_name_repeat(const u8* name);
 void printf_audio_item(const audioinfo_st *item);
-
+u8 checkfileready(void);
 u8 audio_item_nextid_loop(u8 id);
 audioinfo_st* audio_item_get(u8 id);
 
@@ -99,6 +100,7 @@ extern appfile_st *appfiles_hdle_pst;
 extern audioinfolist_st _audioinfolist_st;
 extern audioinfolist_st *audiolist_pst;
 extern audioinfo_st *infolist_pst;
+extern u8 is_file_exsit;
 #endif /* __APPAUDIO_H */
 
 /**

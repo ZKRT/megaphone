@@ -134,6 +134,7 @@ static void user_key_handle(void)
 {
 	u8 vol;
 	u8 option;
+	u8 sec;
 	if(key_pressed(KEY_VOL_PLUS, 0) == KEY_PRESED)
 	{
 		vol = _audio_handlest.volume;
@@ -152,20 +153,44 @@ static void user_key_handle(void)
 	{
 		enter_play_next_song();
 	}
-	if(key_pressed(KEY_PALY_PAUSE, 0) == KEY_PRESED)
+//	if(key_pressed(KEY_PALY_PAUSE, 0) == KEY_PRESED)
+//	{
+//		vol = _audio_handlest.audioplay->play_state;
+//		if(vol ==PLAYING_S_APY)
+//		{
+//			option = PLAY_CTRL_PAUSE;
+//			enter_playctrl_handle(option);
+//		}
+//		else if(vol ==PAUSE_S_APY)
+//		{
+//			option = PLAY_CTRL_CONTINUE;
+//			enter_playctrl_handle(option);
+//		}
+//	}
+	if(key_pressed_time(KEY_PALY_PAUSE, &sec) == KEY_PRESED)  //ÇÐ»»²¥·ÅÄ£Ê½
 	{
-		vol = _audio_handlest.audioplay->play_state;
-		if(vol ==PLAYING_S_APY)
+		if(sec <3)
 		{
-			option = PLAY_CTRL_PAUSE;
-			enter_playctrl_handle(option);
+			vol = _audio_handlest.audioplay->play_state;
+			if(vol ==PLAYING_S_APY)
+			{
+				option = PLAY_CTRL_PAUSE;
+				enter_playctrl_handle(option);
+			}
+			else if(vol ==PAUSE_S_APY)
+			{
+				option = PLAY_CTRL_CONTINUE;
+				enter_playctrl_handle(option);
+			}
 		}
-		else if(vol ==PAUSE_S_APY)
+		else if(sec >=3)
 		{
-			option = PLAY_CTRL_CONTINUE;
-			enter_playctrl_handle(option);
+			_audio_handlest.audioplay->play_mode++;
+			if(_audio_handlest.audioplay->play_mode >=3)
+				_audio_handlest.audioplay->play_mode = 0;
+			printf("change play_mode:%d\n", _audio_handlest.audioplay->play_mode);
 		}
-	}
+	}	
 }
 /**
 * @brief  key_pressed: 
@@ -178,6 +203,24 @@ uint8_t key_pressed(uint8_t num, uint8_t sec)
 	if((all_key[num].timecnt*100 >= sec*1000+JITTER_CNT)&&(all_key[num].pres == KEY_PRESED))  
 	{
 		all_key[num].pres = KEY_RELEASED;  //this presed event must be reset when user handled
+		all_key[num].timecnt = 0;
+		printf("key[%d] pressed\n", num);
+		return KEY_PRESED;
+	}
+	return KEY_RELEASED;
+}
+/**
+* @brief  key_pressed: 
+* @param  num: key number
+* @param  *sec: the time of key pressed, unit is second
+  * @retval KEY_PRESED or KEY_RELEASED
+  */
+uint8_t key_pressed_time(uint8_t num, uint8_t *sec)
+{
+	if((all_key[num].timecnt*100 >= 0+JITTER_CNT)&&(all_key[num].pres == KEY_PRESED))  
+	{
+		all_key[num].pres = KEY_RELEASED;  //this presed event must be reset when user handled
+		*sec = all_key[num].timecnt/10;
 		all_key[num].timecnt = 0;
 		printf("key[%d] pressed\n", num);
 		return KEY_PRESED;

@@ -20,7 +20,8 @@
 #include "wm8978.h"
 #include "i2s.h"
 #include "appaudio_handle.h"
-
+#include "mp3play.h"
+#include "audioplay.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -140,34 +141,47 @@ static void appplay_handle(void)
 			break;
 		
 		case START_S_APY:
-			audio_enter_play_mode();
-      if(wav_play_start() == true)
+			audio_enter_play_mode(); //zkrt_notice
+			if(audio_hdle_pst->play_item->format ==FORMAT_MP3)
 			{
+				mp3_play_start();
+			}
+			else
+			{
+				wav_play_start();
 			}
 			break;
 			
 		case PLAYING_S_APY:
-			wav_playing();
+			if(audio_hdle_pst->play_item->format ==FORMAT_MP3)
+			{
+				mp3_playing();
+			}
+			else
+			{
+				wav_playing();
+			}			
+			
 			break;
 		
 		case PAUSE_S_APY:
-			wav_play_pause();
+			audiocommon_play_pause();
 			break;
 		
 		case CONTINUE_S_APY:
-			wav_play_continue();
+			audiocommon_play_continue();
 			break;
 		
 		case STOP_S_APY:
-			wav_play_stop();
+			audiocommon_play_stop();
 			audio_hdle_pst->play_id = AUDIOID_NONE;
 			audio_hdle_pst->play_item = NULL;
 			break;
 		
 		case OVER_S_APY:
-			wav_play_over();
-		  wav_play_over_check_mode(audio_hdle_pst);
-		  audio_workmode_adjust(); //音频工作模式调整（录音，播放，对讲）
+			audiocommon_play_over();
+			audiocommon_play_over_check_mode(audio_hdle_pst);
+			audio_workmode_adjust(); //音频工作模式调整（录音，播放，对讲）
 			break;		
 		
 		default:break;

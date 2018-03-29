@@ -72,11 +72,14 @@ char enter_startrec_handle(const unsigned char *name, u8 flag, u8 *rid)
 	
 	//判读参数是否正确，解析sother，封装rother
 	namelen = strlen((char*)name);
-  if((namelen>= AUDIO_NAME_LEN)||(namelen <=0))
+	if((namelen>= AUDIO_NAME_LEN)||(namelen <=0))
 		res = S_FailParamInvalid;
 	
 	if(!IS_REC_FLAG(flag))
 		res = S_FailParamInvalid;
+	
+	if(!is_file_exsit)
+		res = S_FailSDFlash;
 	
 	if((*state != RECORDING_S_REC)&&(*state != START_S_REC)&&(*state != PAUSE_S_REC)&&(*state != CONTINUE_S_REC))  //判断录音文件是否重名，不允许覆盖之前的录音文件，允许覆盖当前的录音文件
 	{
@@ -141,12 +144,15 @@ char enter_stoprec_handle(u8 flag, rstopRec_plst *rother)
 	if(!IS_REC_STOPFLAG(flag))
 		res = S_FailParamInvalid;
 	
+	if(!is_file_exsit)
+		res = S_FailSDFlash;
+	
 	if(res ==S_Success)
 	{
 		if((*state ==RECORDING_S_REC)||(*state ==START_S_REC)||(*state ==PAUSE_S_REC))
 		{
 			printf("stoprec_ptf,flag:%d\n", flag);
-			I2S_Rec_Stop(); 			//停止录音 //zkrt_notice
+			I2S_Rec_Stop(); 			//停止录音 
 			
 			if(flag == REC_STOP_NOSAVE)
 			{
@@ -205,6 +211,9 @@ char enter_playsong_handle(const playSong_plst *sother)
 	if(!IS_REC_FLAG(sother->flag))
 		res = S_FailParamInvalid;
 	
+	if(!is_file_exsit)
+		res = S_FailSDFlash;
+	
 	if(res ==S_Success)
 	{
 		item = audio_item_get(sother->id);
@@ -214,15 +223,20 @@ char enter_playsong_handle(const playSong_plst *sother)
 		else
 			snprintf(objname, sizeof(audio_hdle_pst->audioplay->play_objname), "%s/%s", SD_DIR_NAME[RECORD_DIR], item->name);  //获取文件名的绝对路径
 		
-		memset(&audio_hdle_pst->audioplay->wavctrl, 0x00, sizeof(__wavctrl));
-		res = wav_decode_init((u8*)objname, &audio_hdle_pst->audioplay->wavctrl); //判断文件格式是否有效
+		if(item->format ==FORMAT_MP3)
+		{}
+		else
+		{
+			memset(&audio_hdle_pst->audioplay->wavctrl, 0x00, sizeof(__wavctrl));
+			res = wav_decode_init((u8*)objname, &audio_hdle_pst->audioplay->wavctrl); //判断文件格式是否有效
+		}
 		if(!res)
 		{
 			printf("playsong_ptf, out_flag=%d, file:%s\n", sother->flag, objname);
 			appaudio_play_clear(); //clear last play song
 			_audio_handlest.play_id = sother->id;
-		  _audio_handlest.play_item = item;
-		  _audio_handlest.audioplay->play_state = START_S_APY;
+			_audio_handlest.play_item = item;
+			_audio_handlest.audioplay->play_state = START_S_APY;
 			_audio_handlest.audioplay->out_flag = sother->flag;
 			res = S_Success;
 		}
@@ -248,6 +262,9 @@ char enter_playctrl_handle(u8 option)
 	//判读参数是否正确，解析sother，封装rother
 	if(!IS_PLAYOPTION(option))
 		res = S_FailParamInvalid;
+
+	if(!is_file_exsit)
+		res = S_FailSDFlash;
 	
 	if(res ==S_Success)
 	{
@@ -310,6 +327,9 @@ char enter_getaudioinfo_handle(u8 id, rgetAudioInfo_plst *rother)
 {
 	u8 res=S_Success;
 
+	if(!is_file_exsit)
+		res = S_FailSDFlash;
+		
 	//判读参数是否正确，解析sother，封装rother
 	if(audio_item_exist(id)==false)
 		res = S_FailIdInvalid;
@@ -338,6 +358,9 @@ char enter_delrecaudio_handle(u8 id)
 	//判读参数是否正确，解析sother，封装rother
 	if(audio_item_exist(id)==false)
 		res = S_FailIdInvalid;
+
+	if(!is_file_exsit)
+		res = S_FailSDFlash;
 	
 	if(res ==S_Success)
 	{
@@ -375,8 +398,11 @@ char enter_modifyaudio_handle(const modifyAudio_plst *sother)
 		res = S_FailIdInvalid;
 	
 	namelen = strlen((char*)sother->name);
-  if((namelen>= AUDIO_NAME_LEN)||(namelen <=0))
+	if((namelen>= AUDIO_NAME_LEN)||(namelen <=0))
 		res = S_FailParamInvalid;	
+
+	if(!is_file_exsit)
+		res = S_FailSDFlash;
 	
 	if(res ==S_Success)
 	{
@@ -413,6 +439,9 @@ char enter_recctrl_handle(const recCtrl_plst *sother)
 	//判读参数是否正确，解析sother，封装rother
 	if(!IS_RECOPTION(sother->option))
 		res = S_FailParamInvalid;
+	
+	if(!is_file_exsit)
+		res = S_FailSDFlash;	
 	
 	if(res ==S_Success)
 	{
@@ -470,6 +499,7 @@ char enter_play_next_song(void)
 	next_item.id = audio_item_nextid_loop(_audio_handlest.play_id);
 	if(next_item.id !=AUDIOID_NONE)
 	{
+		printf("next id:%d\n", next_item.id);
 		enter_playsong_handle(&next_item);
 		return res;
 	}

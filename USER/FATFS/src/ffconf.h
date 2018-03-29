@@ -134,7 +134,7 @@
 / Drive/Volume Configurations
 /---------------------------------------------------------------------------*/
 
-#define _VOLUMES	1 	//支持3个磁盘  //zkrt_todo
+#define _VOLUMES	1 	//支持1个磁盘  
 /* Number of volumes (logical drives) to be used. */
 
 

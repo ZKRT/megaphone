@@ -66,7 +66,7 @@
                                        ((OPTION) == REC_CTRL_CONTINUE))
 
 //audio name length
-#define AUDIO_NAME_LEN                20
+#define AUDIO_NAME_LEN                40
 
 //index 
 #define CTRLNUM_INDEX                 0   //start from data[0]
@@ -260,6 +260,7 @@ typedef struct
 	u32 samplerate;
 	u32 bitrate;
 	u16 bps;
+	u8 nchannels;
 }rgetAudioInfo_plst;
 typedef struct
 {
@@ -267,6 +268,7 @@ typedef struct
 	u8 play_id;
 	char rec_state;
 	u8 rec_id;
+	u8 vol;
 }rgetAudioState_plst;
 typedef id_plst rdelAudio_plst;
 typedef id_plst rmodifyAudio_plst;

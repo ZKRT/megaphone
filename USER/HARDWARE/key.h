@@ -54,6 +54,7 @@ typedef struct
 void appkey_init(void);
 void appkey_prcs(void);
 uint8_t key_pressed(uint8_t num, uint8_t sec);
+uint8_t key_pressed_time(uint8_t num, uint8_t *sec);
 uint8_t which_key_is_pressed(void);
 //extern volatile uint8_t _can_led_cnt;
 //extern volatile uint8_t _run_led_cnt;

@@ -11,6 +11,8 @@
 #include "diskio.h"
 #include "wm8978.h"
 
+extern u8 is_file_exsit;
+
 static void RCC_Configuration(void);
 static void GPIO_Configuration(void);
 static void NVIC_Configuration(void);
@@ -24,6 +26,7 @@ static void NVIC_Configuration(void);
  */
 void BSP_Init(void)
 {
+	FRESULT res;
 	/*!< At this stage the microcontroller clock setting is already configured, 
 	this is done through SystemInit() function which is called from startup
 	file (startup_stm32f0xx.s) before to branch to application main.
@@ -49,9 +52,14 @@ void BSP_Init(void)
 	os_usart_init();  //usart os task init
 	usart_config();
 	CAN_Mode_Init();
-	exfuns_init();				                  //为fatfs相关变量申请内存  
-  f_mount(fs[SD_CARD],"0:", 1); 		//挂载SD卡  	
-	WM8978_Init();				//初始化WM8978
+	exfuns_init();	//为fatfs相关变量申请内存  
+	res = f_mount(fs[SD_CARD],"0:", 1);
+    if(res==FR_OK)	//挂载SD卡 
+	{
+		is_file_exsit = 1;
+	}
+	printf("f_mount: %d\n", res);
+	WM8978_Init();	//初始化WM8978
 }
 /**
   * @brief  Configures the different system clocks.
@@ -141,7 +149,7 @@ static void GPIO_Configuration(void)
 //  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 //  GPIO_Init(GPIOB, &GPIO_InitStructure); 	
 
-//  /*I2S2 Pins configuration  *************************************************/   //zkrt_todo
+//  /*I2S2 Pins configuration  *************************************************/  
 //  /* Connect pin to Periph */
 //  GPIO_PinAFConfig(GPIOA, GPIO_PinSource11, GPIO_AF_4);
 //  GPIO_PinAFConfig(GPIOA, GPIO_PinSource12, GPIO_AF_4);    

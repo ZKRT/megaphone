@@ -85,7 +85,7 @@ void appled_prcs(void)
 		_run_led_flag = 0;
 		GPIO_WriteBit(RUN_LED_PORT, RUN_LED_PIN, LED_DARK);
 	}
-//	if(_run_led_flag)  //zkrt_debug
+//	if(_run_led_flag) 
 //	{
 //		_run_led_flag = 0;
 //		_run_led_cnt = RUN_LED_INTERVAL;

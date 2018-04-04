@@ -481,7 +481,7 @@ char enter_getaudiostate_handle(rgetAudioState_plst *rother)
 	rother->rec_id = audio_hdle_pst->rec_id;
 	rother->play_state = audio_hdle_pst->audioplay->play_state;
 	rother->rec_state = audio_hdle_pst->audiorec->rec_state;
-
+	rother->vol = audio_hdle_pst->volume;
 	printf("getaudiostate_ptf, playstate:%d, playid:%d, recstate:%d, recid:%d\n", rother->play_state, rother->play_id, rother->rec_state, rother->rec_id);
 
 	return res;

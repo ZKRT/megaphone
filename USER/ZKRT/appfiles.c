@@ -176,6 +176,22 @@ void appfile_init(void)
 		{
 			printf("%s\n", README_STRING);
 			continue;
+		}	
+		if(strstr(fn, ".mp3")!=NULL)
+		{
+			infolist_pst[id_index].format = FORMAT_MP3;
+		}
+		else if(strstr(fn, ".MP3")!=NULL)
+		{
+			infolist_pst[id_index].format = FORMAT_MP3;
+		}
+		else if(strstr(fn, ".wav")!=NULL)
+		{
+			infolist_pst[id_index].format = FORMAT_WAV;
+		}
+		else
+		{
+			infolist_pst[id_index].format = FORMAT_WAV;  //zkrt_notice: 暂时当作wav文件处理 
 		}		
 		audiolist_pst->rec_num++;
 		setBit(audiolist_pst->id_mask, id_index);
@@ -183,17 +199,33 @@ void appfile_init(void)
 		strncpy((char*)infolist_pst[id_index].name, fn, AUDIO_NAME_LEN-1);
 		infolist_pst[id_index].name[AUDIO_NAME_LEN-1] = '\0';
 		infolist_pst[id_index].attr = ATTR_RECORD;
-		infolist_pst[id_index].format = FORMAT_WAV;
+//		infolist_pst[id_index].format = FORMAT_WAV;
 		snprintf(obj_name, sizeof(obj_name), "%s/%s", SD_DIR_NAME[RECORD_DIR], infolist_pst[id_index].name);  //获取文件名的绝对路径
-		res = wav_decode_init((u8*)obj_name, &wavc); //获取wav信息
-		if(!res)
+		if(infolist_pst[id_index].format ==FORMAT_MP3)
 		{
-			infolist_pst[id_index].bitrate = wavc.bitrate;
-			infolist_pst[id_index].bps = wavc.bps;
-			infolist_pst[id_index].samplerate = wavc.samplerate;
-			infolist_pst[id_index].size = wavc.datasize;
-			infolist_pst[id_index].time = wavc.datasize/(wavc.bitrate/8);	//歌曲总长度(单位:秒) 
-			infolist_pst[id_index].nchannels = (u8)(wavc.nchannels);
+			res = mp3_get_frame_info_by_file(&_mp3FrameInfo, obj_name);
+			if(!res)
+			{
+				infolist_pst[id_index].bitrate = _mp3FrameInfo.bitrate;
+				infolist_pst[id_index].bps = _mp3FrameInfo.bitsPerSample;
+				infolist_pst[id_index].samplerate = _mp3FrameInfo.samprate;	
+				infolist_pst[id_index].size = _mp3FrameInfo.datasize;
+				infolist_pst[id_index].time = _mp3FrameInfo.datasize/(_mp3FrameInfo.bitrate/8);	//歌曲总长度(单位:秒) 
+				infolist_pst[id_index].nchannels = (u8)(_mp3FrameInfo.nChans);
+			}
+		}
+		else
+		{
+			res = wav_decode_init((u8*)obj_name, &wavc); //获取wav信息
+			if(!res)
+			{
+				infolist_pst[id_index].bitrate = wavc.bitrate;
+				infolist_pst[id_index].bps = wavc.bps;
+				infolist_pst[id_index].samplerate = wavc.samplerate;
+				infolist_pst[id_index].size = wavc.datasize;
+				infolist_pst[id_index].time = wavc.datasize/(wavc.bitrate/8);	//歌曲总长度(单位:秒) 
+				infolist_pst[id_index].nchannels = (u8)(wavc.nchannels);
+			}
 		}
 		id_index++;
 	}

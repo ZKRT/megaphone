@@ -11,14 +11,14 @@
 /*
   Input Args  : Null
   Output Args : Null
-  Purpose     : enable hardware timer 0 
+  Purpose     : enable hardware timer 0
 */
 extern void hwtmr0_enable(void);
 
 /*
   Input Args  : Null
   Output Args : Null
-  Purpose     : disable hardware timer 0 
+  Purpose     : disable hardware timer 0
 */
 extern void hwtmr0_disable(void);
 

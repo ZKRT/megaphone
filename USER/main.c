@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    main.c 
+  * @file    main.c
   * @author  ZKRT
   * @version V1.0
   * @date    9-May-2017
@@ -33,29 +33,27 @@
   * @param  None
   * @retval None
   */
-int main(void)
-{
+int main(void) {
 	BSP_Init();
 	appcan_init();
 	appled_init();
 	appkey_init();
 	checkfileready();
-	if(is_file_exsit) 
+	if (is_file_exsit)
 		appfatfs_test();
-	if(is_file_exsit) 
+	if (is_file_exsit)
 		appfile_init();
 	appaudio_init();
-	while(1)
-	{
+	while (1) {
 		/* product code start, the proposed process should not be delayed*/
 		appled_prcs();                                       //LEDÁ÷³Ì
 		appcan_prcs();
 		appkey_prcs();
-		appaudio_prcs();	
+		appaudio_prcs();
 		/* product code end*/
 //		/* test code start*/
-//  	mp3play();			
-//		printf("key %d, %d, %d, %d\n", all_key[KEY1_NUM].jitter_val, all_key[KEY2_NUM].jitter_val, all_key[KEY3_NUM].jitter_val, all_key[KEY4_NUM].jitter_val);		
+//  	mp3play();
+//		printf("key %d, %d, %d, %d\n", all_key[KEY1_NUM].jitter_val, all_key[KEY2_NUM].jitter_val, all_key[KEY3_NUM].jitter_val, all_key[KEY4_NUM].jitter_val);
 //		/* test code end*/
 	}
 }

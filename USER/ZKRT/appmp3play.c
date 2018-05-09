@@ -2,7 +2,7 @@
 //#include "coder.h"
 //#include "appfiles.h"
 //#include "audioplay.h"
-//#include "usart.h" 
+//#include "usart.h"
 //#include "ff.h"
 //#include "i2s.h"
 //#include "wm8978.h"
@@ -25,14 +25,14 @@
 //u8 first_decode=0;
 
 ////播放时,I2S DMA传输回调函数
-//void _mp3_i2s_dma_tx_callback(void) 
+//void _mp3_i2s_dma_tx_callback(void)
 //{
 //	u16 i;
 //	if(DMA1_Stream4->CR&(1<<19))
 //	{
 //		_audioplay.wavwitchbuf =0;
 //	}
-//	else 
+//	else
 //	{
 //		_audioplay.wavwitchbuf =1;
 //	}
@@ -54,15 +54,15 @@
 //	{
 //		printf("audio bps not support\n");
 //		return ;
-//	}	
+//	}
 //	I2S2_SampleRate_Set(mp3finfo->samprate);	//设置采样率
 //	I2S2_TX_DMA_Init(_audioplay.i2sbuf1, _audioplay.i2sbuf2, MP3_OUTPUT_SIZE);         //配置TX DMA
-//	i2s_tx_callback = _mp3_i2s_dma_tx_callback;			                                        //回调函数指wav_i2s_dma_callback	
+//	i2s_tx_callback = _mp3_i2s_dma_tx_callback;			                                        //回调函数指wav_i2s_dma_callback
 //	I2S_Play_Start();
 //}
 //void mp3play(void)
 //{
-//	u32 f_br; 
+//	u32 f_br;
 //	FRESULT f_res;
 //	mp3decoder=MP3InitDecoder();
 //	if(mp3decoder==0)
@@ -84,7 +84,7 @@
 //	{
 //		if(bytesLeft)
 //			memmove(readBuf, readPtr, bytesLeft);
-//		if(bytesLeft < READBUF_SIZE) //补充数据		
+//		if(bytesLeft < READBUF_SIZE) //补充数据
 //		{
 //			f_br = 0;
 //			f_res = f_read(&fsrc, readBuf+bytesLeft, READBUF_SIZE-bytesLeft, &f_br);
@@ -133,7 +133,7 @@
 //			printf("1left:%d\n", bytesLeft);
 //			err = MP3Decode(mp3decoder, &readPtr, &bytesLeft, output, 0);
 //			printf("2left:%d\n", bytesLeft);
-//			if(bytesLeft ==READBUF_SIZE)  
+//			if(bytesLeft ==READBUF_SIZE)
 //				bytesLeft = 0;
 //			switch(err)
 //			{
@@ -141,10 +141,10 @@
 //					printf("MP3Decode ok.\n");
 //					if(!first_decode)
 //					{
-//						MP3GetLastFrameInfo(mp3decoder, &mp3FrameInfo);		
-//						printf("bitrate:%d, nChans:%d, samprate:%d, bitsPerSample:%d, outputSamps:%d, layer:%d, version:%d\n", 
-//							mp3FrameInfo.bitrate, mp3FrameInfo.nChans, mp3FrameInfo.samprate, mp3FrameInfo.bitsPerSample, mp3FrameInfo.outputSamps, mp3FrameInfo.layer, mp3FrameInfo.version);						
-//						
+//						MP3GetLastFrameInfo(mp3decoder, &mp3FrameInfo);
+//						printf("bitrate:%d, nChans:%d, samprate:%d, bitsPerSample:%d, outputSamps:%d, layer:%d, version:%d\n",
+//							mp3FrameInfo.bitrate, mp3FrameInfo.nChans, mp3FrameInfo.samprate, mp3FrameInfo.bitsPerSample, mp3FrameInfo.outputSamps, mp3FrameInfo.layer, mp3FrameInfo.version);
+//
 //						if(mp3FrameInfo.layer ==3)
 //						{
 //							first_decode = 1;
@@ -156,19 +156,19 @@
 //					}
 //					if(mp3FrameInfo.nChans==1)
 //						Convert_Mono(output);
-//					else 
-//						Convert_Stereo(output);					
+//					else
+//						Convert_Stereo(output);
 //					//iis trans data
-//					while(_audioplay.wavtransferend==0);		
+//					while(_audioplay.wavtransferend==0);
 //					_audioplay.wavtransferend = 0;
 //					if(_audioplay.wavwitchbuf == 0)
 //					{
-//						output=mp3buffer1;			        	
+//						output=mp3buffer1;
 //					}
-//					else 
+//					else
 //					{
 //						output=mp3buffer2;
-//					} 					
+//					}
 //					break;
 ////				case ERR_MP3_INDATA_UNDERFLOW:
 ////					CloseMP3File();
@@ -180,7 +180,7 @@
 //				case ERR_MP3_INVALID_FRAMEHEADER:
 //					printf("ERR_MP3_INVALID_FRAMEHEADER\n");
 ////					ReadMoreMp3Data();
-//				break;				
+//				break;
 ////				case ERR_MP3_FREE_BITRATE_SYNC:
 ////					CloseMP3File();
 ////				break;

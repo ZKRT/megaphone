@@ -1,10 +1,10 @@
 /*
 
 File Name:    _OSTMR_H_
-Author:       
-Date:         
+Author:
+Date:
 Purpose:      OS timer header files for application purpose only
-              
+
 
 */
 
@@ -16,8 +16,7 @@ Purpose:      OS timer header files for application purpose only
 
 typedef uint32_t ostmr_t;
 
-typedef enum
-{
+typedef enum {
   OSTMR_INACTIVE = 0,
   OSTMR_ACTIVE,
   OSTMR_PAUSED,
@@ -26,24 +25,21 @@ typedef enum
 } ostmrStatus_t;
 
 
-typedef enum
-{
+typedef enum {
   OSTMR_QUICK,    /* 1ms speed time on systmr only */
-  OSTMR_FAST,		  /* 10ms speed time */
-  OSTMR_SLOW,		  /* 10 times per second (=100ms) */
-  OSTMR_SEC,		  /* once per second */
+  OSTMR_FAST,     /* 10ms speed time */
+  OSTMR_SLOW,     /* 10 times per second (=100ms) */
+  OSTMR_SEC,      /* once per second */
   OSTMR_SPEED_ERR = 0xFFFF,
 } ostmrSpeed_t;//enum16(ostmrSpeed);
 
 
-typedef struct 
-{
+typedef struct {
   volatile ostmrSpeed_t  speed;
   volatile uint16_t          number;
-}ostmrID_t;
+} ostmrID_t;
 
-typedef enum
-{
+typedef enum {
   OSTMR_NONE,
   OSTMR_ATOMIC,       /* only call once and automatic delete  */
   OSTMR_PERIODIC,     /* periodic timer task                  */
@@ -52,15 +48,14 @@ typedef enum
 
 
 
-typedef struct
-{  
-  volatile ostmrStatus_t	  status;  
+typedef struct {
+  volatile ostmrStatus_t    status;
   volatile ostmrMode_t     mode;
   volatile ostmrID_t       id;
-  volatile ostmr_t		      value;
-  volatile ostmr_t		      currentValue;
+  volatile ostmr_t          value;
+  volatile ostmr_t          currentValue;
   vfp_t           timertask;
-}sysTimer_t;
+} sysTimer_t;
 
 
 #define ostmr_taskFinish(x) ostmr_taskStatusChange(x, OSTMR_FINISHED)
@@ -112,7 +107,7 @@ extern ostmr_t t_ostmr_getValue( ostmrID_t *);
 
 
 /*
-  Input Args  : timer value in 100ms 
+  Input Args  : timer value in 100ms
   Output Args : NULL
   Purpose     : wait unit the timer timeout
   example     : ostmr_wait(2), the program should wait 200ms before go on process (ISR is not disable)
@@ -123,17 +118,17 @@ extern void ostmr_wait(ostmr_t );
 /*
   Input Args  : 1.  function handler
                 2.  timer value in 100ms
-                3.  timer task mode (refer to timer mode)                
+                3.  timer task mode (refer to timer mode)
   Output Args : NULL
   Purpose     : background timer task is generated and function handler is called when system timer timeout
 */
-extern ostmrID_t t_ostmr_insertTask(vfp_t, ostmr_t, ostmrMode_t);  
+extern ostmrID_t t_ostmr_insertTask(vfp_t, ostmr_t, ostmrMode_t);
 
 
 /*
   Input Args  : 1.  function handler
                 2.  timer value in 100ms
-                3.  timer task mode (refer to timer mode)                
+                3.  timer task mode (refer to timer mode)
   Output Args : delete success return true, otherwise false.
   Purpose     : Delete timer task
 */
@@ -141,27 +136,27 @@ extern bool_t b_ostmr_deleteTask(ostmrID_t *);
 
 /*
   Input Args  : 1.  Timer taks ID
-                2.  change to specified status                
+                2.  change to specified status
   Output Args : NULL
   Purpose     : Change task status
 */
 extern void ostmr_taskStatusChange(ostmrID_t *, ostmrStatus_t);
 
 /*
-  Input Args  : NONE             
+  Input Args  : NONE
   Output Args : NONE
   Purpose     : stop hardware timer0
 */
 extern void ostmr_disable(void);
 
 /*
-  Input Args  : NONE             
+  Input Args  : NONE
   Output Args : NONE
   Purpose     : start hardware timer0
 */
 extern void ostmr_enable(void);
 /*
-  Input Args  : NONE             
+  Input Args  : NONE
   Output Args : NONE
   Purpose     : release timer0 task
 */

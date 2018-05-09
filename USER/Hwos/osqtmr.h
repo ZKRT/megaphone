@@ -1,10 +1,10 @@
 /*
 
-File Name:    
-Author:       
-Date:         
+File Name:
+Author:
+Date:
 Purpose:      OS timer header files for application purpose only
-              
+
 
 */
 
@@ -60,7 +60,7 @@ extern ostmr_t t_systmr_getValue( ostmrID_t *);
 
 
 /*
-  Input Args  : timer value in 100ms 
+  Input Args  : timer value in 100ms
   Output Args : NULL
   Purpose     : wait unit the timer timeout
   example     : ostmr_wait(2), the program should wait 200ms before go on process (ISR is not disable)
@@ -71,17 +71,17 @@ extern void systmr_quickWait(ostmr_t );
 /*
   Input Args  : 1.  function handler
                 2.  timer value in 100ms
-                3.  timer task mode (refer to timer mode)                
+                3.  timer task mode (refer to timer mode)
   Output Args : NULL
   Purpose     : background timer task is generated and function handler is called when system timer timeout
 */
-extern ostmrID_t t_systmr_insertQuickTask(vfp_t, ostmr_t, ostmrMode_t);//max 1000 ms 
+extern ostmrID_t t_systmr_insertQuickTask(vfp_t, ostmr_t, ostmrMode_t);//max 1000 ms
 
 
 /*
   Input Args  : 1.  function handler
                 2.  timer value in 100ms
-                3.  timer task mode (refer to timer mode)                
+                3.  timer task mode (refer to timer mode)
   Output Args : delete success return true, otherwise false.
   Purpose     : Delete timer task
 */
@@ -89,26 +89,26 @@ extern bool_t b_systmr_deleteTask(ostmrID_t *);
 
 /*
   Input Args  : 1.  Timer taks ID
-                2.  change to specified status                
+                2.  change to specified status
   Output Args : NULL
   Purpose     : Change task status
 */
 extern void systmr_taskStatusChange(ostmrID_t *, ostmrStatus_t);
 
 /*
-  Input Args  : NONE               
+  Input Args  : NONE
   Output Args : NONE
   Purpose     : start hardware timer2
 */
 extern void systmr_enable(void);
 /*
-  Input Args  : NONE               
+  Input Args  : NONE
   Output Args : NONE
   Purpose     : stop hardware timer2
 */
 extern void systmr_disable(void);
 /*
-  Input Args  : NONE               
+  Input Args  : NONE
   Output Args : NONE
   Purpose     : release timer2 task
 */

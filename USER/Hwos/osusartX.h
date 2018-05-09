@@ -2,11 +2,11 @@
   ******************************************************************************
   * @file    osusartX.h
   * @author  yanly
-  * @version 
-  * @date    
+  * @version
+  * @date
   * @brief   usart interupt implement send and receive (hardware os layer)
   ******************************************************************************
-  */ 
+  */
 
 #ifndef __OSUSARTX_H
 #define __OSUSARTX_H
@@ -25,11 +25,11 @@ uint8_t  u1_hwuartX_txing(uint8_t ustate_item, USART_TypeDef* COM);
 uint8_t whatis_arrynum_of_USART(USART_TypeDef* COM);
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
-  */ 
+  */
 
 #endif
 /******************* (C) COPYRIGHT 2010 STMicroelectronics *****END OF FILE****/

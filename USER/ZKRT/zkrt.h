@@ -33,7 +33,7 @@
 //seq 序列号，自增
 //APPID, 保留，值0
 //#define _LENGTH     0X1E
-//#define _TOTAL_LEN  0X32   
+//#define _TOTAL_LEN  0X32
 
 //UAVID，设备类型定义，用于UAVID[3]
 #define DEVICE_TYPE_UDP             0X00
@@ -82,7 +82,7 @@
 #define ZK_DINDEX_DEVTYPE           3
 
 
-//编号定义，用于UAVID[2：1]和UAVID[5：4]  
+//编号定义，用于UAVID[2：1]和UAVID[5：4]
 #define DEFAULT_NUM 0X00
 #define SECOND_NUM  0X01
 
@@ -95,8 +95,7 @@
 
 //packet max num
 #pragma pack(push, 1)
-typedef struct _zkrt_packet_t
-{
+typedef struct _zkrt_packet_t {
 	uint8_t start_code; 		        //字节0，帧起始码，0XEB
 	uint8_t ver;		   						  //字节1，协议版本
 	uint8_t session_ack;	          //字节2，会话ID，0无需应答，1有应答；帧标识：0数据帧，1命令帧
@@ -110,7 +109,7 @@ typedef struct _zkrt_packet_t
 	uint8_t data[ZK_DATA_MAX_LEN];  //字节
 	uint16_t crc;              			//字节17+len，CRC校验码
 	uint8_t end_code;          			//字节19+len，帧结束
-}zkrt_packet_t;
+} zkrt_packet_t;
 
 #pragma pack(pop)
 

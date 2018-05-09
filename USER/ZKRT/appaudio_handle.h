@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    appaudio_handle.h 
+  * @file    appaudio_handle.h
   * @author  ZKRT
   * @version V0.0.1
   * @date    23-December-2016
@@ -12,7 +12,7 @@
   *
   ******************************************************************************
   */
-  
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __APPAUDIO_HANDLE_H
 #define __APPAUDIO_HANDLE_H
@@ -22,7 +22,7 @@
 #include "appprotocol.h"
 
 /* Exported macro ------------------------------------------------------------*/
-/* Exported constants --------------------------------------------------------*/	
+/* Exported constants --------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 void enther_getlist_handle(rgetlist_plst *rother);
 char enter_startrec_handle(const unsigned char *name, u8 flag, u8 *rid);
@@ -41,7 +41,7 @@ char enter_play_next_song(void);
 
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}

@@ -1,8 +1,8 @@
 /*
 
-File Name:    
-Author:       
-Date:         
+File Name:
+Author:
+Date:
 Purpose:      OSTMR1 header file
 
 */
@@ -16,14 +16,14 @@ Purpose:      OSTMR1 header file
 /*
   Input Args  : Null
   Output Args : Null
-  Purpose     : enable hardware timer 2 
+  Purpose     : enable hardware timer 2
 */
 extern void hwtmr2_enable(void);
 
 /*
   Input Args  : Null
   Output Args : Null
-  Purpose     : disable hardware timer 2 
+  Purpose     : disable hardware timer 2
 */
 extern void hwtmr2_disable(void);
 

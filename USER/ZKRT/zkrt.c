@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    zkrt.c 
+  * @file    zkrt.c
   * @author  ZKRT
   * @version V1.0
   * @date    9-May-2017
@@ -27,14 +27,13 @@ uint8_t zkrt_tx_seq[DEVICE_NUMBER];               		//×Ö½Ú6£¬Ö¡ĞòÁĞºÅ£¬ÎªÁËÇø·Ö£
 µ÷ÓÃÇ°£ºcrcĞ£ÑéÂëÊÇÄ³¸öÊıÖµ
 µ÷ÓÃºó£ºcrcĞ£ÑéÂëÊÇÒ»¸öĞÂµÄÊıÖµ
  **/
-void crc_accumulate(uint8_t data, uint16_t *crcAccum)
-{
+void crc_accumulate(uint8_t data, uint16_t *crcAccum) {
 	/*Accumulate one byte of data into the CRC*/
 	uint8_t tmp;
 
-	tmp = data ^ (uint8_t)(*crcAccum &0xff);
-	tmp ^= (tmp<<4);
-	*crcAccum = (*crcAccum>>8) ^ (tmp<<8) ^ (tmp <<3) ^ (tmp>>4);
+	tmp = data ^ (uint8_t)(*crcAccum & 0xff);
+	tmp ^= (tmp << 4);
+	*crcAccum = (*crcAccum >> 8) ^ (tmp << 8) ^ (tmp << 3) ^ (tmp >> 4);
 }
 /**
  * @brief Accumulate the X.25 CRC by adding an array of bytes
@@ -49,12 +48,10 @@ void crc_accumulate(uint8_t data, uint16_t *crcAccum)
 µ÷ÓÃÇ°£ºcrcÊÇ¸ù¾İ²ÎÊıÉú³ÉµÄĞ£ÑéÂë
 µ÷ÓÃºó£ºµÃµ½Êı¾İ²¿·ÖÖ®Ç°µÄĞ£ÑéÂë
  **/
-void crc_accumulate_buffer(uint16_t *crcAccum, const char *pBuffer, uint16_t length)
-{
+void crc_accumulate_buffer(uint16_t *crcAccum, const char *pBuffer, uint16_t length) {
 	const uint8_t *p = (const uint8_t *)pBuffer;
-	
-	while (length--)
-	{
+
+	while (length--) {
 		crc_accumulate(*p++, crcAccum);
 	}
 }
@@ -69,12 +66,10 @@ void crc_accumulate_buffer(uint16_t *crcAccum, const char *pBuffer, uint16_t len
 µ÷ÓÃÇ°£ºcrcĞ£ÑéÂëÊÇÈÎÒâÊı
 µ÷ÓÃºó£º¸ù¾İ²ÎÊıÉú³ÉµÄcrcĞ£ÑéÂë
  **/
-uint16_t crc_calculate(const uint8_t* pBuffer, uint16_t length)
-{
+uint16_t crc_calculate(const uint8_t* pBuffer, uint16_t length) {
 	uint16_t crcTmp = 0XFFFF;//Ğ£ÑéÂëÉèÖÃÎª0xffff
-        
-	while (length--) 
-	{
+
+	while (length--) {
 		crc_accumulate(*pBuffer++, &crcTmp);//Öğ¸ö¶ÔÊı×éÖĞµÄÃ¿¸ö×Ö½Ú½øĞĞĞ£Ñé
 	}
 	return crcTmp;//·µ»ØĞ£ÑéÂë
@@ -85,200 +80,165 @@ uint16_t crc_calculate(const uint8_t* pBuffer, uint16_t length)
  * @param   ´ı×ª»»µÄ½á¹¹Ìå
  * @return  ´ı·¢ËÍµÄÊı¾İ³¤¶È
  **/
-uint8_t zkrt_final_encode(uint8_t *dstdata, zkrt_packet_t *packet)
-{
-//seq++	
-	packet->seq = zkrt_tx_seq[packet->UAVID[3]];                                         
+uint8_t zkrt_final_encode(uint8_t *dstdata, zkrt_packet_t *packet) {
+//seq++
+	packet->seq = zkrt_tx_seq[packet->UAVID[3]];
 	zkrt_tx_seq[packet->UAVID[3]]++;
-	zkrt_tx_seq[packet->UAVID[3]]%=255;
-//calculate crc	
+	zkrt_tx_seq[packet->UAVID[3]] %= 255;
+//calculate crc
 #if ZK_CRC_ENABLE
-	packet->crc = crc_calculate(((const uint8_t*)(packet)), ZK_HEADER_LEN+packet->length);    
+	packet->crc = crc_calculate(((const uint8_t*)(packet)), ZK_HEADER_LEN + packet->length);
 #else
 	packet->crc = 0xffff;
 #endif
 //copy packet to senddata
-  memcpy(dstdata, packet, ZK_HEADER_LEN);
-	memcpy(dstdata+ZK_HEADER_LEN, packet->data, packet->length);
-	memcpy(dstdata+ZK_HEADER_LEN+packet->length, packet->data+ZK_DATA_MAX_LEN, ZK_FIXED_LEN-ZK_HEADER_LEN);
-//return total length	
-	return (ZK_FIXED_LEN+packet->length);
+	memcpy(dstdata, packet, ZK_HEADER_LEN);
+	memcpy(dstdata + ZK_HEADER_LEN, packet->data, packet->length);
+	memcpy(dstdata + ZK_HEADER_LEN + packet->length, packet->data + ZK_DATA_MAX_LEN, ZK_FIXED_LEN - ZK_HEADER_LEN);
+//return total length
+	return (ZK_FIXED_LEN + packet->length);
 }
 /**
  * @brief zkrt_init_packet
  *
- * @param  
- * @param  
- * @return 
+ * @param
+ * @param
+ * @return
  **/
-void zkrt_init_packet(zkrt_packet_t *packet){
+void zkrt_init_packet(zkrt_packet_t *packet) {
 	uint8_t i;
-	packet->start_code = _START_CODE;                            
-	packet->ver = _VERSION;                                      
-	packet->session_ack = ZK_SESSION_ACK_DISABLE;                                 
-	packet->padding_enc = ZK_ENCRYPT_DS;    
-  packet->end_code = _END_CODE;		
-//	packet->length = 0;                                   
-	packet->seq = 0;  
+	packet->start_code = _START_CODE;
+	packet->ver = _VERSION;
+	packet->session_ack = ZK_SESSION_ACK_DISABLE;
+	packet->padding_enc = ZK_ENCRYPT_DS;
+	packet->end_code = _END_CODE;
+//	packet->length = 0;
+	packet->seq = 0;
 //	packet->cmd = 0;
 //	packet->command = 0;
-	for(i=0;i<3;i++)
-		packet->APPID[i]= 0x00;        
-	for(i=0;i<6;i++)
-		packet->UAVID[i]= 0x00;	
-	for(i=0;i<ZK_DATA_MAX_LEN;i++)
-		packet->data[i]= 0x00;	
+	for (i = 0; i < 3; i++)
+		packet->APPID[i] = 0x00;
+	for (i = 0; i < 6; i++)
+		packet->UAVID[i] = 0x00;
+	for (i = 0; i < ZK_DATA_MAX_LEN; i++)
+		packet->data[i] = 0x00;
 	packet->crc = 0XFFFF;
 }
 
 /*¶Ôµ¥¸ö×Ö½ÚµÄcrc¸üĞÂĞ£Ñé*/
-void zkrt_update_checksum(zkrt_packet_t* packet, uint8_t ch)
-{
-#if ZK_CRC_ENABLE	
+void zkrt_update_checksum(zkrt_packet_t* packet, uint8_t ch) {
+#if ZK_CRC_ENABLE
 	uint16_t crc = packet->crc;
-	
-	crc_accumulate(ch,&(crc));//Èç¹ûÖ±½Ó´«²Îcrc_accumulate(ch,&(packet->crc));²»¿ÉÒÔ£¬ÒòÎª½á¹¹Ìå³ÉÔ±µÄµØÖ·²»ÄÜÖ±½Ó´«²Î£¬Õâ»áµ¼ÖÂhardfault´íÎó
-	
+
+	crc_accumulate(ch, &(crc)); //Èç¹ûÖ±½Ó´«²Îcrc_accumulate(ch,&(packet->crc));²»¿ÉÒÔ£¬ÒòÎª½á¹¹Ìå³ÉÔ±µÄµØÖ·²»ÄÜÖ±½Ó´«²Î£¬Õâ»áµ¼ÖÂhardfault´íÎó
+
 	packet->crc = crc;
 #endif
 }
 /**
  * @brief zkrt_decode_char
- * @param 
- * @param 
+ * @param
+ * @param
  **/
 uint8_t zkrt_curser_state = 0;
 uint8_t zkrt_recv_success = 0;
 uint8_t zkrt_app_index = 0;
 uint8_t zkrt_uav_index = 0;
 uint8_t zkrt_dat_index = 0;
-uint8_t zkrt_decode_char(zkrt_packet_t *packet, uint8_t ch)
-{
+uint8_t zkrt_decode_char(zkrt_packet_t *packet, uint8_t ch) {
 	zkrt_recv_success = 0;
-	
-	if ((zkrt_curser_state == 0)&&(ch == _START_CODE))		//×Ö½Ú0£¬µÃµ½ÆğÊ¼Âë
-	{
+
+	if ((zkrt_curser_state == 0) && (ch == _START_CODE)) {	//×Ö½Ú0£¬µÃµ½ÆğÊ¼Âë
 		packet->start_code = ch;
 		packet->crc = 0XFFFF;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_curser_state = 1;
-	}
-	else if ((zkrt_curser_state == 1)&&(ch == _VERSION))	//×Ö½Ú1£¬µÃµ½°æ±¾ºÅ
-	{
+	} else if ((zkrt_curser_state == 1) && (ch == _VERSION)) {	//×Ö½Ú1£¬µÃµ½°æ±¾ºÅ
 		packet->ver = ch;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_curser_state = 2;
-	}
-	else if (zkrt_curser_state == 2)											//×Ö½Ú2£¬µÃµ½session
-	{
+	} else if (zkrt_curser_state == 2) {										//×Ö½Ú2£¬µÃµ½session
 		packet->session_ack = ch;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_curser_state = 3;
-	}
-	else if (zkrt_curser_state == 3)											//×Ö½Ú3£¬µÃµ½padding
-	{
+	} else if (zkrt_curser_state == 3) {										//×Ö½Ú3£¬µÃµ½padding
 		packet->padding_enc = ch;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_curser_state = 4;
-	}
-	else if (zkrt_curser_state == 4)											//×Ö½Ú4£¬µÃµ½cmd
-	{
+	} else if (zkrt_curser_state == 4) {										//×Ö½Ú4£¬µÃµ½cmd
 		packet->cmd = ch;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_curser_state = 5;
-	}
-	else if ((zkrt_curser_state == 5)&&(ch <= ZK_DATA_MAX_LEN))		//×Ö½Ú5£¬µÃµ½³¤¶È
-	{
+	} else if ((zkrt_curser_state == 5) && (ch <= ZK_DATA_MAX_LEN)) {	//×Ö½Ú5£¬µÃµ½³¤¶È
 		packet->length = ch;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_curser_state = 6;
-	}
-	else if (zkrt_curser_state == 6)											//×Ö½Ú6£¬½ÓÊÕĞòÁĞºÅ
-	{
+	} else if (zkrt_curser_state == 6) {										//×Ö½Ú6£¬½ÓÊÕĞòÁĞºÅ
 		packet->seq = ch;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_curser_state = 7;
-	}
-	else if (zkrt_curser_state == 7)											//×Ö½Ú7-9£¬½ÓÊÕAPPID
-	{
+	} else if (zkrt_curser_state == 7) {										//×Ö½Ú7-9£¬½ÓÊÕAPPID
 		packet->APPID[zkrt_app_index] = ch;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_app_index++;
-		if (zkrt_app_index == 3)
-		{
+		if (zkrt_app_index == 3) {
 			zkrt_app_index = 0;
 			zkrt_curser_state = 8;
 		}
-	}
-	else if (zkrt_curser_state == 8)											//×Ö½Ú10-15£¬½ÓÊÕUAVID
-	{
+	} else if (zkrt_curser_state == 8) {										//×Ö½Ú10-15£¬½ÓÊÕUAVID
 		packet->UAVID[zkrt_uav_index] = ch;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_uav_index++;
-		if (zkrt_uav_index == 6)
-		{
+		if (zkrt_uav_index == 6) {
 			zkrt_uav_index = 0;
 			zkrt_curser_state = 9;
 		}
-	}
-	else if (zkrt_curser_state == 9)											//×Ö½Ú16£¬µÃµ½command
-	{
+	} else if (zkrt_curser_state == 9) {										//×Ö½Ú16£¬µÃµ½command
 		packet->command = ch;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_curser_state = 10;
-	}
-	else if (zkrt_curser_state == 10)											//×Ö½Ú17-46£¬½ÓÊÕDATA
-	{
+	} else if (zkrt_curser_state == 10) {										//×Ö½Ú17-46£¬½ÓÊÕDATA
 		packet->data[zkrt_dat_index] = ch;
-		zkrt_update_checksum(packet,ch);
+		zkrt_update_checksum(packet, ch);
 		zkrt_dat_index++;
-		if (zkrt_dat_index == packet->length)
-		{
+		if (zkrt_dat_index == packet->length) {
 			zkrt_dat_index = 0;
 			zkrt_curser_state = 11;
 		}
-	}
-	else if (zkrt_curser_state == 11)	//×Ö½Ú47£¬CRC1
-	{
-#if ZK_CRC_ENABLE		
-		if(ch == (uint8_t)((packet->crc)&0xff))
+	} else if (zkrt_curser_state == 11) {	//×Ö½Ú47£¬CRC1
+#if ZK_CRC_ENABLE
+		if (ch == (uint8_t)((packet->crc) & 0xff))
 			zkrt_curser_state = 12;
 		else
 			goto recv_failed;
 #else
-		  packet->crc = ch&0xff;
-			zkrt_curser_state = 12;		
-#endif		
-	}
-	else if (zkrt_curser_state == 12)		//×Ö½Ú48£¬CRC2
-	{
-#if ZK_CRC_ENABLE				
-		if(ch == (uint8_t)((packet->crc)>>8))
+		packet->crc = ch & 0xff;
+		zkrt_curser_state = 12;
+#endif
+	} else if (zkrt_curser_state == 12) {	//×Ö½Ú48£¬CRC2
+#if ZK_CRC_ENABLE
+		if (ch == (uint8_t)((packet->crc) >> 8))
 			zkrt_curser_state = 13;
 		else
 			goto recv_failed;
 #else
-		  packet->crc = (packet->crc)|(ch<<8);
-			zkrt_curser_state = 13;
-#endif		
-	}
-	else if ((zkrt_curser_state == 13)&&(ch == _END_CODE))											//×Ö½Ú49£¬½áÎ²
-	{
+		packet->crc = (packet->crc) | (ch << 8);
+		zkrt_curser_state = 13;
+#endif
+	} else if ((zkrt_curser_state == 13) && (ch == _END_CODE)) {										//×Ö½Ú49£¬½áÎ²
 		packet->end_code = ch;
 		zkrt_curser_state = 0;
 		zkrt_recv_success = 1;
-	}
-	else
-	{
+	} else {
 		goto recv_failed;
 	}
-	
+
 	return zkrt_recv_success;
-	
+
 recv_failed:
-		zkrt_curser_state = 0;
-		zkrt_app_index = 0;
-		zkrt_uav_index = 0;
-		zkrt_dat_index = 0;
-		return 	zkrt_recv_success;
+	zkrt_curser_state = 0;
+	zkrt_app_index = 0;
+	zkrt_uav_index = 0;
+	zkrt_dat_index = 0;
+	return 	zkrt_recv_success;
 }

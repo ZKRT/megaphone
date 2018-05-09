@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    hw_config.h 
+  * @file    hw_config.h
   * @author  ZKRT
   * @version V1.0
   * @date    13-December-2016
@@ -12,22 +12,22 @@
   *
   ******************************************************************************
   */
-  
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __HW_CONFIG_H
-#define __HW_CONFIG_H 
+#define __HW_CONFIG_H
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx.h"
 
 /* Exported macro ------------------------------------------------------------*/
-//whether printf data 
+//whether printf data
 //#define PRINTF_OPEN          //zkrt_debug
 #define USE_PRODUCT_AUDIO_OUPUT //zkrt_debug
 //#define USE_TMIIC  //zkrt_todo: this driver can not work now.
 
 //unit test debug
-//#define UART_TEST_PROTOCOL  
+//#define UART_TEST_PROTOCOL
 
 
 /* Exported types ------------------------------------------------------------*/
@@ -36,30 +36,30 @@
 
 /** @defgroup clock label
   * @{
-  */ 
-#define SYSTEM_CLK	              168
+  */
+#define SYSTEM_CLK                168
 //APB1-42, APB2-84
-#define APB1_CLK		              42
+#define APB1_CLK                  42
 #define APB2_CLK                  84
 #define AHB_CLK                   168
 
 /**
   * @}
-  */ 
+  */
 
 /** @defgroup fast timer task config
   * @{
-  */ 
+  */
 #define FTTC_RCC_CLK                               RCC_APB1Periph_TIM6
 #define FTTC_TIM_NUM                               TIM6
-#define FTTC_IRQ_CH                                TIM6_DAC_IRQn  
+#define FTTC_IRQ_CH                                TIM6_DAC_IRQn
 #define FTTC_PreemptionPriority                    0
 #define FTTC_SubPriority                           1
-#define FTTC_TIMER_CLK                             APB1_CLK*2 
+#define FTTC_TIMER_CLK                             APB1_CLK*2
 
 /** @defgroup quick fast timer config
   * @{
-  */ 
+  */
 #define QTTC_RCC_CLK                                RCC_APB1Periph_TIM7
 #define QTTC_TIM_NUM                                TIM7
 #define QTTC_IRQ_CH                                 TIM7_IRQn
@@ -68,9 +68,9 @@
 #define QTTC_TIMER_CLK                              APB1_CLK*2
 
 /** @defgroup usart
-  */ 
+  */
 #define USART_TEST_NUM                              USART1
-#define USART_TEST_IRQ_CH                           USART1_IRQn  
+#define USART_TEST_IRQ_CH                           USART1_IRQn
 #define USART_TEST_PreemptionPriority               1
 #define USART_TEST_SubPriority                      1
 #define USART_TEST_TX_PORT                          GPIOB
@@ -81,8 +81,8 @@
 #define USART_TEST_RX_PINSE                         GPIO_PinSource7
 
 /** @defgroup led
-  */ 
-#define LED_LIGHT                                   Bit_RESET             
+  */
+#define LED_LIGHT                                   Bit_RESET
 #define LED_DARK                                    Bit_SET
 #define RUN_LED_PORT                                GPIOB
 #define CAN_LED_PORT                                GPIOB
@@ -90,7 +90,7 @@
 #define CAN_LED_PIN                                 GPIO_Pin_0
 
 /** @defgroup key
-  */ 
+  */
 #define KEY1_PORT                                   GPIOA
 #define KEY2_PORT                                   GPIOA
 #define KEY3_PORT                                   GPIOA
@@ -127,7 +127,7 @@
 #define SDIO_D1_PORT                                GPIOC
 #define SDIO_D1_PIN                                 GPIO_Pin_9
 #define SDIO_D1_PSE                                 GPIO_PinSource9
-#define SDIO_D2_PORT                                GPIOC 
+#define SDIO_D2_PORT                                GPIOC
 #define SDIO_D2_PIN                                 GPIO_Pin_10
 #define SDIO_D2_PSE                                 GPIO_PinSource10
 #define SDIO_D3_PORT                                GPIOC
@@ -172,11 +172,11 @@
 #endif /* __HW_CONFIG_H */
 /**
   * @}
-  */ 
+  */
 
 /**
   * @}
   */
-	
+
 /************************ (C) COPYRIGHT ZKRT *****END OF FILE****/
 

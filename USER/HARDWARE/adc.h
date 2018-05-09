@@ -1,6 +1,6 @@
 #ifndef __ADC_H
 #define __ADC_H
-#include "sys.h" 
+#include "sys.h"
 
 #define _25V_VOL 0
 #define _12V_VOL 1
@@ -13,5 +13,5 @@ uint16_t get_adc_val(uint8_t read_type);
 void bat_read(void);
 void bat_check(void);
 
-#endif 
+#endif
 

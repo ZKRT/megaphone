@@ -2,7 +2,7 @@
 #define __RECORDER_H
 #include "sys.h"
 #include "ff.h"
-#include "wavplay.h" 
+#include "wavplay.h"
 
 #define I2S_RX_DMA_BUF_SIZE    	4096		//定义RX DMA 数组大小
 

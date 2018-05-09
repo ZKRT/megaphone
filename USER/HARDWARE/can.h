@@ -1,5 +1,5 @@
 #ifndef __CAN_H
-#define __CAN_H	 
+#define __CAN_H
 #include "sys.h"
 
 //波特率=Fpclk1/((tbs1+1+tbs2+1+1)*brp);
@@ -15,6 +15,6 @@
 uint8_t CAN_Mode_Init(void);
 uint8_t CAN1_rx_check(void);
 uint8_t CAN1_rx_byte(void);
-uint8_t Can_Send_Msg(uint8_t* msg,uint8_t len);						//发送数据
+uint8_t Can_Send_Msg(uint8_t* msg, uint8_t len);						//发送数据
 uint8_t CAN1_send_message_fun(uint8_t *message, uint8_t len);//发送指令
 #endif

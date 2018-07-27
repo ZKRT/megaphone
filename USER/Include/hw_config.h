@@ -22,8 +22,8 @@
 
 /* Exported macro ------------------------------------------------------------*/
 //whether printf data
-//#define PRINTF_OPEN          //zkrt_debug
-#define USE_PRODUCT_AUDIO_OUPUT //zkrt_debug
+#define PRINTF_OPEN          //zkrt_debug
+//#define USE_PRODUCT_AUDIO_OUPUT //zkrt_debug
 //#define USE_TMIIC  //zkrt_todo: this driver can not work now.
 
 //unit test debug
@@ -64,30 +64,32 @@
 #define QTTC_TIM_NUM                                TIM7
 #define QTTC_IRQ_CH                                 TIM7_IRQn
 #define QTTC_PreemptionPriority                     0
-#define QTTC_SubPriority                            2
+#define QTTC_SubPriority                            1
 #define QTTC_TIMER_CLK                              APB1_CLK*2
 
-/** @defgroup usart
-  */
-#define USART_TEST_NUM                              USART1
-#define USART_TEST_IRQ_CH                           USART1_IRQn
-#define USART_TEST_PreemptionPriority               1
-#define USART_TEST_SubPriority                      1
-#define USART_TEST_TX_PORT                          GPIOB
-#define USART_TEST_RX_PORT                          GPIOB
-#define USART_TEST_TX_PIN                           GPIO_Pin_6
-#define USART_TEST_RX_PIN                           GPIO_Pin_7
-#define USART_TEST_TX_PINSE                         GPIO_PinSource6
-#define USART_TEST_RX_PINSE                         GPIO_PinSource7
+// /** @defgroup usart
+//   */
+#define USART_TEST_NUM                              USART1  //zkrt_todo
+// #define USART_TEST_IRQ_CH                           USART1_IRQn
+// #define USART_TEST_PreemptionPriority               1
+// #define USART_TEST_SubPriority                      1
+// #define USART_TEST_TX_PORT                          GPIOB
+// #define USART_TEST_RX_PORT                          GPIOB
+// #define USART_TEST_TX_PIN                           GPIO_Pin_6
+// #define USART_TEST_RX_PIN                           GPIO_Pin_7
+// #define USART_TEST_TX_PINSE                         GPIO_PinSource6
+// #define USART_TEST_RX_PINSE                         GPIO_PinSource7
 
 /** @defgroup led
   */
 #define LED_LIGHT                                   Bit_RESET
 #define LED_DARK                                    Bit_SET
 #define RUN_LED_PORT                                GPIOB
-#define CAN_LED_PORT                                GPIOB
-#define RUN_LED_PIN                                 GPIO_Pin_1
-#define CAN_LED_PIN                                 GPIO_Pin_0
+#define APITX_LED_PORT                                GPIOB
+#define APIRX_LED_PORT                                GPIOB
+#define RUN_LED_PIN                                 GPIO_Pin_0
+#define APITX_LED_PIN                                 GPIO_Pin_1
+#define APIRX_LED_PIN                                 GPIO_Pin_1
 
 /** @defgroup key
   */
@@ -95,10 +97,10 @@
 #define KEY2_PORT                                   GPIOA
 #define KEY3_PORT                                   GPIOA
 #define KEY4_PORT                                   GPIOA
-#define KEY1_PIN                                    GPIO_Pin_0
-#define KEY2_PIN                                    GPIO_Pin_1
-#define KEY3_PIN                                    GPIO_Pin_2
-#define KEY4_PIN                                    GPIO_Pin_3
+#define KEY1_PIN                                    GPIO_Pin_4
+#define KEY2_PIN                                    GPIO_Pin_5
+#define KEY3_PIN                                    GPIO_Pin_6
+#define KEY4_PIN                                    GPIO_Pin_7
 
 /** @defgroup can (comunicatin with MainBoard)
   */

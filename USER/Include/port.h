@@ -137,7 +137,7 @@ typedef union {
 
 typedef enum {
   FALSE = 0,
-  TRUE  = 1
+  TRUE
 } bool_t;
 
 //#define  ENABLE     true

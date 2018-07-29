@@ -449,6 +449,25 @@ char enter_play_next_song(void) {
 	res = S_Fail;
 	return res;
 }
+/**
+  * @brief
+  * @param
+  * @note
+  * @retval
+  */
+char enter_play_last_song(void) {
+	u8 res = S_Success;
+	playSong_plst last_item = {0, REC_FLAG_OUTEN};
+	last_item.id = audio_item_lastid_loop(_audio_handlest.play_id);
+	if (last_item.id != AUDIOID_NONE) {
+		printf("next id:%d\n", last_item.id);
+		enter_playsong_handle(&last_item);
+		return res;
+	}
+	res = S_Fail;
+	return res;
+}
+
 /////////////////////////////////////////////////////////////////////////////// record and play state clear
 /**
   * @brief  appaudio_play_clear

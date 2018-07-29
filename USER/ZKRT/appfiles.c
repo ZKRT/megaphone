@@ -332,6 +332,29 @@ u8 audio_item_nextid_loop(u8 id) {
 	return newid;
 }
 /**
+  * @brief  audio_item_nextid_loop
+根据给定ID值，获取上一个有效ID值
+  * @param
+  * @note
+  * @retval
+  */
+u8 audio_item_lastid_loop(u8 id) {
+
+	u8 newid = id - 1;
+	newid = newid < 0 ? (ID_LIST_MAX-1) : newid;
+	newid = newid >= ID_LIST_MAX ? (ID_LIST_MAX-1) : newid;
+
+	if (audiolist_pst->id_mask == 0) { //zkrt_notice:判断list无item的时候，防止死循环
+		return AUDIOID_NONE;
+	}
+	while (infolist_pst[newid].id == AUDIOID_NONE) {
+		newid--;
+		newid = newid < 0 ? (ID_LIST_MAX-1) : newid;
+		newid = newid >= ID_LIST_MAX ? (ID_LIST_MAX-1) : newid;
+	}
+	return newid;
+}
+/**
   * @brief  audio_item_check_name_repeat
   * @param
   * @note

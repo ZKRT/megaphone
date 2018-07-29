@@ -22,7 +22,7 @@
 
 /* Exported macro ------------------------------------------------------------*/
 //whether printf data
-#define PRINTF_OPEN          //zkrt_debug
+//#define PRINTF_OPEN          //zkrt_debug
 //#define USE_PRODUCT_AUDIO_OUPUT //zkrt_debug
 //#define USE_TMIIC  //zkrt_todo: this driver can not work now.
 
@@ -69,7 +69,7 @@
 
 // /** @defgroup usart
 //   */
-#define USART_TEST_NUM                              USART1  //zkrt_todo
+#define USART_TEST_NUM                              USART1  
 // #define USART_TEST_IRQ_CH                           USART1_IRQn
 // #define USART_TEST_PreemptionPriority               1
 // #define USART_TEST_SubPriority                      1

@@ -88,6 +88,7 @@ bool audio_item_check_name_repeat(const u8* name);
 void printf_audio_item(const audioinfo_st *item);
 u8 checkfileready(void);
 u8 audio_item_nextid_loop(u8 id);
+u8 audio_item_lastid_loop(u8 id);
 audioinfo_st* audio_item_get(u8 id);
 
 

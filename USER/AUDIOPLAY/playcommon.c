@@ -91,6 +91,7 @@ void audiocommon_play_stop(void) {
 void audiocommon_play_pause(void) {
   //zkrt_todo://尝试关闭IIS输出中断，中断里判断状态填充无效发送数据，关闭WM8978 DAC, 关闭WM8978 IIS 输出
   //zkrt_test:暂时测试通过。此处不加任何代码，暂停处理在中断里判断状态填充无效发送数据
+  I2S_Play_Stop(); 
 }
 /**
   * @brief
@@ -103,4 +104,5 @@ void audiocommon_play_continue(void) {
   //具体操作与wav_play_pause相对应
   //zkrt_test:暂时测试通过。此处不加任何代码。
   _audioplay.play_state = PLAYING_S_APY;
+  I2S_Play_Start();
 }

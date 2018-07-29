@@ -55,14 +55,15 @@ void ProcossPsdkPeroidSendTask(void const *parameter)
         app_timer_flag.psdk_peroid_upload = 0;
         app_timer_cnt.psdk_peroid_upload = PSDK_PER_CNT;
         itoa(audiolist_pst->id_mask, aibf, 2);
+        // sprintf(printBuffer, "REC=%d,MUSIC=%d,ID_FLAG=%s\r\n", audiolist_pst->rec_num, audiolist_pst->music_num, aibf);
         sprintf(printBuffer, "REC=%d,MUSIC=%d,ID_FLAG=%s\r\n", audiolist_pst->rec_num, audiolist_pst->music_num, aibf);
         if (_audio_handlest.play_id != AUDIOID_NONE)
         {
-            sprintf(printBuffer, "%s[PLAY] %s\r\n", printBuffer, _audio_handlest.play_item->name);
+            sprintf(printBuffer, "%s[PLAY:ID%d] %s\r\n", printBuffer, _audio_handlest.play_id, _audio_handlest.play_item->name);
         }
         else if (_audio_handlest.rec_id != AUDIOID_NONE)
         {
-            sprintf(printBuffer, "%s[RECORD] %s\r\n", printBuffer, _audio_handlest.rec_item->name);
+            sprintf(printBuffer, "%s[RECORD:ID%d] %s\r\n", printBuffer, _audio_handlest.rec_id, _audio_handlest.rec_item->name);
         }
         
         //push this info to DJI Pilot Floating Window
@@ -81,7 +82,7 @@ void PrcocessPsdkRecTask(void const *parameter)
 
     if (res > 0)
     {
-//		PSDK_DBG_PRINTF("psdk read:%d", res);
+		printf("psdk read:%d\n", res);
         PsdkUpper_ProcessReceiveData(&s_psdkUpperHandle, s_uartRecBuf, res);
     }
 }

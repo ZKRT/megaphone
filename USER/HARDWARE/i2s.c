@@ -149,8 +149,8 @@ void I2S2_TX_DMA_Init(u8* buf0, u8 *buf1, u16 num) {
 	DMA_ITConfig(DMA1_Stream4, DMA_IT_TC, ENABLE); //开启传输完成中断
 
 	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Stream4_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00;//抢占优先级0
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x00;//子优先级0
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = IIS_TX_PreemptionPriority;//抢占优先级0
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = IIS_TX_SubPriority;//子优先级0
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//使能外部中断通道
 	NVIC_Init(&NVIC_InitStructure);//配置
 }
@@ -199,8 +199,8 @@ void I2S2ext_RX_DMA_Init(u8* buf0, u8 *buf1, u16 num) {
 
 
 	NVIC_InitStructure.NVIC_IRQChannel = DMA1_Stream3_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0x00; //抢占优先级0
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0x01;//子优先级1
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = IIS_RX_PreemptionPriority; //抢占优先级0
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = IIS_RX_SubPriority;//子优先级1
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;//使能外部中断通道
 	NVIC_Init(&NVIC_InitStructure);//配置
 

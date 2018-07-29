@@ -439,7 +439,7 @@ char enter_getaudiostate_handle(rgetAudioState_plst *rother) {
   */
 char enter_play_next_song(void) {
 	u8 res = S_Success;
-	playSong_plst next_item = {0, REC_FLAG_OUTEN};
+	playSong_plst next_item = {0, _audio_handlest.audiorec->rec_out_flag};
 	next_item.id = audio_item_nextid_loop(_audio_handlest.play_id);
 	if (next_item.id != AUDIOID_NONE) {
 		printf("next id:%d\n", next_item.id);
@@ -457,7 +457,7 @@ char enter_play_next_song(void) {
   */
 char enter_play_last_song(void) {
 	u8 res = S_Success;
-	playSong_plst last_item = {0, REC_FLAG_OUTEN};
+	playSong_plst last_item = {0, _audio_handlest.audiorec->rec_out_flag};
 	last_item.id = audio_item_lastid_loop(_audio_handlest.play_id);
 	if (last_item.id != AUDIOID_NONE) {
 		printf("next id:%d\n", last_item.id);

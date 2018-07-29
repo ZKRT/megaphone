@@ -14,11 +14,11 @@
 #define UART_WRITE_BUF_SIZE     2048
 
 //uart uart priority define
-#define UART1_IRQ_PRIO_PRE      1
-#define UART1_IRQ_PRIO_SUB      1
+#define UART1_IRQ_PRIO_PRE      USART_TEST_PreemptionPriority
+#define UART1_IRQ_PRIO_SUB      USART_TEST_SubPriority
 
-#define UART2_IRQ_PRIO_PRE      0
-#define UART2_IRQ_PRIO_SUB      0
+#define UART2_IRQ_PRIO_PRE      UART2_PreemptionPriority
+#define UART2_IRQ_PRIO_SUB      UART2_SubPriority
 
 #define UART3_IRQ_PRIO_PRE      1
 #define UART3_IRQ_PRIO_SUB      1

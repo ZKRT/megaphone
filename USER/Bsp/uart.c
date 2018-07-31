@@ -132,60 +132,62 @@ NVIC_InitStructure.NVIC_IRQChannelSubPriority = subPrio;                        
 NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;                                 \
 NVIC_Init(&NVIC_InitStructure);                                                 \
 }
-
-//#define UART_IRQ_HANDLER(n) \
-//void USART##n##_IRQHandler()\
-//{\
-//    uint8_t data;\
-//    \
-//    if (USART_GetITStatus(USART##n, USART_IT_RXNE) != RESET) {\
-//        data = (uint8_t)(USART_ReceiveData(USART##n) & 0x00FF);\
-//        RingBuf_Put(&s_uart##n##ReadRingBuffer, &data, 1);\
-//        if(n == UART_NUM_1) {\
-//            if (!app_timer_cnt.api_rx) {\
-//                GPIO_WriteBit(APIRX_LED_PORT, APIRX_LED_PIN, LED_LIGHT);\
-//				app_timer_cnt.api_rx = APIRX_LED_CNT;\
-//            }\
-//        }\
-//    }\
-//    \
-//    if(USART_GetITStatus(USART##n, USART_IT_TXE) != RESET) {\
-//        if(RingBuf_Get(&s_uart##n##WriteRingBuffer, &data, 1)) {\
-//            USART_SendData(USART##n, data);\
-//            if(n == UART_NUM_1) {\
-//                if (!app_timer_cnt.api_tx) {\
-//                    GPIO_WriteBit(APITX_LED_PORT, APITX_LED_PIN, LED_LIGHT);\
-//					app_timer_cnt.api_tx = APITX_LED_CNT;\
-//                    }\
-//            }\
-//        } else {\
-//            USART_ITConfig(USART##n, USART_IT_TXE, DISABLE);\
-//        }\
-//    }\
-//}
+// #define UART_IRQ_HANDLER(n) \
+// void USART##n##_IRQHandler()\
+// {\
+//     uint8_t data;\
+//     \
+//     if (USART_GetITStatus(USART##n, USART_IT_RXNE) != RESET) {\
+//         data = (uint8_t)(USART_ReceiveData(USART##n) & 0x00FF);\
+//         RingBuf_Put(&s_uart##n##ReadRingBuffer, &data, 1);\
+//     }\
+//     \
+//     if(USART_GetITStatus(USART##n, USART_IT_TXE) != RESET) {\
+//         if(RingBuf_Get(&s_uart##n##WriteRingBuffer, &data, 1)) {\
+//             USART_SendData(USART##n, data);\
+//         } else {\
+//             USART_ITConfig(USART##n, USART_IT_TXE, DISABLE);\
+//         }\
+//     }\
+// 	if (USART_GetFlagStatus(USART##n, USART_FLAG_ORE) != RESET) {\
+// 		USART_ReceiveData(USART##n);\
+// 		USART_ClearFlag(USART##n, USART_FLAG_ORE);\
+// 	}\
+// }
 #define UART_IRQ_HANDLER(n) \
 void USART##n##_IRQHandler()\
 {\
-    uint8_t data;\
-    \
-    if (USART_GetITStatus(USART##n, USART_IT_RXNE) != RESET) {\
-        data = (uint8_t)(USART_ReceiveData(USART##n) & 0x00FF);\
-        RingBuf_Put(&s_uart##n##ReadRingBuffer, &data, 1);\
+   uint8_t data;\
+   \
+   if (USART_GetITStatus(USART##n, USART_IT_RXNE) != RESET) {\
+       data = (uint8_t)(USART_ReceiveData(USART##n) & 0x00FF);\
+       RingBuf_Put(&s_uart##n##ReadRingBuffer, &data, 1);\
+       if(n == PSDK_UART_NUM) {\
+           if (app_timer_cnt.api_rx==0) {\
+               GPIO_WriteBit(APIRX_LED_PORT, APIRX_LED_PIN, LED_LIGHT);\
+				app_timer_cnt.api_rx = APIRX_LED_CNT;\
+           }\
+       }\
+   }\
+   \
+   if(USART_GetITStatus(USART##n, USART_IT_TXE) != RESET) {\
+       if(RingBuf_Get(&s_uart##n##WriteRingBuffer, &data, 1)) {\
+           USART_SendData(USART##n, data);\
+           if(n == PSDK_UART_NUM) {\
+               if (app_timer_cnt.api_tx==0) {\
+                   GPIO_WriteBit(APITX_LED_PORT, APITX_LED_PIN, LED_LIGHT);\
+					app_timer_cnt.api_tx = APITX_LED_CNT;\
+                   }\
+           }\
+       } else {\
+           USART_ITConfig(USART##n, USART_IT_TXE, DISABLE);\
+       }\
+   }\
+   if (USART_GetFlagStatus(USART##n, USART_FLAG_ORE) != RESET) {\
+     USART_ReceiveData(USART##n);\
+     USART_ClearFlag(USART##n, USART_FLAG_ORE);\
     }\
-    \
-    if(USART_GetITStatus(USART##n, USART_IT_TXE) != RESET) {\
-        if(RingBuf_Get(&s_uart##n##WriteRingBuffer, &data, 1)) {\
-            USART_SendData(USART##n, data);\
-        } else {\
-            USART_ITConfig(USART##n, USART_IT_TXE, DISABLE);\
-        }\
-    }\
-	if (USART_GetFlagStatus(USART##n, USART_FLAG_ORE) != RESET) {\
-		USART_ReceiveData(USART##n);\
-		USART_ClearFlag(USART##n, USART_FLAG_ORE);\
-	}\
 }
-
 void UART_Init(E_UartNum uartNum, uint32_t baudRate)
 {    
     switch (uartNum) {

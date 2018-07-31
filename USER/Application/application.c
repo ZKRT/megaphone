@@ -86,7 +86,7 @@ void PrcocessPsdkRecTask(void const *parameter)
 
     if (res > 0)
     {
-        printf("psdk read:%d\n", res);
+        // printf("psdk read:%d\n", res);
         PsdkUpper_ProcessReceiveData(&s_psdkUpperHandle, s_uartRecBuf, res);
     }
 }

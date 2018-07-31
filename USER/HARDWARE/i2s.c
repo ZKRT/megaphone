@@ -216,8 +216,6 @@ void DMA1_Stream4_IRQHandler(void) {
 	if (DMA_GetITStatus(DMA1_Stream4, DMA_IT_TCIF4) == SET) { ////DMA1_Stream4,传输完成标志
 		DMA_ClearITPendingBit(DMA1_Stream4, DMA_IT_TCIF4);
 		i2s_tx_callback();	//执行回调函数,读取数据等操作在这里面处理
-		//zkrt_debug
-//		i2s_play_dmait_config(DISABLE);
 	}
 }
 //DMA1_Stream3中断服务函数

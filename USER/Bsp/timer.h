@@ -22,10 +22,10 @@
 /* Exported macro ------------------------------------------------------------*/
 #define TIMER_UT 100
 ////timer unit is ms
-#define PSDK_PER_CNT (1200 / TIMER_UT)
+#define PSDK_PER_CNT (800 / TIMER_UT)
 #define RUN_LED_CNT (500 / TIMER_UT)
-#define APITX_LED_CNT (100 / TIMER_UT)
-#define APIRX_LED_CNT (100 / TIMER_UT)
+#define APITX_LED_CNT (300 / TIMER_UT)
+#define APIRX_LED_CNT (300 / TIMER_UT)
 /* Exported types ------------------------------------------------------------*/
 typedef struct
 {

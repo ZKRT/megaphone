@@ -53,6 +53,7 @@ typedef enum {
 	PAUSE_S_APY,            //暂停中
 	CONTINUE_S_APY,         //继续播放
 	STOP_S_APY,             //停止播放
+	FAIL_S_APY,             //播放失败
 	OVER_S_APY              //播放结束
 } audioPlayState;
 

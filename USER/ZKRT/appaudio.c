@@ -31,22 +31,23 @@ appaudio_st *audio_hdle_pst = &_audio_handlest;
 extern audioplay_st _audioplay;
 extern audiorec_st _audiorec;
 const char play_state_string[OVER_S_APY + 1][20] = {
-	"idle",
-	"start up",
-	"playing",
-	"pause",
-	"continue",
-	"stop play",
-	"play over"};
+	"Idle",
+	"Play start",
+	"Playing",
+	"Play pause",
+	"Play continue",
+	"Play stop",
+	"Play fail",
+	"Play over"};
 const char record_state_string[OVER_S_REC + 1][20] = {
-	"idle",
-	"start up",
-	"recording",
-	"pause",
-	"continue",
-	"stop record",
-	"record fail",
-	"record over"};
+	"Idle",
+	"Record start",
+	"Recording",
+	"Record pause",
+	"Record continue",
+	"Record Stop",
+	"Record fail",
+	"Record over"};
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 static void apprecord_handle(void);
@@ -212,6 +213,10 @@ static void appplay_handle(void)
 		audiocommon_play_stop();
 		audio_hdle_pst->play_id = AUDIOID_NONE;
 		audio_hdle_pst->play_item = NULL;
+		break;
+
+	case FAIL_S_APY:
+		audiocommon_play_pause();  //zkrt_debug, wait test
 		break;
 
 	case OVER_S_APY:

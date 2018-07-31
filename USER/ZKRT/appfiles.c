@@ -68,11 +68,16 @@ void appfile_init(void) {
 	for (i = 0; i < ID_LIST_MAX; i++) {
 		infolist_pst[i].id = AUDIOID_NONE;
 	}
+	// //write readme info
+	// if (f_open(&appfiles->tempfile, "0:/readme.txt", FA_CREATE_ALWAYS | FA_WRITE) == FR_OK) {
+	// 	f_write(&appfiles->tempfile, README_STRING, sizeof(README_STRING), (UINT*)&i);
+	// 	f_write(&appfiles->tempfile, README_STRING2, sizeof(README_STRING2), (UINT*)&i);
+	// }
 	//write readme info
-	if (f_open(&appfiles->tempfile, "0:/readme.txt", FA_CREATE_ALWAYS | FA_WRITE) == FR_OK) {
+	if (f_open(&appfiles->tempfile, "0:/重要提示.txt", FA_CREATE_ALWAYS | FA_WRITE) == FR_OK) {
 		f_write(&appfiles->tempfile, README_STRING, sizeof(README_STRING), (UINT*)&i);
-		f_write(&appfiles->tempfile, README_STRING2, sizeof(README_STRING2), (UINT*)&i);
-	}
+		// f_write(&appfiles->tempfile, README_STRING2, sizeof(README_STRING2), (UINT*)&i);
+	}	
 	f_close(&appfiles->tempfile);
 
 	//init all dir: create or open

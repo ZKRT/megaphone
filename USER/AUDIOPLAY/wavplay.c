@@ -173,21 +173,21 @@ bool wav_play_start(void) {
 	if (res != FR_OK) {
 		//zkrt_todo
 		printf("audio file open fail\n");
-		*play_state = START_S_APY;
+		*play_state = STOP_S_APY;
 		return false;
 	}
 	f_lseek(file, wavctrl->datastart);		//跳过文件头
 	fillnum = wav_buffill(file, _audioplay.i2sbuf1, _audioplay.tbuf, WAV_I2S_TX_DMA_BUFSIZE, wavctrl->bps); //取数据
 	if (fillnum != WAV_I2S_TX_DMA_BUFSIZE) {
 		printf("audio file read too few\n");
-		*play_state = START_S_APY;
+		*play_state = STOP_S_APY;
 		f_close(file);
 		return false;
 	}
 	fillnum = wav_buffill(file, _audioplay.i2sbuf2, _audioplay.tbuf, WAV_I2S_TX_DMA_BUFSIZE, wavctrl->bps); //取数据
 	if (fillnum != WAV_I2S_TX_DMA_BUFSIZE) {
 		printf("audio file read too few\n");
-		*play_state = START_S_APY;
+		*play_state = STOP_S_APY;
 		f_close(file);
 		return false;
 	}

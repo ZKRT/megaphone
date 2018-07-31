@@ -26,10 +26,27 @@
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-appaudio_st _audio_handlest;                     //音频相关控制处理结构体
+appaudio_st _audio_handlest; //音频相关控制处理结构体
 appaudio_st *audio_hdle_pst = &_audio_handlest;
 extern audioplay_st _audioplay;
 extern audiorec_st _audiorec;
+const char play_state_string[OVER_S_APY + 1][20] = {
+	"idle",
+	"start up",
+	"playing",
+	"pause",
+	"continue",
+	"stop play",
+	"play over"};
+const char record_state_string[OVER_S_REC + 1][20] = {
+	"idle",
+	"start up",
+	"recording",
+	"pause",
+	"continue",
+	"stop record",
+	"record fail",
+	"record over"};
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 static void apprecord_handle(void);
@@ -41,7 +58,8 @@ static void appplay_handle(void);
   * @note
   * @retval
   */
-void appaudio_init(void) {
+void appaudio_init(void)
+{
 	/************init global parameter**********************************/
 	_audio_handlest.audiorec = &_audiorec;
 	_audio_handlest.audioplay = &_audioplay;
@@ -62,7 +80,7 @@ void appaudio_init(void) {
 	_audio_handlest.play_item = NULL;
 	_audio_handlest.audioplay->play_state = IDLE_S_APY;
 	_audio_handlest.audioplay->play_mode = NORMAL_MAPY;
-	_audio_handlest.audioplay->out_flag = REC_FLAG_OUTDISE;
+	_audio_handlest.audioplay->out_flag = REC_FLAG_OUTEN;
 
 	//set vol
 	enter_volctrl_handle(VOLUME_INIT_VALUE);
@@ -75,9 +93,28 @@ void appaudio_init(void) {
   * @note
   * @retval
   */
-void appaudio_prcs(void) {
-	apprecord_handle();
+void appaudio_prcs(void)
+{
 	appplay_handle();
+	apprecord_handle();
+}
+//check enable play audio
+bool allowed_playaudio(void)
+{
+	if ((_audio_handlest.audiorec->rec_state == IDLE_S_REC) ||
+		(_audio_handlest.audiorec->rec_state == OVER_S_REC))
+		return true;
+	else
+		return false;
+}
+//check enable record
+bool allowed_record(void)
+{
+	if ((_audio_handlest.audioplay->play_state == IDLE_S_APY) ||
+		(_audio_handlest.audioplay->play_state == OVER_S_APY))
+		return true;
+	else
+		return false;
 }
 /**
   * @brief  apprecord_handle
@@ -85,11 +122,13 @@ void appaudio_prcs(void) {
   * @note
   * @retval
   */
-static void apprecord_handle(void) {
+static void apprecord_handle(void)
+{
 	if (audio_hdle_pst->rec_enable == false)
 		return;
 
-	switch (audio_hdle_pst->audiorec->rec_state) {
+	switch (audio_hdle_pst->audiorec->rec_state)
+	{
 	case IDLE_S_REC:
 		break;
 
@@ -117,7 +156,8 @@ static void apprecord_handle(void) {
 		audio_workmode_adjust(); //音频工作模式调整（录音，播放，对讲）
 		break;
 
-	default: break;
+	default:
+		break;
 	}
 }
 /**
@@ -126,27 +166,35 @@ static void apprecord_handle(void) {
   * @note
   * @retval
   */
-static void appplay_handle(void) {
+static void appplay_handle(void)
+{
 	if (audio_hdle_pst->play_enable == false)
 		return;
 
-	switch (audio_hdle_pst->audioplay->play_state) {
+	switch (audio_hdle_pst->audioplay->play_state)
+	{
 	case IDLE_S_APY:
 		break;
 
 	case START_S_APY:
 		audio_enter_play_mode(); //zkrt_notice
-		if (audio_hdle_pst->play_item->format == FORMAT_MP3) {
+		if (audio_hdle_pst->play_item->format == FORMAT_MP3)
+		{
 			mp3_play_start();
-		} else {
+		}
+		else
+		{
 			wav_play_start();
 		}
 		break;
 
 	case PLAYING_S_APY:
-		if (audio_hdle_pst->play_item->format == FORMAT_MP3) {
+		if (audio_hdle_pst->play_item->format == FORMAT_MP3)
+		{
 			mp3_playing();
-		} else {
+		}
+		else
+		{
 			wav_playing();
 		}
 
@@ -172,22 +220,23 @@ static void appplay_handle(void) {
 		audio_workmode_adjust(); //音频工作模式调整（录音，播放，对讲）
 		break;
 
-	default: break;
+	default:
+		break;
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////protocl funciton
-static char none_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char getlist_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char startrec_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char stoprec_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char playsong_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char playctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char volctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char getaudioinfo_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char delrecaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char modifyaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char recctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
-static char getaudiostate_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
+static char none_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char getlist_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char startrec_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char stoprec_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char playsong_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char playctrl_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char volctrl_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char getaudioinfo_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char delrecaudio_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char modifyaudio_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char recctrl_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
+static char getaudiostate_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen);
 
 const PTCOL_FUN ptcol_fun[] = {
 	none_ptf,
@@ -201,15 +250,15 @@ const PTCOL_FUN ptcol_fun[] = {
 	delrecaudio_ptf,
 	modifyaudio_ptf,
 	recctrl_ptf,
-	getaudiostate_ptf
-};
+	getaudiostate_ptf};
 /**
   * @brief  none_ptf
   * @param
   * @note
   * @retval
   */
-static char none_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char none_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	return NOTNEED_RETRUN;
 }
 /**
@@ -218,10 +267,11 @@ static char none_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char getlist_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	rgetlist_plst *rother = (rgetlist_plst*)r->other_data;
+static char getlist_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	rgetlist_plst *rother = (rgetlist_plst *)r->other_data;
 
 	enther_getlist_handle(rother);
 
@@ -236,12 +286,13 @@ static char getlist_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char startrec_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char startrec_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	u8 res = S_Success;
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	startRec_plst *sother = (startRec_plst*)(s->other_data);
-	rstartRec_plst *rother = (rstartRec_plst*)r->other_data;
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	startRec_plst *sother = (startRec_plst *)(s->other_data);
+	rstartRec_plst *rother = (rstartRec_plst *)r->other_data;
 
 	res = enter_startrec_handle(sother->name, sother->flag, &rother->id);
 
@@ -258,13 +309,14 @@ static char startrec_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char stoprec_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char stoprec_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	u8 res = S_Success;
 
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	stopRec_plst *sother = (stopRec_plst*)(s->other_data);
-	rstopRec_plst *rother = (rstopRec_plst*)r->other_data;
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	stopRec_plst *sother = (stopRec_plst *)(s->other_data);
+	rstopRec_plst *rother = (rstopRec_plst *)r->other_data;
 
 	res = enter_stoprec_handle(sother->flag, rother);
 
@@ -281,13 +333,14 @@ static char stoprec_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char playsong_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char playsong_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	u8 res = S_Success;
 
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	playSong_plst *sother = (playSong_plst*)(s->other_data);
-	rplaySong_plst *rother = (rplaySong_plst*)r->other_data;
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	playSong_plst *sother = (playSong_plst *)(s->other_data);
+	rplaySong_plst *rother = (rplaySong_plst *)r->other_data;
 
 	res = enter_playsong_handle(sother);
 
@@ -304,11 +357,12 @@ static char playsong_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char playctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char playctrl_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	u8 res = S_Success;
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	playCtrl_plst *sother = (playCtrl_plst*)(s->other_data);
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	playCtrl_plst *sother = (playCtrl_plst *)(s->other_data);
 
 	res = enter_playctrl_handle(sother->option);
 
@@ -325,11 +379,12 @@ static char playctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char volctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char volctrl_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	u8 res = S_Success;
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	volumeCtrl_plst *sother = (volumeCtrl_plst*)(s->other_data);
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	volumeCtrl_plst *sother = (volumeCtrl_plst *)(s->other_data);
 
 	res = enter_volctrl_handle(sother->vol);
 
@@ -346,12 +401,13 @@ static char volctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char getaudioinfo_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char getaudioinfo_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	u8 res = S_Success;
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	getAudioInfo_plst *sother = (getAudioInfo_plst*)(s->other_data);
-	rgetAudioInfo_plst *rother = (rgetAudioInfo_plst*)r->other_data;
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	getAudioInfo_plst *sother = (getAudioInfo_plst *)(s->other_data);
+	rgetAudioInfo_plst *rother = (rgetAudioInfo_plst *)r->other_data;
 
 	res = enter_getaudioinfo_handle(sother->id, rother);
 
@@ -368,12 +424,13 @@ static char getaudioinfo_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char delrecaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char delrecaudio_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	u8 res = S_Success;
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	delAudio_plst *sother = (delAudio_plst*)(s->other_data);
-	rdelAudio_plst *rother = (rdelAudio_plst*)r->other_data;
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	delAudio_plst *sother = (delAudio_plst *)(s->other_data);
+	rdelAudio_plst *rother = (rdelAudio_plst *)r->other_data;
 
 	res = enter_delrecaudio_handle(sother->id);
 
@@ -391,12 +448,13 @@ static char delrecaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char modifyaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char modifyaudio_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	u8 res = S_Success;
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	modifyAudio_plst *sother = (modifyAudio_plst*)(s->other_data);
-	rmodifyAudio_plst *rother = (rmodifyAudio_plst*)r->other_data;
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	modifyAudio_plst *sother = (modifyAudio_plst *)(s->other_data);
+	rmodifyAudio_plst *rother = (rmodifyAudio_plst *)r->other_data;
 
 	res = enter_modifyaudio_handle(sother);
 
@@ -414,11 +472,12 @@ static char modifyaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char recctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char recctrl_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	u8 res = S_Success;
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	recCtrl_plst *sother = (recCtrl_plst*)(s->other_data);
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	recCtrl_plst *sother = (recCtrl_plst *)(s->other_data);
 
 	res = enter_recctrl_handle(sother);
 
@@ -435,11 +494,12 @@ static char recctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
   * @note
   * @retval
   */
-static char getaudiostate_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+static char getaudiostate_ptf(void *sdata, void *rdata, u8 slen, u8 *rlen)
+{
 	u8 res = S_Success;
-	send_plst *s = (send_plst*)sdata;
-	respond_plst *r = (respond_plst*)rdata;
-	rgetAudioState_plst *rother = (rgetAudioState_plst*)r->other_data;
+	send_plst *s = (send_plst *)sdata;
+	respond_plst *r = (respond_plst *)rdata;
+	rgetAudioState_plst *rother = (rgetAudioState_plst *)r->other_data;
 
 	res = enter_getaudiostate_handle(rother);
 

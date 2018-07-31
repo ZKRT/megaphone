@@ -29,20 +29,20 @@ extern appaudio_st _audio_handlest;
 // #define INPUT2_INDEX 11
 // #define BUTTON4_INDEX 12
 
-#define VOL_SCALE1_INDEX 0
-#define PLAY_BUTTON1_INDEX 1
-#define PAUSE_BUTTON2_INDEX 2
-#define STOP_BUTTON3_INDEX 3
-#define LASTSONG_BUTTON4_INDEX 4
-#define NEXTSONG_BUTTON5_INDEX 5
-#define CHOSONG_INPUT1_INDEX 6
-#define STARTREC_INPUT2_INDEX 7
-#define PASUEREC_BUTTON6_INDEX 8
-#define STOPREC_LIST1_INDEX 9
-#define DELCREC_BUTTON7_INDEX 10
-#define DELIDREC_INPUT3_INDEX 11
-#define RECOUTEN_SWITCH1_INDEX 12
-#define AUDIOINFOGET_INPUT4_INDEX 13
+#define VOL_SCALE_INDEX 0
+// #define PLAY_BUTTON_INDEX 1
+#define PLAY_PAUSE_BUTTON_INDEX 1
+// #define STOP_BUTTON_INDEX 3
+#define LASTSONG_BUTTON_INDEX 2
+#define NEXTSONG_BUTTON_INDEX 3
+#define CHOSONG_INPUT_INDEX 4
+#define STARTREC_INPUT_INDEX 5
+#define PASUEREC_BUTTON_INDEX 6
+#define STOPREC_LIST_INDEX 7
+#define DELCREC_BUTTON_INDEX 8
+#define DELIDREC_INPUT_INDEX 9
+#define RECOUTEN_SWITCH_INDEX 10
+#define AUDIOINFOGET_INPUT_INDEX 11
 
 /*********************************************************************
 *       Static data
@@ -71,20 +71,20 @@ extern appaudio_st _audio_handlest;
 
 //@formatter:off
 static const T_PsdkAppFuncWidgetListItem s_TestWidgetList[] = {
-    APPFUNC_DEF_SCALE_WIDGET(VOL_SCALE1_INDEX, "Volume "),
-    APPFUNC_DEF_BUTTON_WIDGET(PLAY_BUTTON1_INDEX, "Play"),
-    APPFUNC_DEF_BUTTON_WIDGET(PAUSE_BUTTON2_INDEX, "Pause/Continue"),
-    APPFUNC_DEF_BUTTON_WIDGET(STOP_BUTTON3_INDEX, "Stop play"),
-    APPFUNC_DEF_BUTTON_WIDGET(LASTSONG_BUTTON4_INDEX, "Previous"),
-    APPFUNC_DEF_BUTTON_WIDGET(NEXTSONG_BUTTON5_INDEX, "Next"),
-    APPFUNC_DEF_INT_INPUT_BOX_WIDGET(CHOSONG_INPUT1_INDEX, "Play by ID", "ID range: 0~31"),
-    APPFUNC_DEF_INT_INPUT_BOX_WIDGET(STARTREC_INPUT2_INDEX, "Start record", "Entry Date: YearMonthDay"),
-    APPFUNC_DEF_BUTTON_WIDGET(PASUEREC_BUTTON6_INDEX, "Pause/Continue record"),
-    APPFUNC_DEF_LIST_WIDGET(STOPREC_LIST1_INDEX, "Stop record", 3, "N/A", "Save", "Cancel"),
-    APPFUNC_DEF_BUTTON_WIDGET(DELCREC_BUTTON7_INDEX, "Delete the recording file"),
-    APPFUNC_DEF_INT_INPUT_BOX_WIDGET(DELIDREC_INPUT3_INDEX, "Delete the record file by ID", "ID range: 0~31"),
-    APPFUNC_DEF_SWITCH_WIDGET(RECOUTEN_SWITCH1_INDEX, "Interphone when play and record"),
-//    APPFUNC_DEF_INT_INPUT_BOX_WIDGET(AUDIOINFOGET_INPUT4_INDEX, "Get audio info by ID", "ID range: 0~31"),
+    APPFUNC_DEF_SCALE_WIDGET(VOL_SCALE_INDEX, "Volume "),
+    // APPFUNC_DEF_BUTTON_WIDGET(PLAY_BUTTON_INDEX, "Play"),
+    APPFUNC_DEF_BUTTON_WIDGET(PLAY_PAUSE_BUTTON_INDEX, "Play/Pause/Continue"),
+    // APPFUNC_DEF_BUTTON_WIDGET(STOP_BUTTON_INDEX, "Stop play"),
+    APPFUNC_DEF_BUTTON_WIDGET(LASTSONG_BUTTON_INDEX, "Previous"),
+    APPFUNC_DEF_BUTTON_WIDGET(NEXTSONG_BUTTON_INDEX, "Next"),
+    APPFUNC_DEF_INT_INPUT_BOX_WIDGET(CHOSONG_INPUT_INDEX, "Play by ID", "ID range: 0~31"),
+    APPFUNC_DEF_INT_INPUT_BOX_WIDGET(STARTREC_INPUT_INDEX, "Start record", "Entry Date: YearMonthDay"),
+    APPFUNC_DEF_BUTTON_WIDGET(PASUEREC_BUTTON_INDEX, "Pause/Continue record"),
+    APPFUNC_DEF_LIST_WIDGET(STOPREC_LIST_INDEX, "Stop record", 3, "N/A", "Save", "Cancel"),
+    APPFUNC_DEF_BUTTON_WIDGET(DELCREC_BUTTON_INDEX, "Delete the recording file"),
+    APPFUNC_DEF_INT_INPUT_BOX_WIDGET(DELIDREC_INPUT_INDEX, "Delete the record file by ID", "ID range: 0~31"),
+    APPFUNC_DEF_SWITCH_WIDGET(RECOUTEN_SWITCH_INDEX, "Interphone when play and record"),
+    //    APPFUNC_DEF_INT_INPUT_BOX_WIDGET(AUDIOINFOGET_INPUT_INDEX, "Get audio info by ID", "ID range: 0~31"),
 };
 //@formatter:on
 
@@ -116,9 +116,10 @@ static U_AppFuncWidgetValue choosesong_input1Val = {.intInputBoxVal = 0};
 static U_AppFuncWidgetValue startrecord_input2Val = {.intInputBoxVal = 0};
 static U_AppFuncWidgetValue stoprecord_list1Val = {.listVal = 0};
 static U_AppFuncWidgetValue delidrecord_input3Val = {.intInputBoxVal = 0};
-static uint8_t pause_button2Val = PLAY_CTRL_PAUSE; //2 state, pause and continue
+// static uint8_t pause_button2Val = PAUSE_S_APY; //2 state, pause and continue
 static uint8_t pauserec_button6val = REC_CTRL_PAUSE;
-static U_AppFuncWidgetValue recouten_switch1Val = {.switchVal = PSDK_APPFUNC_SWITCH_VAL_OFF};
+static U_AppFuncWidgetValue recouten_switch1Val = {.switchVal = PSDK_APPFUNC_SWITCH_VAL_ON};
+static uint8_t cur_del_play_id = 0xff;
 static char receivePrint[1024];
 
 /*********************************************************************
@@ -138,23 +139,23 @@ Test_GetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t widgetIndex,
 {
     switch (widgetIndex)
     {
-    case VOL_SCALE1_INDEX:
+    case VOL_SCALE_INDEX:
         vol_scale1Val.scaleVal = _audio_handlest.volume;
         *pWidgetValue = vol_scale1Val;
         break;
-    case CHOSONG_INPUT1_INDEX:
+    case CHOSONG_INPUT_INDEX:
         *pWidgetValue = choosesong_input1Val;
         break;
-    case STARTREC_INPUT2_INDEX:
+    case STARTREC_INPUT_INDEX:
         *pWidgetValue = startrecord_input2Val;
         break;
-    case STOPREC_LIST1_INDEX:
+    case STOPREC_LIST_INDEX:
         *pWidgetValue = stoprecord_list1Val;
         break;
-    case DELIDREC_INPUT3_INDEX:
+    case DELIDREC_INPUT_INDEX:
         *pWidgetValue = delidrecord_input3Val;
         break;
-    case RECOUTEN_SWITCH1_INDEX:
+    case RECOUTEN_SWITCH_INDEX:
         *pWidgetValue = recouten_switch1Val;
         break;
     default:
@@ -169,62 +170,66 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
 {
     switch (widgetIndex)
     {
-    case VOL_SCALE1_INDEX:
+    case VOL_SCALE_INDEX:
         PSDK_LOG_DEBUG("vol Opt");
         vol_scale1Val = *pWidgetValue;
         enter_volctrl_handle((uint8_t)vol_scale1Val.scaleVal);
         break;
-    case PLAY_BUTTON1_INDEX:
-        if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_PRESS_DOWN)
-        {
-            PSDK_LOG_DEBUG("Button1 Press Down");
-        }
-        else if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_RELEASE_UP)
-        {
-            PSDK_LOG_DEBUG("Button1 Release Up");
-            if (_audio_handlest.play_id != AUDIOID_NONE)
-            {
-                playSong_plst temp = {_audio_handlest.play_id, _audio_handlest.audiorec->rec_out_flag};
-                enter_playsong_handle(&temp);
-            }
-            else
-            {
-                enter_play_next_song();
-            }
-        }
-        break;
-    case PAUSE_BUTTON2_INDEX:
+    // case PLAY_BUTTON_INDEX:
+    //     if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_PRESS_DOWN)
+    //     {
+    //         PSDK_LOG_DEBUG("Button1 Press Down");
+    //     }
+    //     else if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_RELEASE_UP)
+    //     {
+    //         PSDK_LOG_DEBUG("Button1 Release Up");
+    //         if (_audio_handlest.play_id != AUDIOID_NONE)
+    //         {
+    //             playSong_plst temp = {_audio_handlest.play_id, _audio_handlest.audiorec->rec_out_flag};
+    //             enter_playsong_handle(&temp);
+    //         }
+    //         else
+    //         {
+    //             enter_play_next_song();
+    //         }
+    //     }
+    //     break;
+    case PLAY_PAUSE_BUTTON_INDEX:
         if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_PRESS_DOWN)
         {
             PSDK_LOG_DEBUG("Button2 Press Down");
         }
         else if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_RELEASE_UP)
         {
-            PSDK_LOG_DEBUG("Button2 Release Up, %d", pause_button2Val);
-            if (pause_button2Val == PLAY_CTRL_PAUSE)
-            { //pasue
-                enter_playctrl_handle(PLAY_CTRL_PAUSE);
-                pause_button2Val = PLAY_CTRL_CONTINUE;
+            PSDK_LOG_DEBUG("Button2 Release Up");
+            if (allowed_playaudio() == false)
+                break;
+            if (_audio_handlest.play_id == AUDIOID_NONE)
+            {
+                //                playSong_plst temp = {_audio_handlest.play_id, _audio_handlest.audiorec->rec_out_flag};
+                enter_play_next_song();
             }
             else
-            { //continue play song
-                enter_playctrl_handle(PLAY_CTRL_CONTINUE);
-                pause_button2Val = PLAY_CTRL_PAUSE;
+            {
+                if (_audio_handlest.audioplay->play_state == PAUSE_S_APY)
+                    enter_playctrl_handle(PLAY_CTRL_CONTINUE);
+                else
+                    enter_playctrl_handle(PLAY_CTRL_PAUSE);
             }
         }
         break;
-    case STOP_BUTTON3_INDEX:
-        if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_PRESS_DOWN)
-        {
-            PSDK_LOG_DEBUG("Button3 Press Down");
-        }
-        else if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_RELEASE_UP)
-        {
-            PSDK_LOG_DEBUG("Button3 Release Up");
-            enter_playctrl_handle(PLAY_CTRL_STOP);
-        }
-        break;
-    case LASTSONG_BUTTON4_INDEX:
+    // case STOP_BUTTON_INDEX:
+    //     if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_PRESS_DOWN)
+    //     {
+    //         PSDK_LOG_DEBUG("Button3 Press Down");
+    //     }
+    //     else if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_RELEASE_UP)
+    //     {
+    //         PSDK_LOG_DEBUG("Button3 Release Up");
+    //         enter_playctrl_handle(PLAY_CTRL_STOP);
+    //     }
+    //     break;
+    case LASTSONG_BUTTON_INDEX:
         if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_PRESS_DOWN)
         {
             PSDK_LOG_DEBUG("Button4 Press Down");
@@ -232,10 +237,12 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
         else if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_RELEASE_UP)
         {
             PSDK_LOG_DEBUG("Button4 Release Up");
+            if (allowed_playaudio() == false)
+                break;
             enter_play_last_song();
         }
         break;
-    case NEXTSONG_BUTTON5_INDEX:
+    case NEXTSONG_BUTTON_INDEX:
         if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_PRESS_DOWN)
         {
             PSDK_LOG_DEBUG("Button5 Press Down");
@@ -243,28 +250,33 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
         else if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_RELEASE_UP)
         {
             PSDK_LOG_DEBUG("Button5 Release Up");
+            if (allowed_playaudio() == false)
+                break;
             enter_play_next_song();
         }
         break;
-    case CHOSONG_INPUT1_INDEX:
+    case CHOSONG_INPUT_INDEX:
         PSDK_LOG_DEBUG("Input1 Opt, %d", pWidgetValue->intInputBoxVal);
+        if (allowed_playaudio() == false)
+            break;
         choosesong_input1Val = *pWidgetValue;
         {
-            playSong_plst temp = {(uint8_t)choosesong_input1Val.intInputBoxVal, _audio_handlest.audiorec->rec_out_flag};
+            playSong_plst temp = {(uint8_t)choosesong_input1Val.intInputBoxVal, _audio_handlest.audioplay->out_flag};
             enter_playsong_handle(&temp);
         }
         break;
-    case STARTREC_INPUT2_INDEX:
+    case STARTREC_INPUT_INDEX:
         startrecord_input2Val = *pWidgetValue;
         PSDK_LOG_DEBUG("Input2 Opt: %d", startrecord_input2Val.intInputBoxVal);
         {
             char name[AUDIO_NAME_LEN] = {0};
             uint8_t rid;
             sprintf(name, "%d_%u.wav", startrecord_input2Val.intInputBoxVal, TimingDelay);
+            enter_playctrl_handle(PLAY_CTRL_STOP);
             enter_startrec_handle((uint8_t *)name, _audio_handlest.audiorec->rec_out_flag, &rid);
         }
         break;
-    case PASUEREC_BUTTON6_INDEX:
+    case PASUEREC_BUTTON_INDEX:
         if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_PRESS_DOWN)
         {
             PSDK_LOG_DEBUG("Button6 Press Down");
@@ -273,6 +285,8 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
         {
             recCtrl_plst temp;
             PSDK_LOG_DEBUG("Button6 Release Up");
+            if (allowed_record() == false)
+                break;
             if (pauserec_button6val == REC_CTRL_PAUSE)
             {
                 temp.option = REC_CTRL_PAUSE;
@@ -287,45 +301,49 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
             }
         }
         break;
-    case STOPREC_LIST1_INDEX:
+    case STOPREC_LIST_INDEX:
         PSDK_LOG_DEBUG("List1 Opt");
+        if (allowed_record() == false)
+            break;
         stoprecord_list1Val = *pWidgetValue;
         {
             rstopRec_plst temp;
             enter_stoprec_handle((uint8_t)stoprecord_list1Val.listVal, &temp);
         }
         break;
-    case DELCREC_BUTTON7_INDEX:
+    case DELCREC_BUTTON_INDEX:
         if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_PRESS_DOWN)
         {
             PSDK_LOG_DEBUG("Button7 Press Down");
-            //            if ((_audio_handlest.play_id != AUDIOID_NONE) && (_audio_handlest.play_item->attr == ATTR_RECORD))
-            //                enter_playctrl_handle(PLAY_CTRL_STOP);
+            if ((_audio_handlest.play_id != AUDIOID_NONE) && (_audio_handlest.play_item->attr == ATTR_RECORD))
+            {
+                enter_playctrl_handle(PLAY_CTRL_STOP);
+                cur_del_play_id = _audio_handlest.play_id;
+            }
         }
         else if (pWidgetValue->buttonVal == PSDK_APPFUNC_BUTTON_VAL_RELEASE_UP)
         {
             PSDK_LOG_DEBUG("Button7 Release Up");
-            if ((_audio_handlest.play_id != AUDIOID_NONE) && (_audio_handlest.play_item->attr == ATTR_RECORD))
-            {
-                enter_playctrl_handle(PLAY_CTRL_STOP);
-                enter_delrecaudio_handle(_audio_handlest.play_id);
-            }
+            enter_delrecaudio_handle(cur_del_play_id);
+            cur_del_play_id = 0xff;
         }
         break;
-    case DELIDREC_INPUT3_INDEX:
+    case DELIDREC_INPUT_INDEX:
         PSDK_LOG_DEBUG("Input3 Opt");
         delidrecord_input3Val = *pWidgetValue;
         enter_delrecaudio_handle((uint8_t)delidrecord_input3Val.intInputBoxVal);
         break;
-    case RECOUTEN_SWITCH1_INDEX:
+    case RECOUTEN_SWITCH_INDEX:
         PSDK_LOG_DEBUG("Switch1 Opt");
         recouten_switch1Val = *pWidgetValue;
         if (recouten_switch1Val.data == PSDK_APPFUNC_SWITCH_VAL_ON)
         {
+            _audio_handlest.audioplay->out_flag = REC_FLAG_OUTEN;
             _audio_handlest.audiorec->rec_out_flag = REC_FLAG_OUTEN;
         }
         else
         {
+            _audio_handlest.audioplay->out_flag = REC_FLAG_OUTDISE;
             _audio_handlest.audiorec->rec_out_flag = REC_FLAG_OUTDISE;
         }
         break;

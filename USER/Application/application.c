@@ -15,7 +15,8 @@
 #include "appfiles.h"
 
 extern appaudio_st _audio_handlest;
-
+extern const char play_state_string[OVER_S_APY + 1][20];
+extern const char record_state_string[OVER_S_REC + 1][20];
 //Payload SDK User Info Set
 T_PsdkUserInfo userInfo = {
     .APP_Name = USER_APP_NAME,
@@ -55,23 +56,26 @@ void ProcossPsdkPeroidSendTask(void const *parameter)
         app_timer_flag.psdk_peroid_upload = 0;
         app_timer_cnt.psdk_peroid_upload = PSDK_PER_CNT;
         itoa(audiolist_pst->id_mask, aibf, 2);
-        // sprintf(printBuffer, "REC=%d,MUSIC=%d,ID_FLAG=%s\r\n", audiolist_pst->rec_num, audiolist_pst->music_num, aibf);
         sprintf(printBuffer, "REC=%d,MUSIC=%d,ID_FLAG=%s\r\n", audiolist_pst->rec_num, audiolist_pst->music_num, aibf);
+        // sprintf(printBuffer, "REC=%d,MUSIC=%d\r\n", audiolist_pst->rec_num, audiolist_pst->music_num);
         if (_audio_handlest.play_id != AUDIOID_NONE)
         {
-            sprintf(printBuffer, "%s[PLAY:ID%d] %s\r\n", printBuffer, _audio_handlest.play_id, _audio_handlest.play_item->name);
+            sprintf(printBuffer, "%s[%s:ID%d] ", printBuffer, &play_state_string[_audio_handlest.audioplay->play_state][0], _audio_handlest.play_id);
+            strcat(printBuffer, (char *)_audio_handlest.play_item->name);
         }
         else if (_audio_handlest.rec_id != AUDIOID_NONE)
         {
-            sprintf(printBuffer, "%s[RECORD:ID%d] %s\r\n", printBuffer, _audio_handlest.rec_id, _audio_handlest.rec_item->name);
+            sprintf(printBuffer, "%s[%s:ID%d] ", printBuffer, &record_state_string[_audio_handlest.audiorec->rec_state][0], _audio_handlest.rec_id);
+            strcat(printBuffer, (char *)_audio_handlest.rec_item->name);
+            //            sprintf(printBuffer, "%s[%s:ID%d] %s\r\n", printBuffer, &record_state_string[_audio_handlest.audiorec->rec_state][0], _audio_handlest.rec_id, _audio_handlest.rec_item->name);
         }
-        
+
         //push this info to DJI Pilot Floating Window
         PsdkAppFunc_PushMsgToFloatingWindow(&s_psdkUpperHandle, printBuffer);
 
         //transfer this info to MSDK
         PsdkAppFunc_TransferToApp(&s_psdkUpperHandle, (const uint8_t *)printBuffer, strlen(printBuffer) + 1, &realSendLen);
- //       PSDK_DBG_PRINTF("per send psdk");
+        //       PSDK_DBG_PRINTF("per send psdk");
     }
 }
 //Receive Psdk Data Process, all callback function process here.
@@ -82,7 +86,7 @@ void PrcocessPsdkRecTask(void const *parameter)
 
     if (res > 0)
     {
-		printf("psdk read:%d\n", res);
+        printf("psdk read:%d\n", res);
         PsdkUpper_ProcessReceiveData(&s_psdkUpperHandle, s_uartRecBuf, res);
     }
 }

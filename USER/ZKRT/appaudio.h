@@ -121,7 +121,8 @@ typedef struct {
 /* Exported functions ------------------------------------------------------- */
 void appaudio_prcs(void);
 void appaudio_init(void);
-
+bool allowed_playaudio(void);
+bool allowed_record(void);
 //wav
 extern bool wav_play_start(void);
 extern u8 wav_playing(void);
@@ -130,6 +131,7 @@ extern void wav_play_stop(void);
 extern void wav_play_pause(void);
 extern void wav_play_continue(void);
 extern void wav_play_over_check_mode(appaudio_st* audio);
+
 #endif /* __APPAUDIO_H */
 
 /**

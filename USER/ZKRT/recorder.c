@@ -166,7 +166,7 @@ void recode_over_handle(void) {
   * @retval
   */
 void recode_pause_handle(void) {
-	I2S_Play_Stop(); //zkrt_debug
+	I2S_Play_Stop(); 
 	I2S_Rec_Stop();
 }
 /**

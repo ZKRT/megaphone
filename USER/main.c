@@ -40,7 +40,7 @@ int main(void)
     BSP_Init();
     // appcan_init();
     appled_init();
-//    appkey_init();
+    appkey_init();
     checkfileready();
     if (is_file_exsit)
         appfatfs_test();

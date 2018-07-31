@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-//#define PSDK_PRINTF_OPEN  //zkrt_notice
+// #define PSDK_PRINTF_OPEN  //zkrt_debug
 
 static uint8_t isLogInit = 0;
 

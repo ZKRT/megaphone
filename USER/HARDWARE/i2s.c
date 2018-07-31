@@ -216,6 +216,8 @@ void DMA1_Stream4_IRQHandler(void) {
 	if (DMA_GetITStatus(DMA1_Stream4, DMA_IT_TCIF4) == SET) { ////DMA1_Stream4,传输完成标志
 		DMA_ClearITPendingBit(DMA1_Stream4, DMA_IT_TCIF4);
 		i2s_tx_callback();	//执行回调函数,读取数据等操作在这里面处理
+		//zkrt_debug
+//		i2s_play_dmait_config(DISABLE);
 	}
 }
 //DMA1_Stream3中断服务函数
@@ -233,6 +235,11 @@ void I2S_Play_Start(void) {
 void I2S_Play_Stop(void) {
 	DMA_Cmd(DMA1_Stream4, DISABLE); //关闭DMA,结束播放
 }
+//close or open i2s play interrupt
+void i2s_play_dmait_config(FunctionalState NewState)
+{
+	DMA_ITConfig(DMA1_Stream4, DMA_IT_TC, NewState);
+}
 //I2S开始录音
 void I2S_Rec_Start(void) {
 	DMA_Cmd(DMA1_Stream3, ENABLE); //开启DMA TX传输,开始录音
@@ -242,4 +249,8 @@ void I2S_Rec_Stop(void) {
 	DMA_Cmd(DMA1_Stream3, DISABLE); //关闭DMA,结束录音
 
 }
-
+//close or open i2s record interrupt
+void i2s_record_dmait_config(FunctionalState NewState)
+{
+	DMA_ITConfig(DMA1_Stream3, DMA_IT_TC, NewState);
+}

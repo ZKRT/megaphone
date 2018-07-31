@@ -22,8 +22,8 @@
 
 /* Exported macro ------------------------------------------------------------*/
 //whether printf data
-//#define PRINTF_OPEN          //zkrt_debug
-//#define USE_PRODUCT_AUDIO_OUPUT //zkrt_debug
+// #define PRINTF_OPEN          //zkrt_debug
+//#define USE_PRODUCT_AUDIO_OUPUT
 //#define USE_TMIIC  //zkrt_todo: this driver can not work now.
 
 //unit test debug
@@ -69,9 +69,9 @@
 
 // /** @defgroup usart
 //   */
-#define USART_TEST_NUM                              USART1  
+#define USART_TEST_NUM                               USART1  
  #define USART_TEST_IRQ_CH                           USART1_IRQn
- #define USART_TEST_PreemptionPriority               1
+ #define USART_TEST_PreemptionPriority               2
  #define USART_TEST_SubPriority                      1
  #define USART_TEST_TX_PORT                          GPIOB
  #define USART_TEST_RX_PORT                          GPIOB
@@ -85,11 +85,11 @@
 #define LED_LIGHT                                   Bit_RESET
 #define LED_DARK                                    Bit_SET
 #define RUN_LED_PORT                                GPIOB
-#define APITX_LED_PORT                                GPIOB
-#define APIRX_LED_PORT                                GPIOB
+#define APITX_LED_PORT                              GPIOB
+#define APIRX_LED_PORT                              GPIOB
 #define RUN_LED_PIN                                 GPIO_Pin_0
-#define APITX_LED_PIN                                 GPIO_Pin_1
-#define APIRX_LED_PIN                                 GPIO_Pin_1
+#define APITX_LED_PIN                               GPIO_Pin_1
+#define APIRX_LED_PIN                               GPIO_Pin_2
 
 /** @defgroup key
   */
@@ -171,10 +171,10 @@
 
 /** @defgroup else nvic priority
   */
-#define IIS_TX_PreemptionPriority                     0
-#define IIS_TX_SubPriority                            2
-#define IIS_RX_PreemptionPriority                     0
-#define IIS_RX_SubPriority                            2
+#define IIS_TX_PreemptionPriority                     1
+#define IIS_TX_SubPriority                            0
+#define IIS_RX_PreemptionPriority                     1
+#define IIS_RX_SubPriority                            0
 #define UART2_PreemptionPriority                      0
 #define UART2_SubPriority                             1
 

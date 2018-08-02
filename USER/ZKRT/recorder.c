@@ -53,7 +53,7 @@ void audio_enter_rec_mode(void) {
 		WM8978_Output_Cfg(0, 1);		//开启BYPASS输出
 	else
 		WM8978_Output_Cfg(0, 0);		//开启BYPASS输出
-	WM8978_MIC_Gain(46);		//MIC增益设置
+	WM8978_MIC_Gain(APP_MIC_GAIN);		//MIC增益设置
 
 	WM8978_I2S_Cfg(2, 0);		//飞利浦标准,16位数据长度
 	I2S2_Init(I2S_Standard_Phillips, I2S_Mode_MasterTx, I2S_CPOL_Low, I2S_DataFormat_16b);			//飞利浦标准,主机发送,时钟低电平有效,16位帧长度
@@ -72,11 +72,11 @@ void audio_enter_play_mode(void) {
 	if (_audioplay.out_flag == REC_FLAG_OUTEN) {
 		wm8978_input_ctrl(1);
 		WM8978_Output_Cfg(1, 1);		//开启DAC输出
-		WM8978_MIC_Gain(46);			//MIC增益设置为0
+		WM8978_MIC_Gain(APP_MIC_GAIN);			
 	} else {
-		wm8978_input_ctrl(0);
+		wm8978_input_ctrl(1);
 		WM8978_Output_Cfg(1, 0);		//开启DAC输出
-		WM8978_MIC_Gain(0);			//MIC增益设置为0
+		WM8978_MIC_Gain(APP_MIC_GAIN);  //增益设置为0时，出错？
 	}
 	I2S_Play_Stop();			//停止时钟发送
 	I2S_Rec_Stop(); 			//停止录音
@@ -85,8 +85,12 @@ void audio_enter_play_mode(void) {
 void audio_enter_speak_mode(void) {
 	WM8978_ADDA_Cfg(0, 0);		 //close adc and dac
 	wm8978_input_ctrl(1);
-	WM8978_Output_Cfg(0, 1);		 //bypass
-	WM8978_MIC_Gain(46);			   //MIC增益设置为0
+	if (_audioplay.out_flag == REC_FLAG_OUTEN)
+		WM8978_Output_Cfg(0, 1);		//开启BYPASS输出
+	else
+		WM8978_Output_Cfg(0, 0);		//开启BYPASS输出
+	// WM8978_Output_Cfg(0, 1);		 //bypass
+	WM8978_MIC_Gain(APP_MIC_GAIN);			   //MIC增益设置为0
 	I2S_Play_Stop();			     //停止时钟发送
 	I2S_Rec_Stop(); 			     //停止录音
 }

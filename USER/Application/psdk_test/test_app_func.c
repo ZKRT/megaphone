@@ -4,6 +4,7 @@
 */
 #include "appaudio_handle.h"
 #include "appaudio.h"
+#include "pwm.h"
 
 #include "test_app_func.h"
 #include <string.h>
@@ -29,20 +30,36 @@ extern appaudio_st _audio_handlest;
 // #define INPUT2_INDEX 11
 // #define BUTTON4_INDEX 12
 
-#define VOL_SCALE_INDEX 0
-// #define PLAY_BUTTON_INDEX 1
-#define PLAY_PAUSE_BUTTON_INDEX 1
-// #define STOP_BUTTON_INDEX 3
-#define LASTSONG_BUTTON_INDEX 2
-#define NEXTSONG_BUTTON_INDEX 3
-#define CHOSONG_INPUT_INDEX 4
-#define STARTREC_INPUT_INDEX 5
-#define PASUEREC_BUTTON_INDEX 6
-#define STOPREC_LIST_INDEX 7
-#define DELCREC_BUTTON_INDEX 8
-#define DELIDREC_INPUT_INDEX 9
-#define RECOUTEN_SWITCH_INDEX 10
-#define AUDIOINFOGET_INPUT_INDEX 11
+typedef enum
+{
+    PWM1_SCALE_INDEX = 0,
+    VOL_SCALE_INDEX,
+    RECOUTEN_SWITCH_INDEX,
+    PLAY_PAUSE_BUTTON_INDEX,
+    LASTSONG_BUTTON_INDEX,
+    NEXTSONG_BUTTON_INDEX,
+    CHOSONG_INPUT_INDEX,
+    STARTREC_INPUT_INDEX,
+    STOPREC_LIST_INDEX,
+    PASUEREC_BUTTON_INDEX,
+    DELCREC_BUTTON_INDEX,
+    DELIDREC_INPUT_INDEX
+} WidgetListIndex_em;
+// #define PWM1_SCALE_INDEX             0
+// #define VOL_SCALE_INDEX              1
+// // #define PLAY_BUTTON_INDEX 1
+// #define PLAY_PAUSE_BUTTON_INDEX      2
+// // #define STOP_BUTTON_INDEX 3
+// #define LASTSONG_BUTTON_INDEX        3
+// #define NEXTSONG_BUTTON_INDEX        4
+// #define CHOSONG_INPUT_INDEX          5
+// #define STARTREC_INPUT_INDEX         6
+// #define STOPREC_LIST_INDEX           7
+// #define PASUEREC_BUTTON_INDEX        8
+// #define DELCREC_BUTTON_INDEX         9
+// #define DELIDREC_INPUT_INDEX         10
+// #define RECOUTEN_SWITCH_INDEX        11
+// //#define AUDIOINFOGET_INPUT_INDEX 11
 
 /*********************************************************************
 *       Static data
@@ -71,7 +88,9 @@ extern appaudio_st _audio_handlest;
 
 //@formatter:off
 static const T_PsdkAppFuncWidgetListItem s_TestWidgetList[] = {
-    APPFUNC_DEF_SCALE_WIDGET(VOL_SCALE_INDEX, "Volume "),
+    APPFUNC_DEF_SCALE_WIDGET(PWM1_SCALE_INDEX, "Servo"),
+    APPFUNC_DEF_SCALE_WIDGET(VOL_SCALE_INDEX, "Volume"),
+    APPFUNC_DEF_SWITCH_WIDGET(RECOUTEN_SWITCH_INDEX, "Interphone"),
     // APPFUNC_DEF_BUTTON_WIDGET(PLAY_BUTTON_INDEX, "Play"),
     APPFUNC_DEF_BUTTON_WIDGET(PLAY_PAUSE_BUTTON_INDEX, "Play/Pause/Continue"),
     // APPFUNC_DEF_BUTTON_WIDGET(STOP_BUTTON_INDEX, "Stop play"),
@@ -79,11 +98,10 @@ static const T_PsdkAppFuncWidgetListItem s_TestWidgetList[] = {
     APPFUNC_DEF_BUTTON_WIDGET(NEXTSONG_BUTTON_INDEX, "Next"),
     APPFUNC_DEF_INT_INPUT_BOX_WIDGET(CHOSONG_INPUT_INDEX, "Play by ID", "ID range: 0~31"),
     APPFUNC_DEF_INT_INPUT_BOX_WIDGET(STARTREC_INPUT_INDEX, "Start record", "Entry Date: YearMonthDay"),
-    APPFUNC_DEF_BUTTON_WIDGET(PASUEREC_BUTTON_INDEX, "Pause/Continue record"),
     APPFUNC_DEF_LIST_WIDGET(STOPREC_LIST_INDEX, "Stop record", 3, "N/A", "Save", "Cancel"),
+    APPFUNC_DEF_BUTTON_WIDGET(PASUEREC_BUTTON_INDEX, "Pause/Continue record"),
     APPFUNC_DEF_BUTTON_WIDGET(DELCREC_BUTTON_INDEX, "Delete the recording file"),
     APPFUNC_DEF_INT_INPUT_BOX_WIDGET(DELIDREC_INPUT_INDEX, "Delete the record file by ID", "ID range: 0~31"),
-    APPFUNC_DEF_SWITCH_WIDGET(RECOUTEN_SWITCH_INDEX, "Interphone when play and record"),
     //    APPFUNC_DEF_INT_INPUT_BOX_WIDGET(AUDIOINFOGET_INPUT_INDEX, "Get audio info by ID", "ID range: 0~31"),
 };
 //@formatter:on
@@ -120,6 +138,7 @@ static U_AppFuncWidgetValue delidrecord_input3Val = {.intInputBoxVal = 0};
 static uint8_t pauserec_button6val = REC_CTRL_PAUSE;
 static U_AppFuncWidgetValue recouten_switch1Val = {.switchVal = PSDK_APPFUNC_SWITCH_VAL_ON};
 static uint8_t cur_del_play_id = 0xff;
+static U_AppFuncWidgetValue pwm1_scaleVal = {.scaleVal = 50};
 static char receivePrint[1024];
 
 /*********************************************************************
@@ -157,6 +176,9 @@ Test_GetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t widgetIndex,
         break;
     case RECOUTEN_SWITCH_INDEX:
         *pWidgetValue = recouten_switch1Val;
+        break;
+    case PWM1_SCALE_INDEX:
+        *pWidgetValue = pwm1_scaleVal;
         break;
     default:
         break;
@@ -336,15 +358,27 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
     case RECOUTEN_SWITCH_INDEX:
         PSDK_LOG_DEBUG("Switch1 Opt");
         recouten_switch1Val = *pWidgetValue;
-        if (recouten_switch1Val.data == PSDK_APPFUNC_SWITCH_VAL_ON)
+        if (recouten_switch1Val.switchVal == PSDK_APPFUNC_SWITCH_VAL_ON)
         {
+            PSDK_LOG_DEBUG("out en");
             _audio_handlest.audioplay->out_flag = REC_FLAG_OUTEN;
             _audio_handlest.audiorec->rec_out_flag = REC_FLAG_OUTEN;
+            change_audio_bypass_chanel();
         }
         else
         {
+            PSDK_LOG_DEBUG("out disable");
             _audio_handlest.audioplay->out_flag = REC_FLAG_OUTDISE;
             _audio_handlest.audiorec->rec_out_flag = REC_FLAG_OUTDISE;
+            change_audio_bypass_chanel();
+        }
+        break;
+    case PWM1_SCALE_INDEX:
+        PSDK_LOG_DEBUG("scale Opt");
+        pwm1_scaleVal = *pWidgetValue;
+        {
+            THROW_PWM1(SCALE2PWM(pwm1_scaleVal.switchVal));
+            PSDK_LOG_DEBUG("scale:%d,pwm:%d", pwm1_scaleVal.switchVal, SCALE2PWM(pwm1_scaleVal.switchVal));
         }
         break;
     default:

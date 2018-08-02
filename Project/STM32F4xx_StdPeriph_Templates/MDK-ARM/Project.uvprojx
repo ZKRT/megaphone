@@ -989,6 +989,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\USER\HARDWARE\i2s.c</FilePath>
             </File>
+            <File>
+              <FileName>pwm.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\HARDWARE\pwm.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

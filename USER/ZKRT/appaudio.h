@@ -30,6 +30,7 @@
 //#define VOLUME_MAP(V)                (u8)(0.57*(V))   //zkrt_notice: 0.57 by wm8978 value limit  //0.57 is max 0db gain, reg value is 0b111001,see wm8978 doc
 #define VOLUME_MAP(V)                (u8)(0.29*(V)+28)   //zkrt_notice: 0.30 by wm8978 value limit //ºı–°À•»ı∑÷±¥„–÷µ       
 #define VOLUME_INIT_VALUE            5  //zkrt_debug
+#define APP_MIC_GAIN 46
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -124,6 +125,7 @@ void appaudio_prcs(void);
 void appaudio_init(void);
 bool allowed_playaudio(void);
 bool allowed_record(void);
+void change_audio_bypass_chanel(void);
 //wav
 extern bool wav_play_start(void);
 extern u8 wav_playing(void);

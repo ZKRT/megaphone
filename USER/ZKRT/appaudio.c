@@ -117,6 +117,23 @@ bool allowed_record(void)
 	else
 		return false;
 }
+//change audio bypass when audio and record
+void change_audio_bypass_chanel(void)
+{
+	u8 rec_flag =0, play_flag =0;
+
+	if(_audio_handlest.audiorec->rec_out_flag == REC_FLAG_OUTEN)
+		rec_flag = 1;
+	if(_audio_handlest.audioplay->out_flag == REC_FLAG_OUTEN)
+		play_flag = 1;
+	
+	if(allowed_record()&&allowed_playaudio()) //not play and not record
+		WM8978_Output_Cfg(0, play_flag);
+	else if(!allowed_record()) //playing
+		WM8978_Output_Cfg(1, play_flag);
+	else if(!allowed_playaudio()) //recording
+		WM8978_Output_Cfg(0, rec_flag); 
+}
 /**
   * @brief  apprecord_handle
   * @param

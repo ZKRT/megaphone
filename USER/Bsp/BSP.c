@@ -13,6 +13,7 @@
 #include "uart.h"
 #include "log_printf.h"
 #include <app_config.h>
+#include "pwm.h"
 
 extern u8 is_file_exsit;
 
@@ -56,6 +57,7 @@ void BSP_Init(void)
     //  usart_config();
     LOG_Init();
     UART_Init(PSDK_UART_NUM, 115200);
+    pwm_init();
     // CAN_Mode_Init();
     exfuns_init(); //为fatfs相关变量申请内存
     res = f_mount(fs[SD_CARD], "0:", 1);

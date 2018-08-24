@@ -246,13 +246,6 @@ u8 wav_playing(void)
 	if (*iis_transed == 1)
 	{
 		*iis_transed = 0;
-
-		// //zkrt_debug
-		// i2s_play_dmait_config(DISABLE);
-		// Delay(50);
-		// i2s_play_dmait_config(ENABLE);
-		// printf("TimingDelay:%u", TimingDelay);
-
 		if (*buffindex)
 			fillnum = wav_buffill(file, _audioplay.i2sbuf2, _audioplay.tbuf, WAV_I2S_TX_DMA_BUFSIZE, wavctrl->bps); //È¡Êý¾Ý
 		else

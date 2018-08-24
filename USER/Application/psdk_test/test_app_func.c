@@ -377,7 +377,8 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
         PSDK_LOG_DEBUG("scale Opt");
         pwm1_scaleVal = *pWidgetValue;
         {
-            THROW_PWM1(SCALE2PWM(pwm1_scaleVal.switchVal));
+            // THROW_PWM1(SCALE2PWM(pwm1_scaleVal.switchVal));
+            pwm_set_soft(1, SCALE2PWM(pwm1_scaleVal.switchVal));
             PSDK_LOG_DEBUG("scale:%d,pwm:%d", pwm1_scaleVal.switchVal, SCALE2PWM(pwm1_scaleVal.switchVal));
         }
         break;

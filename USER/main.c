@@ -27,6 +27,7 @@
 #include "mp3play.h"
 #include "timer.h"
 #include "application.h"
+#include "pwm.h"
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -57,6 +58,7 @@ int main(void)
         appkey_prcs();
         appaudio_prcs();
         psdk_prcs();
+        pwm_prcs();
         /* product code end*/
         //		/* test code start*/
         //  	mp3play();

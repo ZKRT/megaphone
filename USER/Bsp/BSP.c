@@ -14,6 +14,7 @@
 #include "log_printf.h"
 #include <app_config.h>
 #include "pwm.h"
+#include "dmr818.h"
 
 extern u8 is_file_exsit;
 
@@ -57,6 +58,7 @@ void BSP_Init(void)
     //  usart_config();
     LOG_Init();
     UART_Init(PSDK_UART_NUM, 115200);
+    UART_Init(DMR818_UART_NUM, 57600);
     pwm_init();
     // CAN_Mode_Init();
     exfuns_init(); //为fatfs相关变量申请内存

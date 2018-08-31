@@ -271,11 +271,11 @@ char enter_volctrl_handle(u8 vol) {
 	if (res == S_Success) {
 		_audio_handlest.volume = vol;
 		if (vol == 0) {
-			WM8978_HPvol_Set(0, 0);
+			// WM8978_HPvol_Set(0, 0);
 			WM8978_SPKvol_Set(0);
 			printf("volctrl_ptf, vol:%d,volmap:%d\n", vol, vol);
 		} else {
-			WM8978_HPvol_Set(VOLUME_MAP(vol), VOLUME_MAP(vol));	//耳机音量设置
+			// WM8978_HPvol_Set(VOLUME_MAP(vol), VOLUME_MAP(vol));	//耳机音量设置
 			WM8978_SPKvol_Set(VOLUME_MAP(vol));		              //喇叭音量设置
 			printf("volctrl_ptf, vol:%d,volmap:%d\n", vol, VOLUME_MAP(vol));
 		}

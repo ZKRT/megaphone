@@ -28,6 +28,7 @@
 #include "timer.h"
 #include "application.h"
 #include "pwm.h"
+#include "dmr818.h"
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -49,6 +50,7 @@ int main(void)
         appfile_init();
     appaudio_init();
     timer_init();
+    dmr818_init();
     psdk_init();
     while (1)
     {
@@ -59,6 +61,7 @@ int main(void)
         appaudio_prcs();
         psdk_prcs();
         pwm_prcs();
+        dmr818_prcs();
         /* product code end*/
         //		/* test code start*/
         //  	mp3play();

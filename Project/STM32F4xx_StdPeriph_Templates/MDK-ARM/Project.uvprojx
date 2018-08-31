@@ -994,6 +994,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\..\USER\HARDWARE\pwm.c</FilePath>
             </File>
+            <File>
+              <FileName>dmr818.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\..\USER\HARDWARE\dmr818.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

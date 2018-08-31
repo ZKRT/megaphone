@@ -22,6 +22,7 @@
 #include "appaudio_handle.h"
 #include "mp3play.h"
 #include "audioplay.h"
+#include "dmr818.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -85,6 +86,7 @@ void appaudio_init(void)
 
 	//set vol
 	enter_volctrl_handle(VOLUME_INIT_VALUE);
+	WM8978_HPvol_Set(VOLUME_MAP(100), VOLUME_MAP(100));	//耳机音量默认设置
 	//进入speaker模式
 	audio_enter_speak_mode();
 }
@@ -111,8 +113,9 @@ bool allowed_playaudio(void)
 //check enable record
 bool allowed_record(void)
 {
-	if ((_audio_handlest.audioplay->play_state == IDLE_S_APY) ||
-		(_audio_handlest.audioplay->play_state == OVER_S_APY))
+	if (((_audio_handlest.audioplay->play_state == IDLE_S_APY) ||
+		(_audio_handlest.audioplay->play_state == OVER_S_APY))&&
+		(dmr818_config.ptt == DMR_PTT_RECV))
 		return true;
 	else
 		return false;
@@ -233,7 +236,7 @@ static void appplay_handle(void)
 		break;
 
 	case FAIL_S_APY:
-		audiocommon_play_pause();  //zkrt_debug, wait test
+		audiocommon_play_pause();
 		break;
 
 	case OVER_S_APY:

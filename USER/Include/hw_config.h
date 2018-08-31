@@ -87,9 +87,16 @@
 #define RUN_LED_PORT                                GPIOB
 #define APITX_LED_PORT                              GPIOB
 #define APIRX_LED_PORT                              GPIOB
+#define SOS_LED_PORT                                GPIOA
 #define RUN_LED_PIN                                 GPIO_Pin_0
 #define APITX_LED_PIN                               GPIO_Pin_1
 #define APIRX_LED_PIN                               GPIO_Pin_2
+#define SOS_LED_PIN                                 GPIO_Pin_8
+
+/** @defgroup dmr818
+  */
+#define DMR_PTT_PORT                                GPIOB
+#define DMR_PTT_PIN                                 GPIO_Pin_15
 
 /** @defgroup key
   */
@@ -177,6 +184,8 @@
 #define IIS_RX_SubPriority                            0
 #define UART2_PreemptionPriority                      0
 #define UART2_SubPriority                             1
+#define UART3_PreemptionPriority                      2
+#define UART3_SubPriority                             1
 
 /* Exported functions ------------------------------------------------------- */
 

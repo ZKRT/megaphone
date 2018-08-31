@@ -5,6 +5,8 @@
 #include "appaudio_handle.h"
 #include "appaudio.h"
 #include "pwm.h"
+#include "dmr818.h"
+#include "wm8978.h"
 
 #include "test_app_func.h"
 #include <string.h>
@@ -34,7 +36,7 @@ typedef enum
 {
     PWM1_SCALE_INDEX = 0,
     VOL_SCALE_INDEX,
-    RECOUTEN_SWITCH_INDEX,
+    INTERPHONE_SWITCH_INDEX,
     PLAY_PAUSE_BUTTON_INDEX,
     LASTSONG_BUTTON_INDEX,
     NEXTSONG_BUTTON_INDEX,
@@ -43,7 +45,10 @@ typedef enum
     STOPREC_LIST_INDEX,
     PASUEREC_BUTTON_INDEX,
     DELCREC_BUTTON_INDEX,
-    DELIDREC_INPUT_INDEX
+    DELIDREC_INPUT_INDEX,
+    AUDIO_REPEATER_SWITCH_INDEX,
+    INTERPHONE_CH_LIST_INDEX,
+    // LOUDSPEAKER_SWITCH_INDEX
 } WidgetListIndex_em;
 // #define PWM1_SCALE_INDEX             0
 // #define VOL_SCALE_INDEX              1
@@ -58,7 +63,7 @@ typedef enum
 // #define PASUEREC_BUTTON_INDEX        8
 // #define DELCREC_BUTTON_INDEX         9
 // #define DELIDREC_INPUT_INDEX         10
-// #define RECOUTEN_SWITCH_INDEX        11
+// #define INTERPHONE_SWITCH_INDEX        11
 // //#define AUDIOINFOGET_INPUT_INDEX 11
 
 /*********************************************************************
@@ -90,7 +95,7 @@ typedef enum
 static const T_PsdkAppFuncWidgetListItem s_TestWidgetList[] = {
     APPFUNC_DEF_SCALE_WIDGET(PWM1_SCALE_INDEX, "Servo"),
     APPFUNC_DEF_SCALE_WIDGET(VOL_SCALE_INDEX, "Volume"),
-    APPFUNC_DEF_SWITCH_WIDGET(RECOUTEN_SWITCH_INDEX, "Interphone"),
+    APPFUNC_DEF_SWITCH_WIDGET(INTERPHONE_SWITCH_INDEX, "Interphone enabled"),
     // APPFUNC_DEF_BUTTON_WIDGET(PLAY_BUTTON_INDEX, "Play"),
     APPFUNC_DEF_BUTTON_WIDGET(PLAY_PAUSE_BUTTON_INDEX, "Play/Pause/Continue"),
     // APPFUNC_DEF_BUTTON_WIDGET(STOP_BUTTON_INDEX, "Stop play"),
@@ -102,6 +107,9 @@ static const T_PsdkAppFuncWidgetListItem s_TestWidgetList[] = {
     APPFUNC_DEF_BUTTON_WIDGET(PASUEREC_BUTTON_INDEX, "Pause/Continue record"),
     APPFUNC_DEF_BUTTON_WIDGET(DELCREC_BUTTON_INDEX, "Delete the recording file"),
     APPFUNC_DEF_INT_INPUT_BOX_WIDGET(DELIDREC_INPUT_INDEX, "Delete the record file by ID", "ID range: 0~31"),
+    APPFUNC_DEF_SWITCH_WIDGET(AUDIO_REPEATER_SWITCH_INDEX, "Audio repeater enabled"),
+    APPFUNC_DEF_LIST_WIDGET(INTERPHONE_CH_LIST_INDEX, "Choose interphone channel", 8, "ch9", "ch10", "ch11", "ch12", "ch13", "ch14", "ch15", "ch16"),
+//    APPFUNC_DEF_SWITCH_WIDGET(LOUDSPEAKER_SWITCH_INDEX, "Loudspeaker enabled")
     //    APPFUNC_DEF_INT_INPUT_BOX_WIDGET(AUDIOINFOGET_INPUT_INDEX, "Get audio info by ID", "ID range: 0~31"),
 };
 //@formatter:on
@@ -139,6 +147,9 @@ static uint8_t pauserec_button6val = REC_CTRL_PAUSE;
 static U_AppFuncWidgetValue recouten_switch1Val = {.switchVal = PSDK_APPFUNC_SWITCH_VAL_ON};
 static uint8_t cur_del_play_id = 0xff;
 static U_AppFuncWidgetValue pwm1_scaleVal = {.scaleVal = 50};
+static U_AppFuncWidgetValue audiorepeater_switchVal = {.switchVal = PSDK_APPFUNC_SWITCH_VAL_OFF};
+static U_AppFuncWidgetValue interphonech_listVal = {.listVal = 0};
+//static U_AppFuncWidgetValue loudspeaker_switchVal = {.switchVal = PSDK_APPFUNC_SWITCH_VAL_ON};
 static char receivePrint[1024];
 
 /*********************************************************************
@@ -174,12 +185,21 @@ Test_GetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t widgetIndex,
     case DELIDREC_INPUT_INDEX:
         *pWidgetValue = delidrecord_input3Val;
         break;
-    case RECOUTEN_SWITCH_INDEX:
+    case INTERPHONE_SWITCH_INDEX:
         *pWidgetValue = recouten_switch1Val;
         break;
     case PWM1_SCALE_INDEX:
         *pWidgetValue = pwm1_scaleVal;
         break;
+    case AUDIO_REPEATER_SWITCH_INDEX:
+        *pWidgetValue = audiorepeater_switchVal;
+        break;
+    case INTERPHONE_CH_LIST_INDEX:
+        *pWidgetValue = interphonech_listVal;
+        break;
+    // case LOUDSPEAKER_SWITCH_INDEX:
+    //     *pWidgetValue = loudspeaker_switchVal;
+    //     break;
     default:
         break;
     }
@@ -288,6 +308,8 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
         }
         break;
     case STARTREC_INPUT_INDEX:
+        // if (allowed_record() == false) //播放音乐时允许强制停止再进行录音
+        //     break;
         startrecord_input2Val = *pWidgetValue;
         PSDK_LOG_DEBUG("Input2 Opt: %d", startrecord_input2Val.intInputBoxVal);
         {
@@ -355,7 +377,7 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
         delidrecord_input3Val = *pWidgetValue;
         enter_delrecaudio_handle((uint8_t)delidrecord_input3Val.intInputBoxVal);
         break;
-    case RECOUTEN_SWITCH_INDEX:
+    case INTERPHONE_SWITCH_INDEX:
         PSDK_LOG_DEBUG("Switch1 Opt");
         recouten_switch1Val = *pWidgetValue;
         if (recouten_switch1Val.switchVal == PSDK_APPFUNC_SWITCH_VAL_ON)
@@ -382,6 +404,33 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
             PSDK_LOG_DEBUG("scale:%d,pwm:%d", pwm1_scaleVal.switchVal, SCALE2PWM(pwm1_scaleVal.switchVal));
         }
         break;
+    case AUDIO_REPEATER_SWITCH_INDEX:
+        PSDK_LOG_DEBUG("AUDIO_REPEATER_SWITCH_INDEX");
+        audiorepeater_switchVal = *pWidgetValue;
+        if (audiorepeater_switchVal.switchVal == PSDK_APPFUNC_SWITCH_VAL_ON)
+        {
+            //中继打开时，wm8978 out1打开，dmr818 mic打开
+            PSDK_LOG_DEBUG("on");
+            dmr818_interphone_send_or_recv(DMR_PTT_SEND);
+            // WM8978_Output1_Channel_Cfg(1, 1);
+        }
+        else
+        {
+            PSDK_LOG_DEBUG("off");
+            dmr818_interphone_send_or_recv(DMR_PTT_RECV);
+            // WM8978_Output1_Channel_Cfg(0, 0);
+        }
+        break;
+    case INTERPHONE_CH_LIST_INDEX:
+        PSDK_LOG_DEBUG("INTERPHONE_CH_LIST_INDEX");
+        interphonech_listVal = *pWidgetValue;
+        dmr818_runtime_change_channel((uint8_t)(interphonech_listVal.listVal + 9));
+        break;
+    // case LOUDSPEAKER_SWITCH_INDEX:
+    //     PSDK_LOG_DEBUG("LOUDSPEAKER_SWITCH_INDEX");
+    //     loudspeaker_switchVal = *pWidgetValue;
+    //     WM8978_Output2_Channel_Cfg((uint8_t)loudspeaker_switchVal.switchVal, (uint8_t)loudspeaker_switchVal.switchVal);
+    //     break;
     default:
         break;
     }

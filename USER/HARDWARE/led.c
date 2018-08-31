@@ -32,7 +32,7 @@
 void appled_init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
-    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB|RCC_AHB1Periph_GPIOA, ENABLE);
     /*LED Pins configuration  *************************************************/
     GPIO_InitStructure.GPIO_Pin = RUN_LED_PIN | APITX_LED_PIN | APIRX_LED_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
@@ -40,9 +40,12 @@ void appled_init(void)
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
     GPIO_Init(GPIOB, &GPIO_InitStructure); //all pin's port is gpiob
+    GPIO_InitStructure.GPIO_Pin = SOS_LED_PIN; //sos led
+    GPIO_Init(SOS_LED_PORT, &GPIO_InitStructure);
     GPIO_WriteBit(RUN_LED_PORT, RUN_LED_PIN, LED_LIGHT);
     GPIO_WriteBit(APITX_LED_PORT, APITX_LED_PIN, LED_DARK);
     GPIO_WriteBit(APIRX_LED_PORT, APIRX_LED_PIN, LED_DARK);
+    GPIO_WriteBit(SOS_LED_PORT, SOS_LED_PIN, LED_DARK);
 }
 /**
   * @brief  led_process. ledµÆ¿ØÖÆ

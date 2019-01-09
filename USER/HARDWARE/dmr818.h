@@ -63,9 +63,9 @@
 #define DMR818_TX_POWER_LOW 0xFF
 /* Exported constants --------------------------------------------------------*/
 //user config info
-#define DMR818_UART_NUM UART_NUM_1 //zkrt_debug
+#define DMR818_UART_NUM UART_NUM_3 
 #define DMR818_DEF_CH 9
-#define DMR818_DEF_MIC 9
+#define DMR818_DEF_MIC 0
 #define DMR818_DEF_VOL 9
 #define DMR818_DEF_NOISELEV DMR818_NOISELEV_NO
 #define DMR818_DEF_TONETYPE DMR818_TONETYPE_CTCSS

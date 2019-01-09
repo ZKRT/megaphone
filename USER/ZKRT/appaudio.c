@@ -113,9 +113,16 @@ bool allowed_playaudio(void)
 //check enable record
 bool allowed_record(void)
 {
-	if (((_audio_handlest.audioplay->play_state == IDLE_S_APY) ||
-		(_audio_handlest.audioplay->play_state == OVER_S_APY))&&
-		(dmr818_config.ptt == DMR_PTT_RECV))
+	if ((_audio_handlest.audioplay->play_state == IDLE_S_APY) ||
+		(_audio_handlest.audioplay->play_state == OVER_S_APY))
+		return true;
+	else
+		return false;
+}
+//check enable start record
+bool allowed_start_record(void)
+{
+	if (dmr818_config.ptt == DMR_PTT_RECV)
 		return true;
 	else
 		return false;

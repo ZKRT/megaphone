@@ -146,7 +146,7 @@ static U_AppFuncWidgetValue delidrecord_input3Val = {.intInputBoxVal = 0};
 static uint8_t pauserec_button6val = REC_CTRL_PAUSE;
 static U_AppFuncWidgetValue recouten_switch1Val = {.switchVal = PSDK_APPFUNC_SWITCH_VAL_ON};
 static uint8_t cur_del_play_id = 0xff;
-static U_AppFuncWidgetValue pwm1_scaleVal = {.scaleVal = 50};
+static U_AppFuncWidgetValue pwm1_scaleVal = {.scaleVal = PWMSCALE_INIT_V};
 static U_AppFuncWidgetValue audiorepeater_switchVal = {.switchVal = PSDK_APPFUNC_SWITCH_VAL_OFF};
 static U_AppFuncWidgetValue interphonech_listVal = {.listVal = 0};
 //static U_AppFuncWidgetValue loudspeaker_switchVal = {.switchVal = PSDK_APPFUNC_SWITCH_VAL_ON};
@@ -308,8 +308,8 @@ E_PsdkStat Test_SetWidgetValueFunc(E_PsdkAppFuncWidgetType widgetType, uint8_t w
         }
         break;
     case STARTREC_INPUT_INDEX:
-        // if (allowed_record() == false) //播放音乐时允许强制停止再进行录音
-        //     break;
+        if (allowed_start_record() == false) //播放音乐时允许强制停止再进行录音,但不允许对讲机处于放音状态时录音
+            break;
         startrecord_input2Val = *pWidgetValue;
         PSDK_LOG_DEBUG("Input2 Opt: %d", startrecord_input2Val.intInputBoxVal);
         {

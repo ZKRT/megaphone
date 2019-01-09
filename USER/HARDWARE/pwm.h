@@ -14,22 +14,27 @@
 #define PWM_MAX_V  2500
 #define PWM_MEDIUM_V ((PWM_MAX_V+PWM_MIN_V)/2)
 #define PWM_INIT_V PWM_MEDIUM_V
+//min or max pwm value for program restriction
+#define PWM_MIN_V_ACTUAL  PWM_MEDIUM_V 
+#define PWM_MAX_V_ACTUAL  2200 
 //scale remap, scale vale is 0~100
 #define SCALE_MIN_V 0
 #define SCALE_MAX_V 100
 #define SCALE_MEDIUM_V ((SCALE_MAX_V+SCALE_MIN_V)/2)
 #define SCALE_INIT_V SCALE_MEDIUM_V
 //scale to pwm map
-#define SCALE2PWM_MAP_K ((PWM_MAX_V-PWM_MIN_V)/(SCALE_MAX_V-SCALE_MIN_V))
-#define SCALE2PWM(scale_v) (SCALE2PWM_MAP_K*(scale_v)+(PWM_MAX_V-SCALE2PWM_MAP_K*SCALE_MAX_V))
+#define SCALE2PWM_MAP_K ((PWM_MAX_V_ACTUAL-PWM_MIN_V_ACTUAL)/(SCALE_MAX_V-SCALE_MIN_V))
+#define SCALE2PWM(scale_v) (SCALE2PWM_MAP_K*(scale_v)+(PWM_MAX_V_ACTUAL-SCALE2PWM_MAP_K*SCALE_MAX_V))
 //pwm to scale map
-#define PWM2SCALE_MAP_K ((SCALE_MAX_V-SCALE_MIN_V)/(PWM_MAX_V-PWM_MIN_V))
-#define PWM2SCALE(pwm_v) (PWM2SCALE_MAP_K*(pwm_v)+(SCALE_MAX_V-PWM2SCALE_MAP_K*PWM_MAX_V))
+#define PWM2SCALE_MAP_K ((SCALE_MAX_V-SCALE_MIN_V)/(PWM_MAX_V_ACTUAL-PWM_MIN_V_ACTUAL))
+#define PWM2SCALE(pwm_v) (PWM2SCALE_MAP_K*(pwm_v)+(SCALE_MAX_V-PWM2SCALE_MAP_K*PWM_MAX_V_ACTUAL))
+//scale init value
+#define PWMSCALE_INIT_V 0
 
 typedef struct{
 #define PWM_TASK_TIME 2 //2ms per
-#define PWM_CHANGE_TIME (6/PWM_TASK_TIME)  //ms
-#define PWM_CHANGE_PERV 6 //change value per cnt
+#define PWM_CHANGE_TIME (6/PWM_TASK_TIME)  //per 6ms to change pwm value
+#define PWM_CHANGE_PERV 2 //change value per cnt
     short final_v;
     short run_v;
     uint8_t flag;

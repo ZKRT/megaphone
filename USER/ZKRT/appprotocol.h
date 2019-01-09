@@ -22,7 +22,7 @@
 /* Exported macro ------------------------------------------------------------*/
 #define DEV_MODEL              "M-SP"
 #define DEV_HW                 "000403"
-#define DEV_SW                 "000302"
+#define DEV_SW                 "000402"
 
 /* Exported constants --------------------------------------------------------*/
 

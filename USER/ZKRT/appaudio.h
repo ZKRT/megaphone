@@ -125,6 +125,7 @@ void appaudio_prcs(void);
 void appaudio_init(void);
 bool allowed_playaudio(void);
 bool allowed_record(void);
+bool allowed_start_record(void);
 void change_audio_bypass_chanel(void);
 //wav
 extern bool wav_play_start(void);

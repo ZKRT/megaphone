@@ -19,6 +19,7 @@
 #include "led.h"
 #include "appaudio.h"
 #include "appaudio_handle.h"
+#include "dmr818.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -157,9 +158,23 @@ static void user_key_handle(void)
         if (IS_VOLUME((int)vol))
             enter_volctrl_handle(vol);
     }
-    if (key_pressed(KEY_PLAY_NEXT, 0) == KEY_PRESED)
+    // if (key_pressed(KEY_PLAY_NEXT, 0) == KEY_PRESED)
+    // {
+    //     enter_play_next_song();
+    // }
+    if (key_pressed_time(KEY_PLAY_NEXT, &sec) == KEY_PRESED)
     {
-        enter_play_next_song();
+        if (sec < 2)
+        {
+            enter_play_next_song();
+        }
+        else if (sec >= 3)
+        {
+            if (dmr818_config.ptt == DMR_PTT_SEND)
+                dmr818_interphone_send_or_recv(DMR_PTT_RECV);
+            else
+                dmr818_interphone_send_or_recv(DMR_PTT_SEND);
+        }
     }
     //	if(key_pressed(KEY_PALY_PAUSE, 0) == KEY_PRESED)
     //	{

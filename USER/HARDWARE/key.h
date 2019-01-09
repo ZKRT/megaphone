@@ -12,10 +12,10 @@
 //#define KEY2_V 		                         GPIO_ReadInputDataBit(KEY2_PORT,GPIO_Pin_1)
 //#define KEY3_V 		                         GPIO_ReadInputDataBit(KEY3_PORT,GPIO_Pin_2)
 //#define KEY4_V	                           GPIO_ReadInputDataBit(KEY4_PORT,GPIO_Pin_3)
-#define KEY1_V 		                         GPIO_ReadInputDataBit(KEY1_PORT,GPIO_Pin_2)
-#define KEY2_V 		                         GPIO_ReadInputDataBit(KEY2_PORT,GPIO_Pin_3)
-#define KEY3_V 		                         GPIO_ReadInputDataBit(KEY3_PORT,GPIO_Pin_0)
-#define KEY4_V	                           GPIO_ReadInputDataBit(KEY4_PORT,GPIO_Pin_1)
+#define KEY1_V 		                         GPIO_ReadInputDataBit(KEY1_PORT,KEY1_PIN)
+#define KEY2_V 		                         GPIO_ReadInputDataBit(KEY2_PORT,KEY2_PIN)
+#define KEY3_V 		                         GPIO_ReadInputDataBit(KEY3_PORT,KEY3_PIN)
+#define KEY4_V	                             GPIO_ReadInputDataBit(KEY4_PORT,KEY4_PIN)
 
 //key presed or realese value, this define relevant the gpio resgister  //zkrt_notice
 #define KEY_PRESED                         0
@@ -28,8 +28,8 @@
 #define KEY4_NUM                           3
 #define KEY_NUM                            4
 
-#define KEY_PLAY_NEXT                      KEY1_NUM
-#define KEY_PALY_PAUSE                     KEY2_NUM
+#define KEY_PLAY_NEXT                      KEY2_NUM  //change this map
+#define KEY_PALY_PAUSE                     KEY1_NUM
 #define KEY_VOL_PLUS                       KEY3_NUM
 #define KEY_VOL_MINUS                      KEY4_NUM
 

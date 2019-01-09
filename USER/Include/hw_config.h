@@ -95,10 +95,10 @@
 #define KEY2_PORT                                   GPIOA
 #define KEY3_PORT                                   GPIOA
 #define KEY4_PORT                                   GPIOA
-#define KEY1_PIN                                    GPIO_Pin_0
-#define KEY2_PIN                                    GPIO_Pin_1
-#define KEY3_PIN                                    GPIO_Pin_2
-#define KEY4_PIN                                    GPIO_Pin_3
+#define KEY1_PIN                                    GPIO_Pin_4
+#define KEY2_PIN                                    GPIO_Pin_5
+#define KEY3_PIN                                    GPIO_Pin_6
+#define KEY4_PIN                                    GPIO_Pin_7
 
 /** @defgroup can (comunicatin with MainBoard)
   */

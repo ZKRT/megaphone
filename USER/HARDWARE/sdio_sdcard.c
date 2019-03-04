@@ -65,6 +65,7 @@ SD_Error SD_Init(void) {
 
 	RCC_APB2PeriphResetCmd(SDIO_RCC_CLK, ENABLE);//SDIO复位
 
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC | RCC_AHB1Periph_GPIOD, ENABLE);
 
 	GPIO_InitStructure.GPIO_Pin = SDIO_D0_PIN | SDIO_D1_PIN | SDIO_D2_PIN | SDIO_D3_PIN | SDIO_CLK_PIN;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;//复用功能

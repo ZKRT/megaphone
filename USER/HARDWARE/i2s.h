@@ -17,7 +17,8 @@ void I2S_Play_Start(void);
 void I2S_Rec_Start(void);
 void I2S_Play_Stop(void);
 void I2S_Rec_Stop(void);
-
+void i2s_play_dmait_config(FunctionalState NewState);
+void i2s_record_dmait_config(FunctionalState NewState);
 
 #endif
 

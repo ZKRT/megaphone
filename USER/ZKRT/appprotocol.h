@@ -20,9 +20,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "zkrt.h"
 /* Exported macro ------------------------------------------------------------*/
-#define DEV_MODEL              "M-SP"
-#define DEV_HW                 "010101"
-#define DEV_SW                 "000303"
+#define DEV_MODEL              "M-SP2"
+#define DEV_HW                 "010203"
+#define DEV_SW                 "000304"
 
 /* Exported constants --------------------------------------------------------*/
 

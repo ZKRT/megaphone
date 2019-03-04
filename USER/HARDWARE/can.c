@@ -12,6 +12,7 @@ uint8_t CAN_Mode_Init(void) {
 	CAN_FilterInitTypeDef  CAN_FilterInitStructure;
 	NVIC_InitTypeDef  NVIC_InitStructure;
 
+    RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
 	RCC_APB1PeriphClockCmd(CAN_M_RCC_CLK, ENABLE);
 
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;

@@ -161,6 +161,30 @@ void WM8978_Output_Cfg(u8 dacen, u8 bpsen) {
 	WM8978_Write_Reg(50, regval); //R50设置
 	WM8978_Write_Reg(51, regval); //R51设置
 }
+//WM8978 输出通道使能配置
+//LOUT1
+//ROUT1
+void WM8978_Output1_Channel_Cfg(u8 lout1,u8 rout1) {
+	u16 regval;
+	regval = WM8978_Read_Reg(2);	
+	if (lout1) regval |= 1 << 7;	
+	else regval &= ~(1 << 7);
+	if (rout1) regval |= 1 << 8;	
+	else regval &= ~(1 << 8);		
+	WM8978_Write_Reg(2, regval);
+}
+//WM8978 输出通道使能配置
+//LOUT2
+//ROUT2
+void WM8978_Output2_Channel_Cfg(u8 lout2,u8 rout2) {
+	u16 regval;
+	regval = WM8978_Read_Reg(3);	
+	if (rout2) regval |= 1 << 5;	
+	else regval &= ~(1 << 5);
+	if (lout2) regval |= 1 << 6;	
+	else regval &= ~(1 << 6);		
+	WM8978_Write_Reg(3, regval);
+}
 //WM8978 MIC增益设置(不包括BOOST的20dB,MIC-->ADC输入部分的增益)
 //gain:0~63,对应-12dB~35.25dB,0.75dB/Step
 void WM8978_MIC_Gain(u8 gain) {

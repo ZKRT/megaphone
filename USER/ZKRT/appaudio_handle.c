@@ -271,11 +271,11 @@ char enter_volctrl_handle(u8 vol) {
 	if (res == S_Success) {
 		_audio_handlest.volume = vol;
 		if (vol == 0) {
-			WM8978_HPvol_Set(0, 0);
+			// WM8978_HPvol_Set(0, 0);
 			WM8978_SPKvol_Set(0);
 			printf("volctrl_ptf, vol:%d,volmap:%d\n", vol, vol);
 		} else {
-			WM8978_HPvol_Set(VOLUME_MAP(vol), VOLUME_MAP(vol));	//耳机音量设置
+			// WM8978_HPvol_Set(VOLUME_MAP(vol), VOLUME_MAP(vol));	//耳机音量设置
 			WM8978_SPKvol_Set(VOLUME_MAP(vol));		              //喇叭音量设置
 			printf("volctrl_ptf, vol:%d,volmap:%d\n", vol, VOLUME_MAP(vol));
 		}
@@ -439,7 +439,7 @@ char enter_getaudiostate_handle(rgetAudioState_plst *rother) {
   */
 char enter_play_next_song(void) {
 	u8 res = S_Success;
-	playSong_plst next_item = {0, REC_FLAG_OUTEN};
+	playSong_plst next_item = {0, _audio_handlest.audioplay->out_flag};
 	next_item.id = audio_item_nextid_loop(_audio_handlest.play_id);
 	if (next_item.id != AUDIOID_NONE) {
 		printf("next id:%d\n", next_item.id);
@@ -449,6 +449,25 @@ char enter_play_next_song(void) {
 	res = S_Fail;
 	return res;
 }
+/**
+  * @brief
+  * @param
+  * @note
+  * @retval
+  */
+char enter_play_last_song(void) {
+	u8 res = S_Success;
+	playSong_plst last_item = {0, _audio_handlest.audioplay->out_flag};
+	last_item.id = audio_item_lastid_loop(_audio_handlest.play_id);
+	if (last_item.id != AUDIOID_NONE) {
+		printf("next id:%d\n", last_item.id);
+		enter_playsong_handle(&last_item);
+		return res;
+	}
+	res = S_Fail;
+	return res;
+}
+
 /////////////////////////////////////////////////////////////////////////////// record and play state clear
 /**
   * @brief  appaudio_play_clear

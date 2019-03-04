@@ -25,6 +25,7 @@
 #include "appfiles.h"
 #include "appaudio.h"
 #include "mp3play.h"
+#include "dmr818.h"
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -44,12 +45,14 @@ int main(void) {
 	if (is_file_exsit)
 		appfile_init();
 	appaudio_init();
+    dmr818_init();
 	while (1) {
 		/* product code start, the proposed process should not be delayed*/
 		appled_prcs();                                       //LEDÁ÷³Ì
 		appcan_prcs();
 		appkey_prcs();
 		appaudio_prcs();
+        dmr818_prcs();
 		/* product code end*/
 //		/* test code start*/
 //  	mp3play();

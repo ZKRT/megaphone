@@ -64,21 +64,21 @@
 #define QTTC_TIM_NUM                                TIM7
 #define QTTC_IRQ_CH                                 TIM7_IRQn
 #define QTTC_PreemptionPriority                     0
-#define QTTC_SubPriority                            2
+#define QTTC_SubPriority                            1
 #define QTTC_TIMER_CLK                              APB1_CLK*2
 
-/** @defgroup usart
-  */
-#define USART_TEST_NUM                              USART1
-#define USART_TEST_IRQ_CH                           USART1_IRQn
-#define USART_TEST_PreemptionPriority               1
-#define USART_TEST_SubPriority                      1
-#define USART_TEST_TX_PORT                          GPIOB
-#define USART_TEST_RX_PORT                          GPIOB
-#define USART_TEST_TX_PIN                           GPIO_Pin_6
-#define USART_TEST_RX_PIN                           GPIO_Pin_7
-#define USART_TEST_TX_PINSE                         GPIO_PinSource6
-#define USART_TEST_RX_PINSE                         GPIO_PinSource7
+// /** @defgroup usart
+//   */
+#define USART_TEST_NUM                               USART1  
+ #define USART_TEST_IRQ_CH                           USART1_IRQn
+ #define USART_TEST_PreemptionPriority               2
+ #define USART_TEST_SubPriority                      1
+ #define USART_TEST_TX_PORT                          GPIOB
+ #define USART_TEST_RX_PORT                          GPIOB
+ #define USART_TEST_TX_PIN                           GPIO_Pin_6
+ #define USART_TEST_RX_PIN                           GPIO_Pin_7
+ #define USART_TEST_TX_PINSE                         GPIO_PinSource6
+ #define USART_TEST_RX_PINSE                         GPIO_PinSource7
 
 /** @defgroup led
   */
@@ -86,8 +86,19 @@
 #define LED_DARK                                    Bit_SET
 #define RUN_LED_PORT                                GPIOB
 #define CAN_LED_PORT                                GPIOB
-#define RUN_LED_PIN                                 GPIO_Pin_1
-#define CAN_LED_PIN                                 GPIO_Pin_0
+#define APITX_LED_PORT                              GPIOB
+#define APIRX_LED_PORT                              GPIOB
+#define SOS_LED_PORT                                GPIOA
+#define RUN_LED_PIN                                 GPIO_Pin_0
+#define CAN_LED_PIN                                 GPIO_Pin_1
+#define APITX_LED_PIN                               GPIO_Pin_1
+#define APIRX_LED_PIN                               GPIO_Pin_2
+#define SOS_LED_PIN                                 GPIO_Pin_8
+
+/** @defgroup dmr818
+  */
+#define DMR_PTT_PORT                                GPIOB
+#define DMR_PTT_PIN                                 GPIO_Pin_15
 
 /** @defgroup key
   */
@@ -110,8 +121,8 @@
 #define CAN_M_R_PINSE                               GPIO_PinSource11
 #define CAN_M_NUM                                   CAN1
 #define CAN_AF_NAME                                 GPIO_AF_CAN1
-#define CAN_PreemptionPriority                      1
-#define CAN_SubPriority                             0
+#define CAN_PreemptionPriority                      0
+#define CAN_SubPriority                             1
 
 /** @defgroup sdio
   */
@@ -138,7 +149,7 @@
 #define SDIO_STREAM_X                               DMA2_Stream3
 #define SDIO_CHANNEL_NUM                            DMA_Channel_4
 #define SDIO_PreemptionPriority                     0
-#define SDIO_SubPriority                            0
+#define SDIO_SubPriority                            1
 
 /** @defgroup iic for wm8978
   */
@@ -166,6 +177,17 @@
 #define IIS_SDOUT_WM_PORT                           GPIOC
 #define IIS_SDOUT_WM_PIN                            GPIO_Pin_2
 #define IIS_SDOUT_WM_PSE                            GPIO_PinSource2
+
+/** @defgroup else nvic priority
+  */
+#define IIS_TX_PreemptionPriority                     1
+#define IIS_TX_SubPriority                            0
+#define IIS_RX_PreemptionPriority                     1
+#define IIS_RX_SubPriority                            0
+#define UART2_PreemptionPriority                      0
+#define UART2_SubPriority                             1
+#define UART3_PreemptionPriority                      2
+#define UART3_SubPriority                             1
 
 /* Exported functions ------------------------------------------------------- */
 

@@ -71,5 +71,6 @@ void TimingDelay_Decrement(void);
 
 void INTX_DISABLE(void);//关闭所有中断
 void INTX_ENABLE(void);	//开启所有中断
+char *itoa(int num, char *str, int radix);
 #endif
 

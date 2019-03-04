@@ -22,6 +22,7 @@
 #include "appaudio_handle.h"
 #include "mp3play.h"
 #include "audioplay.h"
+#include "dmr818.h"
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -62,10 +63,11 @@ void appaudio_init(void) {
 	_audio_handlest.play_item = NULL;
 	_audio_handlest.audioplay->play_state = IDLE_S_APY;
 	_audio_handlest.audioplay->play_mode = NORMAL_MAPY;
-	_audio_handlest.audioplay->out_flag = REC_FLAG_OUTDISE;
+	_audio_handlest.audioplay->out_flag = REC_FLAG_OUTEN;
 
 	//set vol
 	enter_volctrl_handle(VOLUME_INIT_VALUE);
+	WM8978_HPvol_Set(VOLUME_MAP(100), VOLUME_MAP(100));	//耳机音量默认设置
 	//进入speaker模式
 	audio_enter_speak_mode();
 }
@@ -75,9 +77,53 @@ void appaudio_init(void) {
   * @note
   * @retval
   */
-void appaudio_prcs(void) {
-	apprecord_handle();
+void appaudio_prcs(void)
+{
 	appplay_handle();
+	apprecord_handle();
+}
+//check enable play audio
+bool allowed_playaudio(void)
+{
+	if ((_audio_handlest.audiorec->rec_state == IDLE_S_REC) ||
+		(_audio_handlest.audiorec->rec_state == OVER_S_REC))
+		return true;
+	else
+		return false;
+}
+//check enable record
+bool allowed_record(void)
+{
+	if ((_audio_handlest.audioplay->play_state == IDLE_S_APY) ||
+		(_audio_handlest.audioplay->play_state == OVER_S_APY))
+		return true;
+	else
+		return false;
+}
+//check enable start record
+bool allowed_start_record(void)
+{
+	if (dmr818_config.ptt == DMR_PTT_RECV)
+		return true;
+	else
+		return false;
+}
+//change audio bypass when audio and record
+void change_audio_bypass_chanel(void)
+{
+	u8 rec_flag =0, play_flag =0;
+
+	if(_audio_handlest.audiorec->rec_out_flag == REC_FLAG_OUTEN)
+		rec_flag = 1;
+	if(_audio_handlest.audioplay->out_flag == REC_FLAG_OUTEN)
+		play_flag = 1;
+	
+	if(allowed_record()&&allowed_playaudio()) //not play and not record
+		WM8978_Output_Cfg(0, play_flag);
+	else if(!allowed_record()) //playing
+		WM8978_Output_Cfg(1, play_flag);
+	else if(!allowed_playaudio()) //recording
+		WM8978_Output_Cfg(0, rec_flag); 
 }
 /**
   * @brief  apprecord_handle
@@ -166,6 +212,9 @@ static void appplay_handle(void) {
 		audio_hdle_pst->play_item = NULL;
 		break;
 
+	case FAIL_S_APY:
+		audiocommon_play_pause();
+		break;
 	case OVER_S_APY:
 		audiocommon_play_over();
 		audiocommon_play_over_check_mode(audio_hdle_pst);

@@ -29,7 +29,8 @@
 //volume value mapping
 //#define VOLUME_MAP(V)                (u8)(0.57*(V))   //zkrt_notice: 0.57 by wm8978 value limit  //0.57 is max 0db gain, reg value is 0b111001,see wm8978 doc
 #define VOLUME_MAP(V)                (u8)(0.29*(V)+28)   //zkrt_notice: 0.30 by wm8978 value limit //ºı–°À•»ı∑÷±¥„–÷µ       
-#define VOLUME_INIT_VALUE            100
+#define VOLUME_INIT_VALUE            5  //zkrt_debug
+#define APP_MIC_GAIN 46
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -53,6 +54,7 @@ typedef enum {
 	PAUSE_S_APY,            //‘›Õ£÷–
 	CONTINUE_S_APY,         //ºÃ–¯≤•∑≈
 	STOP_S_APY,             //Õ£÷π≤•∑≈
+	FAIL_S_APY,             //≤•∑≈ ß∞‹
 	OVER_S_APY              //≤•∑≈Ω· ¯
 } audioPlayState;
 
@@ -121,7 +123,10 @@ typedef struct {
 /* Exported functions ------------------------------------------------------- */
 void appaudio_prcs(void);
 void appaudio_init(void);
-
+bool allowed_playaudio(void);
+bool allowed_record(void);
+bool allowed_start_record(void);
+void change_audio_bypass_chanel(void);
 //wav
 extern bool wav_play_start(void);
 extern u8 wav_playing(void);

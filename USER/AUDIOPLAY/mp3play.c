@@ -469,6 +469,7 @@ u8 mp3_play_start(void) {
 	FRESULT f_res;
 	FIL *file = &_audioplay.play_fil;
 	char *fname = _audioplay.play_objname;
+	audioPlayState *play_state = &_audioplay.play_state;
 	//global parameter
 	mp3_parameter_reset();
 	//init decoder
@@ -480,6 +481,8 @@ u8 mp3_play_start(void) {
 		printf("MP3InitDecoder fail.\n");
 		mp3user_dec.state = Error_MP3S;
 		mp3user_app.decoder_status = 0;
+		*play_state = FAIL_S_APY;
+		return 0;
 	} else {
 		printf("MP3InitDecoder ok.\n");
 		mp3user_app.decoder_status = 1;
@@ -488,6 +491,7 @@ u8 mp3_play_start(void) {
 	if (f_res != FR_OK) {
 		mp3user_dec.state = OpenFileFail_MP3S;
 		printf("f_open fail.\n");
+		*play_state = FAIL_S_APY;
 		return 0;
 	}
 	_audioplay.play_state = PLAYING_S_APY;

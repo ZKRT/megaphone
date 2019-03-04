@@ -31,7 +31,10 @@
 //#define CONFIG_DIR                         "0:/CONFIG"
 //#define LOG_DIR                            "0:/LOG"
 
-#define README_STRING                      "Audio name length must be less than 40!\n"
+// #define README_STRING                      "Audio name length must be less than 40!\n"
+// #define README_STRING2                      "The number of music and record files must be less than 32!\n"
+
+#define README_STRING                      "关于音频文件的操作提示：\r\n1. 音频文件名不能超过40个字节;\r\n2. 音乐和录音音频数目总和不能超过32首;\r\n3. 只支持MP3、WAV音频格式"
 #define README_STRING2                      "The number of music and record files must be less than 32!\n"
 
 //dir name arry index by SD_DIR_NAME
@@ -88,6 +91,7 @@ bool audio_item_check_name_repeat(const u8* name);
 void printf_audio_item(const audioinfo_st *item);
 u8 checkfileready(void);
 u8 audio_item_nextid_loop(u8 id);
+u8 audio_item_lastid_loop(u8 id);
 audioinfo_st* audio_item_get(u8 id);
 
 

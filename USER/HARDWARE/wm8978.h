@@ -35,6 +35,8 @@ u8 WM8978_Init(void);
 void WM8978_ADDA_Cfg(u8 dacen, u8 adcen);
 void WM8978_Input_Cfg(u8 micen, u8 lineinen, u8 auxen);
 void WM8978_Output_Cfg(u8 dacen, u8 bpsen);
+void WM8978_Output1_Channel_Cfg(u8 lout1,u8 rout1);
+void WM8978_Output2_Channel_Cfg(u8 lout2,u8 rout2);
 void WM8978_MIC_Gain(u8 gain);
 void WM8978_LINEIN_Gain(u8 gain);
 void WM8978_AUX_Gain(u8 gain);

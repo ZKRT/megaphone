@@ -181,15 +181,15 @@ void TIM7_IRQHandler(void)
 {
 	hwtmr2_irqHandler();
 }
-/**
-  * @brief  This function handles USARTy global interrupt request.
-  * @param  None
-  * @retval None
-  */
-void USART1_IRQHandler(void) 
-{
-	_USARTX_IRQHandler(USART1);
-}
+///**
+//  * @brief  This function handles USARTy global interrupt request.
+//  * @param  None
+//  * @retval None
+//  */
+//void USART1_IRQHandler(void) 
+//{
+//	_USARTX_IRQHandler(USART1);
+//}
 
 /**
   * @brief  This function handles USARTy global interrupt request.

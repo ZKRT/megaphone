@@ -34,6 +34,12 @@
 #define AUDIOID_NONE                  0xff
 #define ID_LIST_MAX                   32
 
+//enable and disable
+#define FUN_FLAG_OUTEN                1
+#define FUN_FLAG_OUTDISE              2
+#define IS_FUN_FLAG(FLAG)             (((FLAG) == FUN_FLAG_OUTEN) || \
+                                       ((FLAG) == FUN_FLAG_OUTDISE))
+									   
 //start record param
 #define REC_FLAG_OUTEN                1
 #define REC_FLAG_OUTDISE              2
@@ -62,6 +68,9 @@
 
 //volume control param
 #define IS_VOLUME(VOL)                (((VOL) >= 0) && ((VOL) <= 100))
+
+//speaker channel param
+#define IS_MSP_CH(CH)                 (((CH) >= 1) && ((CH) <= 16))
 
 //record control param
 #define REC_CTRL_PAUSE               1
@@ -117,6 +126,9 @@ typedef enum {
 	CN_ModifyFilePram,
 	CN_RecCtrl,
 	CN_GetAudioStae,
+	CN_SpeakerSw,
+	CN_RelaySky2Ground,
+	CN_SetSpeakerCh,
 	CN_MAX
 } ControlNumEnum;
 

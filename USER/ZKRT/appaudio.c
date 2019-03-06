@@ -237,6 +237,9 @@ static char delrecaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
 static char modifyaudio_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
 static char recctrl_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
 static char getaudiostate_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
+static char loudspeaker_sw_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
+static char relay_sky2ground_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
+static char set_speaker_channel_ptf(void *sdata, void *rdata, u8 slen, u8* rlen);
 
 const PTCOL_FUN ptcol_fun[] = {
 	none_ptf,
@@ -250,7 +253,10 @@ const PTCOL_FUN ptcol_fun[] = {
 	delrecaudio_ptf,
 	modifyaudio_ptf,
 	recctrl_ptf,
-	getaudiostate_ptf
+	getaudiostate_ptf,
+	loudspeaker_sw_ptf,
+	relay_sky2ground_ptf,
+	set_speaker_channel_ptf
 };
 /**
   * @brief  none_ptf
@@ -496,6 +502,69 @@ static char getaudiostate_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
 	r->control_num = s->control_num;
 	r->status = res;
 	*rlen = sizeof(rgetAudioState_plst) + RES_HEADER_LEN;
+
+	return NEED_RETRUN;
+}
+/**
+  * @brief  喊话扬声器的开关
+  * @param
+  * @note
+  * @retval
+  */
+static char loudspeaker_sw_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+	u8 res = S_Success;
+	send_plst *s = (send_plst*)sdata;
+	respond_plst *r = (respond_plst*)rdata;
+	uint8_t flag = s->other_data[0];
+
+	res = enter_speaker_sw(flag);
+	
+	//respond header
+	r->control_num = s->control_num;
+	r->status = res;
+	*rlen = RES_HEADER_LEN;
+
+	return NEED_RETRUN;
+}
+/**
+  * @brief  中继功能开关
+  * @param
+  * @note
+  * @retval
+  */
+static char relay_sky2ground_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+	u8 res = S_Success;
+	send_plst *s = (send_plst*)sdata;
+	respond_plst *r = (respond_plst*)rdata;
+	uint8_t flag = s->other_data[0];
+
+	res = enter_relay_sky2ground_sw(flag);
+
+	//respond header
+	r->control_num = s->control_num;
+	r->status = res;
+	*rlen = RES_HEADER_LEN;
+
+	return NEED_RETRUN;
+}
+/**
+  * @brief  设置喊话对讲机通道
+  * @param
+  * @note
+  * @retval
+  */
+static char set_speaker_channel_ptf(void *sdata, void *rdata, u8 slen, u8* rlen) {
+	u8 res = S_Success;
+	send_plst *s = (send_plst*)sdata;
+	respond_plst *r = (respond_plst*)rdata;
+	uint8_t ch = s->other_data[0];
+
+	res = enter_set_speaker_ch(ch);
+
+	//respond header
+	r->control_num = s->control_num;
+	r->status = res;
+	*rlen = RES_HEADER_LEN;
 
 	return NEED_RETRUN;
 }

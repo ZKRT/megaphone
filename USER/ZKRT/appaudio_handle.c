@@ -22,6 +22,7 @@ audio的音频控制接口，对外接口
 #include "appaudio.h"
 #include "appfiles.h"
 #include "appaudio_handle.h"
+#include "dmr818.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -467,7 +468,59 @@ char enter_play_last_song(void) {
 	res = S_Fail;
 	return res;
 }
+/**
+  * @brief
+  * @param
+  * @note
+  * @retval
+  */
+char enter_speaker_sw(uint8_t flag) {
+	u8 res = S_Success;
+	if (!IS_REC_FLAG((int)flag))
+		res = S_FailParamInvalid;
 
+	if (res == S_Success) {
+		_audio_handlest.audioplay->out_flag = flag;
+		_audio_handlest.audiorec->rec_out_flag = flag;
+		change_audio_bypass_chanel();
+	}
+	return res;
+}
+/**
+  * @brief
+  * @param
+  * @note
+  * @retval
+  */
+char enter_relay_sky2ground_sw(uint8_t flag) {
+	u8 res = S_Success;
+	if (!IS_FUN_FLAG((int)flag))
+		res = S_FailParamInvalid;
+
+	if (res == S_Success) {
+		if(flag ==FUN_FLAG_OUTEN)
+			dmr818_interphone_send_or_recv(DMR_PTT_SEND);
+		else
+			dmr818_interphone_send_or_recv(DMR_PTT_RECV);
+	}
+	return res;
+}
+/**
+  * @brief
+  * @param
+  * @note
+  * @retval
+  */
+char enter_set_speaker_ch(uint8_t ch) {
+	u8 res = S_Success;
+	if (!IS_MSP_CH((int)ch))
+		res = S_FailVolumeExceed;
+
+	if (res == S_Success) {
+		dmr818_runtime_change_channel(ch);
+	}
+	return res;
+}
 /////////////////////////////////////////////////////////////////////////////// record and play state clear
 /**
   * @brief  appaudio_play_clear

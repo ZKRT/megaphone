@@ -37,6 +37,9 @@ char enter_recctrl_handle(const recCtrl_plst *sother);
 char enter_getaudiostate_handle(rgetAudioState_plst *rother);
 char enter_play_next_song(void);
 char enter_play_last_song(void);
+char enter_speaker_sw(uint8_t flag);
+char enter_relay_sky2ground_sw(uint8_t flag);
+char enter_set_speaker_ch(uint8_t ch);
 #endif /* __APPAUDIO_HANDLE_H */
 
 /**
